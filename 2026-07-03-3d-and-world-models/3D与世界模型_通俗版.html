@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D 模型与世界模型 · 一份写给普通人的通俗指南</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+<style>
+  :root{
+    --bg:#faf7f2; --panel:#f2ece1; --ink:#2b2723; --soft:#6d6459; --line:#e3d9c9;
+    --accent:#b5602f; --accent2:#3f7d6e; --gold:#c99a3c; --card:#fffdf9; --maxw:820px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.9; font-size:16.5px;}
+  .wrap{display:grid; grid-template-columns:270px minmax(0,1fr); max-width:1200px; margin:0 auto;}
+  nav.toc{position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto; padding:30px 18px 60px;
+    border-right:1px solid var(--line); background:var(--panel);}
+  nav.toc .brand{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:800; margin-bottom:14px;}
+  nav.toc a{display:block; color:var(--soft); text-decoration:none; font-size:13.5px; padding:5px 10px; border-radius:8px; border-left:2px solid transparent; margin:1px 0;}
+  nav.toc a:hover{color:var(--ink); background:#e8dfd0;}
+  nav.toc a.lvl-1{font-weight:700; color:#4a423a; margin-top:8px;}
+  nav.toc a.lvl-2{padding-left:22px; font-size:12.5px;}
+  nav.toc a.active{color:var(--accent); border-left-color:var(--accent); background:#efe4d3;}
+  main{padding:0 clamp(20px,5vw,64px) 120px;}
+  .paper{max-width:var(--maxw); margin:0 auto;}
+  header.hero{padding:70px 0 26px; border-bottom:2px solid var(--line); margin-bottom:30px;}
+  header.hero .kicker{color:var(--accent2); font-size:13px; letter-spacing:.16em; text-transform:uppercase; font-weight:800;}
+  header.hero h1{font-size:34px; line-height:1.35; margin:14px 0 12px; letter-spacing:-.01em;}
+  header.hero .sub{color:var(--soft); font-size:15.5px;}
+  .content h1{font-size:26px; margin:60px 0 8px; padding-top:26px; border-top:2px solid var(--line);}
+  .content h1:first-of-type{border-top:none; padding-top:0; margin-top:10px;}
+  .content h2{font-size:20px; margin:34px 0 10px; color:#57493c;}
+  .content h3{font-size:16.5px; margin:22px 0 6px; color:var(--accent);}
+  .content p{margin:14px 0;}
+  .content a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(181,96,47,.3);}
+  .content a:hover{border-bottom-color:var(--accent);}
+  .content ul,.content ol{padding-left:24px; margin:12px 0;}
+  .content li{margin:8px 0;}
+  .content strong{color:#000;}
+  .content em{color:var(--accent2); font-style:normal; font-weight:600;}
+  .content code{background:#efe7da; padding:.1em .4em; border-radius:5px; font-size:.9em; color:#8a4a22;}
+  .content hr{border:none; border-top:1px dashed var(--line); margin:36px 0;}
+  /* analogy callout */
+  .content blockquote{margin:20px 0; padding:16px 20px; background:var(--card); border:1px solid var(--line);
+    border-left:4px solid var(--gold); border-radius:0 12px 12px 0; box-shadow:0 2px 12px rgba(120,90,40,.05);}
+  .content blockquote p{margin:6px 0;}
+  .content blockquote p:first-child{margin-top:0;}
+  .content blockquote strong:first-child{color:var(--accent);}
+  .content table{width:100%; border-collapse:collapse; margin:20px 0; font-size:14.5px; display:block; overflow-x:auto;}
+  .content thead th{background:#ede3d3; text-align:left; font-weight:700;}
+  .content th,.content td{border:1px solid var(--line); padding:10px 13px; vertical-align:top;}
+  .content tbody tr:nth-child(even){background:#f6efe4;}
+  footer.f{max-width:var(--maxw); margin:0 auto; padding-top:24px; border-top:2px solid var(--line); color:var(--soft); font-size:13px;}
+  #bar{position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,var(--accent),var(--gold)); z-index:50;}
+  figure.ill{margin:28px 0; text-align:center;}
+  figure.ill svg{max-width:100%; height:auto; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow:0 3px 18px rgba(120,90,40,.07);}
+  figure.ill figcaption{margin-top:11px; font-size:13.5px; color:var(--soft); font-style:italic;}
+  figure.ill svg text{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
+  @media (max-width:900px){ .wrap{grid-template-columns:1fr;} nav.toc{display:none;} header.hero{padding-top:44px;} }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="wrap">
+  <nav class="toc" id="toc"><div class="brand">目录</div></nav>
+  <main>
+    <div class="paper">
+      <header class="hero">
+        <div class="kicker">通俗科普 · 无需任何技术背景</div>
+        <h1>让电脑"看懂"和"想象"立体世界</h1>
+        <div class="sub">3D 模型 与 世界模型,到底在讲什么?一份从零开始的通俗指南 · 2026 年 7 月</div>
+      </header>
+      <article class="content" id="content"></article>
+      <footer class="f">这份材料是上一份《面向研究者的深度报告》的通俗改写版。所有比方都是为了好理解而做的简化,细节以专业版为准。</footer>
+    </div>
+  </main>
+</div>
+
+<script id="md" type="text/markdown">
+# 开始之前:这份材料想帮你搞懂什么
+
+你可能在新闻里越来越常听到两个词:**3D 模型** 和 **世界模型(World Model)**。它们被认为是人工智能接下来最重要的方向之一,连李飞飞、杨立昆(Yann LeCun)这些顶级科学家都在押注。
+
+但这两个词到底指什么?为什么它们要放在一起讲?这份材料不假设你懂任何技术,我们会像讲故事一样,一步步把它讲清楚。全程用生活里的比方,读完你大概能在饭桌上跟人聊明白。
+
+我们要回答四个问题:
+
+1. 电脑是怎么"记住"一个立体场景的?
+2. AI 怎么能"无中生有"造出一个 3D 物体?
+3. 什么是"世界模型"?为什么说它是 AI 的下一步?
+4. 这两件事——立体和想象——为什么必须合在一起,才能造出真正好用的机器人和自动驾驶?
+
+---
+
+# 第一章:先把两个词说清楚
+
+在深入之前,我们先给这两个核心词一个"人话版"的定义。
+
+## "3D 模型"是什么
+
+你在电脑上看到的照片、视频,本质上都是**平的**——它们是"2D"(两个维度:左右、上下)。而现实世界是**立体的**"3D"(三个维度:左右、上下、还有前后深浅)。
+
+所谓 **3D 模型**,就是电脑里存的一个**立体物件或立体场景的数字版本**。比如一把椅子的 3D 模型,你可以在电脑里把它转来转去,从任何角度看,就像它真的摆在你面前一样。游戏里的角色、电影里的特效怪兽、宜家网站上能旋转查看的家具,背后都是 3D 模型。
+
+> **打个比方**:2D 图片就像一张椅子的照片——你只能看到拍照那一刻的那个角度。3D 模型则像椅子本身——你能绕着它走一圈,蹲下来看底部,凑近看扶手。信息量完全不是一个级别。
+
+<figure class="ill">
+<svg viewBox="0 0 660 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="平面照片与立体模型对比">
+  <!-- left: flat photo -->
+  <rect x="40" y="55" width="180" height="130" rx="8" fill="#fff" stroke="#e3d9c9" stroke-width="2"/>
+  <rect x="52" y="67" width="156" height="106" rx="4" fill="#eef3ee"/>
+  <circle cx="90" cy="100" r="14" fill="#c99a3c"/>
+  <path d="M52 173 L110 120 L150 150 L185 118 L208 140 L208 173 Z" fill="#8fae9c"/>
+  <text x="130" y="212" text-anchor="middle" font-size="16" font-weight="700" fill="#57493c">平面照片(2D)</text>
+  <text x="130" y="232" text-anchor="middle" font-size="12.5" fill="#8a7d6c">只有一个固定角度</text>
+  <!-- middle vs -->
+  <text x="330" y="130" text-anchor="middle" font-size="22" fill="#b5602f" font-weight="800">VS</text>
+  <!-- right: 3D cube with rotation arrows -->
+  <g transform="translate(500,120)">
+    <path d="M-42 -34 L0 -58 L42 -34 L42 22 L0 46 L-42 22 Z" fill="#f0e6d6" stroke="#b5602f" stroke-width="2"/>
+    <path d="M-42 -34 L0 -10 L42 -34" fill="none" stroke="#b5602f" stroke-width="2"/>
+    <path d="M0 -10 L0 46" fill="none" stroke="#b5602f" stroke-width="2"/>
+    <path d="M-42 -34 L0 -58 L42 -34 L0 -10 Z" fill="#e8c98d" opacity="0.7"/>
+    <path d="M0 -10 L42 -34 L42 22 L0 46 Z" fill="#d99a6a" opacity="0.55"/>
+    <!-- rotation arrows -->
+    <path d="M-70 -30 A 78 78 0 0 1 70 -30" fill="none" stroke="#3f7d6e" stroke-width="2.4" stroke-dasharray="0"/>
+    <path d="M70 -30 l -3 -12 l 13 6 Z" fill="#3f7d6e"/>
+    <path d="M70 40 A 78 78 0 0 1 -70 40" fill="none" stroke="#3f7d6e" stroke-width="2.4"/>
+    <path d="M-70 40 l 3 12 l -13 -6 Z" fill="#3f7d6e"/>
+  </g>
+  <text x="500" y="212" text-anchor="middle" font-size="16" font-weight="700" fill="#57493c">立体模型(3D)</text>
+  <text x="500" y="232" text-anchor="middle" font-size="12.5" fill="#8a7d6c">可任意旋转、走近观察</text>
+</svg>
+<figcaption>图 1 · 平面照片只记录一个角度;立体模型记录的是物体本身,能从任何方向查看。</figcaption>
+</figure>
+
+## "世界模型"是什么
+
+**世界模型**是 AI 脑子里的一个"想象引擎"。它让 AI 能够在心里**预演接下来会发生什么**,而不用真的去试。
+
+> **打个比方**:一个熟练的司机看到前面有个球滚到马路上,他脑子里会"闪过"一个画面——球后面可能跟着一个追球的小孩。于是他提前减速。他并没有真的撞上去才知道危险,而是**在脑子里预演了一遍**。这个"脑内预演"的能力,就是世界模型想让 AI 拥有的东西。
+
+<figure class="ill">
+<svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="司机的脑内预演">
+  <!-- road -->
+  <rect x="0" y="170" width="640" height="60" fill="#ece3d4"/>
+  <line x1="20" y1="200" x2="120" y2="200" stroke="#c9bda6" stroke-width="4" stroke-dasharray="18 14"/>
+  <line x1="520" y1="200" x2="620" y2="200" stroke="#c9bda6" stroke-width="4" stroke-dasharray="18 14"/>
+  <!-- car -->
+  <g transform="translate(90,150)">
+    <rect x="-46" y="0" width="92" height="30" rx="8" fill="#b5602f"/>
+    <path d="M-30 0 Q-24 -22 0 -22 Q24 -22 30 0 Z" fill="#c98a5a"/>
+    <circle cx="-26" cy="32" r="10" fill="#3a332c"/>
+    <circle cx="26" cy="32" r="10" fill="#3a332c"/>
+  </g>
+  <!-- ball on road -->
+  <circle cx="330" cy="190" r="16" fill="#c99a3c"/>
+  <path d="M330 174 a16 16 0 0 1 0 32 M318 182 a16 16 0 0 0 24 16" stroke="#8a6a1e" stroke-width="1.5" fill="none"/>
+  <!-- thought bubble from car -->
+  <circle cx="160" cy="120" r="5" fill="#fff" stroke="#3f7d6e" stroke-width="1.5"/>
+  <circle cx="180" cy="100" r="8" fill="#fff" stroke="#3f7d6e" stroke-width="1.5"/>
+  <rect x="200" y="24" width="300" height="92" rx="18" fill="#fbf6ee" stroke="#3f7d6e" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="228" y="52" font-size="13" fill="#3f7d6e" font-weight="700">脑内预演:</text>
+  <!-- inside bubble: ball + child -->
+  <circle cx="300" cy="86" r="11" fill="#c99a3c"/>
+  <g transform="translate(370,58)" stroke="#57493c" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <circle cx="0" cy="0" r="8" fill="#e0b07a" stroke="none"/>
+    <line x1="0" y1="8" x2="0" y2="30"/>
+    <line x1="0" y1="14" x2="-12" y2="24"/>
+    <line x1="0" y1="14" x2="12" y2="22"/>
+    <line x1="0" y1="30" x2="-10" y2="46"/>
+    <line x1="0" y1="30" x2="10" y2="46"/>
+  </g>
+  <path d="M318 86 L350 78" stroke="#b5602f" stroke-width="2" fill="none"/>
+  <path d="M350 78 l -11 -1 l 5 9 Z" fill="#b5602f"/>
+  <text x="452" y="90" font-size="12.5" fill="#8a7d6c">球后面</text>
+  <text x="452" y="107" font-size="12.5" fill="#8a7d6c">可能有小孩!</text>
+</svg>
+<figcaption>图 5 · 世界模型 = AI 脑内的"预演引擎":看到球,就能提前想到"后面可能追来一个孩子",于是不用真撞上就懂得减速。</figcaption>
+</figure>
+
+再比如你闭上眼睛,想象自己把桌上的杯子往前推——你几乎能"看见"杯子滑动、到桌边掉下去摔碎。你没有真的推,但你脑子里那个能预测结果的"小宇宙",就是你自己的世界模型。AI 研究者想给机器也装上这么一个。
+
+## 为什么这两个词要一起讲
+
+关键就在这里:**一个好的"想象引擎",必须懂"立体"。**
+
+想象一下,如果司机脑子里那个预演画面是平的、扭曲的、不符合物理规律的——球会突然消失,小孩会穿墙而过——那这个预演不但没用,还会害人。要让 AI 的"脑内预演"靠谱,它必须真正理解这个世界是**立体的**、物体是**有前后遮挡的**、东西是**会遵守重力和碰撞规律的**。
+
+这就是为什么"3D"和"世界模型"这两条研究线,正在快速地走到一起。接下来我们分别看它们各自走到了哪一步。
+
+---
+
+# 第二章:电脑怎么"记住"一个立体场景?
+
+这一章讲的是**"把真实世界搬进电脑"**——也就是拍几张照片,让电脑还原出一个可以自由旋转、自由走动的立体场景。这个领域这几年发生了三次大跳跃。
+
+## 第一跳:魔法般的"照片补全"——NeRF(2020 年)
+
+假设你围着一座雕像拍了几十张照片。人来做的话,很难凭这些照片"脑补"出没拍到的角度。但 2020 年出现的一项技术 **NeRF**(神经辐射场)做到了:它能学会这个场景,然后生成任何一个你**没拍过**的新角度的画面,而且以假乱真。
+
+它的原理说起来很妙:NeRF 不是把雕像存成一堆点或一个壳,而是训练一个"小大脑"(神经网络),你问它"空间里这个位置、从这个方向看,是什么颜色、有多不透明?",它就回答你。把无数个这样的问答拼起来,就渲染出一整张图。
+
+> **打个比方**:NeRF 就像一位记忆力超群的画师。你给他看了雕像的几十张照片,他就把整座雕像"记"在脑子里。之后你说"我想看从左上方 45 度的样子",他闭着眼睛就能给你画出来,连光影都对。
+
+**但它有个大毛病:太慢了。** 让这位"画师"学会一个场景,当年要用高级显卡算上一两天;而且每换一个新场景,就得从头再学一遍。这也定义了后面几年大家努力的方向:**又快又好**。
+
+## 第二跳:一堆"彩色棉花糖"——高斯泼溅(2023 年)
+
+2023 年,一个叫 **3D 高斯泼溅**(3D Gaussian Splatting)的方法几乎颠覆了整个领域。它换了个思路:不再用"小大脑"去死记硬背,而是用**几百万个半透明的、带颜色的小斑点**堆出整个场景。
+
+> **打个比方**:如果说 NeRF 是让画师凭记忆作画,那高斯泼溅就像用**无数团彩色的、半透明的棉花糖**去堆出雕像的形状。每团棉花糖有自己的颜色、大小、透明度和位置。远看,这一堆棉花糖拼起来就是一尊栩栩如生的雕像;而且因为它是"实实在在摆在那儿"的东西,电脑渲染起来飞快。
+
+<figure class="ill">
+<svg viewBox="0 0 620 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="高斯泼溅:用许多彩色半透明斑点堆出形状">
+  <text x="150" y="235" text-anchor="middle" font-size="13.5" font-weight="700" fill="#57493c">近看:一堆彩色斑点</text>
+  <text x="470" y="235" text-anchor="middle" font-size="13.5" font-weight="700" fill="#57493c">远看:一只小猫</text>
+  <!-- scattered translucent blobs forming a cat silhouette (left) -->
+  <g>
+    <circle cx="150" cy="120" r="34" fill="#d99a6a" opacity="0.55"/>
+    <circle cx="128" cy="100" r="26" fill="#e8c98d" opacity="0.6"/>
+    <circle cx="176" cy="104" r="24" fill="#c98a5a" opacity="0.55"/>
+    <circle cx="120" cy="80" r="15" fill="#b5602f" opacity="0.6"/>
+    <circle cx="182" cy="80" r="15" fill="#b5602f" opacity="0.6"/>
+    <circle cx="150" cy="150" r="30" fill="#e0b07a" opacity="0.5"/>
+    <circle cx="120" cy="160" r="18" fill="#d99a6a" opacity="0.5"/>
+    <circle cx="182" cy="162" r="18" fill="#e8c98d" opacity="0.5"/>
+    <circle cx="150" cy="118" r="10" fill="#8a5a34" opacity="0.7"/>
+    <circle cx="136" cy="112" r="6" fill="#3f7d6e" opacity="0.8"/>
+    <circle cx="166" cy="112" r="6" fill="#3f7d6e" opacity="0.8"/>
+    <circle cx="100" cy="130" r="12" fill="#e0b07a" opacity="0.45"/>
+    <circle cx="200" cy="132" r="12" fill="#e0b07a" opacity="0.45"/>
+  </g>
+  <!-- arrow -->
+  <path d="M250 125 L360 125" stroke="#b5602f" stroke-width="2.5" fill="none"/>
+  <path d="M360 125 l -12 -6 l 0 12 Z" fill="#b5602f"/>
+  <text x="305" y="112" text-anchor="middle" font-size="12" fill="#8a7d6c">拼起来</text>
+  <!-- clean cat (right) -->
+  <g transform="translate(470,120)">
+    <ellipse cx="0" cy="26" rx="46" ry="34" fill="#d99a6a"/>
+    <circle cx="0" cy="-8" r="34" fill="#e0b07a"/>
+    <path d="M-26 -30 L-32 -58 L-12 -40 Z" fill="#d99a6a"/>
+    <path d="M26 -30 L32 -58 L12 -40 Z" fill="#d99a6a"/>
+    <circle cx="-12" cy="-10" r="5" fill="#3f7d6e"/>
+    <circle cx="12" cy="-10" r="5" fill="#3f7d6e"/>
+    <path d="M-6 2 Q0 8 6 2" stroke="#8a5a34" stroke-width="2.5" fill="none"/>
+    <line x1="-30" y1="4" x2="-6" y2="0" stroke="#8a5a34" stroke-width="1.5"/>
+    <line x1="30" y1="4" x2="6" y2="0" stroke="#8a5a34" stroke-width="1.5"/>
+  </g>
+</svg>
+<figcaption>图 3 · 高斯泼溅不"记忆",而是用几百万个半透明的彩色小斑点直接堆出场景——所以又快又能实时游走。</figcaption>
+</figure>
+
+它有多快?NeRF 每秒可能只能生成几张画面(卡顿),而高斯泼溅能做到**每秒一百多张**——也就是丝般顺滑的实时效果,你可以像玩游戏一样在场景里流畅走动。训练时间也从"一两天"缩短到"几分钟"。
+
+代价是它比较"占地方"——存一个场景要好几百兆,不像 NeRF 那么精简。但这个速度上的飞跃太重要了,以至于全世界的研究几乎在一年内集体转向了它。
+
+## 第三跳:一秒钟"看一眼就懂"——前馈式重建(2024–2025 年)
+
+前两种方法,不管快慢,都还得**对着每个新场景现学一遍**。最新的方向更狠:训练一个见多识广的"超级模型",让它**看一眼照片,一秒钟内直接吐出立体结果**,不用现学。
+
+2025 年最亮眼的代表叫 **VGGT**(还拿了计算机视觉顶级会议的最佳论文)。你丢给它几张、甚至几百张照片,它一秒之内就能算出相机在哪、每个像素有多远、整个场景的立体结构——这些活儿以前需要一整套复杂流程慢慢磨。
+
+<figure class="ill">
+<svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="立体重建技术的三次跳跃">
+  <line x1="70" y1="70" x2="610" y2="70" stroke="#e3d9c9" stroke-width="3"/>
+  <!-- node 1 -->
+  <circle cx="120" cy="70" r="11" fill="#b5602f"/>
+  <text x="120" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#b5602f">2020</text>
+  <text x="120" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#57493c">NeRF</text>
+  <text x="120" y="134" text-anchor="middle" font-size="12" fill="#8a7d6c">记忆超群的画师</text>
+  <text x="120" y="151" text-anchor="middle" font-size="12" fill="#8a7d6c">精致但慢</text>
+  <!-- node 2 -->
+  <circle cx="345" cy="70" r="11" fill="#c99a3c"/>
+  <text x="345" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#c99a3c">2023</text>
+  <text x="345" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#57493c">高斯泼溅</text>
+  <text x="345" y="134" text-anchor="middle" font-size="12" fill="#8a7d6c">彩色棉花糖大师</text>
+  <text x="345" y="151" text-anchor="middle" font-size="12" fill="#8a7d6c">飞快、能实时游走</text>
+  <!-- node 3 -->
+  <circle cx="575" cy="70" r="11" fill="#3f7d6e"/>
+  <text x="575" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#3f7d6e">2025</text>
+  <text x="575" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#57493c">前馈式(VGGT)</text>
+  <text x="575" y="134" text-anchor="middle" font-size="12" fill="#8a7d6c">看一眼就懂的老法师</text>
+  <text x="575" y="151" text-anchor="middle" font-size="12" fill="#8a7d6c">一秒出结果、不用现学</text>
+  <!-- arrows on line -->
+  <path d="M232 70 l -14 -6 l 0 12 Z" fill="#c99a3c"/>
+  <path d="M462 70 l -14 -6 l 0 12 Z" fill="#3f7d6e"/>
+  <text x="340" y="188" text-anchor="middle" font-size="12.5" fill="#b5602f" font-weight="700">趋势:越来越快 · 越来越通用 →</text>
+</svg>
+<figcaption>图 2 · 把真实场景搬进电脑,五年里跨了三大步——一步比一步快、一步比一步通用。</figcaption>
+</figure>
+
+> **一句话概括这一章的演变**:从"慢工出细活的画师"(NeRF)→ "又快又爽的棉花糖大师"(高斯泼溅)→ "看一眼就懂的老法师"(VGGT)。核心趋势就是**越来越快、越来越通用**。这一点后面会很重要:正因为电脑现在能又快又好地理解立体场景,才有可能把这个能力装进 AI 的"想象引擎"里。
+
+---
+
+# 第三章:让 AI"无中生有"造出 3D
+
+上一章是"把真东西搬进电脑"。这一章反过来:**凭空创造**。你打一行字"一只戴着宇航头盔的柯基犬",AI 就给你生成一个可以旋转查看的立体模型。这在几年前还是天方夜谭,现在几秒钟就能出。
+
+<figure class="ill">
+<svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="一句话变成立体模型">
+  <!-- text bubble -->
+  <rect x="30" y="60" width="230" height="72" rx="14" fill="#fff" stroke="#e3d9c9" stroke-width="2"/>
+  <path d="M70 132 l 0 22 l 24 -22 Z" fill="#fff" stroke="#e3d9c9" stroke-width="2"/>
+  <text x="145" y="90" text-anchor="middle" font-size="14.5" fill="#57493c">"一只戴宇航头盔</text>
+  <text x="145" y="112" text-anchor="middle" font-size="14.5" fill="#57493c">的柯基犬"</text>
+  <!-- AI gear box -->
+  <path d="M300 96 L360 96" stroke="#b5602f" stroke-width="2.5"/>
+  <path d="M360 96 l -12 -6 l 0 12 Z" fill="#b5602f"/>
+  <circle cx="330" cy="70" r="16" fill="none" stroke="#c99a3c" stroke-width="3"/>
+  <text x="330" y="75" text-anchor="middle" font-size="12" fill="#c99a3c" font-weight="800">AI</text>
+  <!-- 3D result -->
+  <g transform="translate(470,96)">
+    <ellipse cx="0" cy="20" rx="40" ry="30" fill="#e0b07a"/>
+    <circle cx="0" cy="-6" r="30" fill="#d99a6a"/>
+    <path d="M-30 -18 a30 22 0 0 1 60 0 Z" fill="#8fae9c"/>
+    <path d="M-30 -18 a30 8 0 0 0 60 0" fill="#7a9e8c"/>
+    <circle cx="-10" cy="0" r="4.5" fill="#2b2723"/>
+    <circle cx="10" cy="0" r="4.5" fill="#2b2723"/>
+    <ellipse cx="0" cy="14" rx="7" ry="5" fill="#8a5a34"/>
+    <!-- rotation arrows -->
+    <path d="M-58 30 A 60 60 0 0 0 58 30" fill="none" stroke="#3f7d6e" stroke-width="2"/>
+    <path d="M58 30 l -2 -12 l 12 7 Z" fill="#3f7d6e"/>
+  </g>
+  <text x="145" y="176" text-anchor="middle" font-size="12.5" fill="#8a7d6c">一句话</text>
+  <text x="470" y="176" text-anchor="middle" font-size="12.5" fill="#8a7d6c">几秒后:可旋转的立体模型</text>
+</svg>
+<figcaption>图 4 · "文字生成 3D"——输入一句描述,AI 直接造出一个能转着看的立体物件。</figcaption>
+</figure>
+
+## 起步:借用"会画画的 AI"来雕刻(2022 年)
+
+你可能玩过文字生成图片的 AI(比如输入一句话就出一张画)。造 3D 的第一个聪明办法,就是**借用**这些会画画的 AI 当"老师"。
+
+做法很巧妙:先捏一团"数字黏土"(一个粗糙的立体形状),然后不停地从各个角度给这团黏土"拍照",拿去问画画 AI:"从这个角度看,像不像一只柯基?"画画 AI 说"鼻子该再翘一点",于是就照着改。转一圈一圈地改,黏土就慢慢变成了一只逼真的立体柯基。这套方法的开山之作叫 **DreamFusion**。
+
+> **打个比方**:就像一个雕刻新手,身边站着一位只会看平面画的老师。新手每雕一刀,就从一个角度拍张照给老师看,老师点评,新手再改。转着圈地反复打磨,最后雕出一个各个角度都像样的作品。
+
+**但这个办法有个著名的搞笑毛病,叫"多脸怪"(Janus 问题)。** 因为那位老师只会一个角度一个角度地看,他不知道"正面已经有一张脸了",结果从背面看的时候他又要求长出一张脸——于是雕出来的柯基,前面一张脸,后面还有一张脸。而且这种"边雕边问"的方式很慢,做一个要几个小时。
+
+## 提速:从"边雕边问"到"直接打印"(2023–2025 年)
+
+为了解决又慢又长多脸的问题,研究者想了很多招:
+
+- **先让老师学会"环视"**:训练画画 AI 一次就生成同一个物体的好几个协调角度,这样就不会长出多余的脸了。
+- **干脆不用老师,直接"打印"**:训练一个专门造 3D 的大模型,你给一句话或一张图,它像 3D 打印机一样**直接吐出**成品,几秒钟搞定,不用反复打磨。代表作有 **LRM**(五秒出一个)、还有一系列 2024–2025 年的大模型如 **CLAY、TRELLIS、腾讯的混元 3D、TripoSG** 等等。
+
+> **打个比方**:早期是"雕刻家对着镜子反复修"(慢),现在是"3D 打印机,发个指令就出货"(快)。质量也越来越高,已经有不少能直接拿去做游戏、打印手办。
+
+## 现在到什么程度了
+
+今天,已经有好几个**能直接用的商业产品**(比如 Tripo、Meshy、Rodin 这些网站),普通人上传一张图或打一句话,几十秒就能得到一个立体模型,还能下载下来 3D 打印或放进游戏。这个领域进步之快,可以说"以月为单位"。
+
+> **提醒**:这些公司自己宣传的性能数字(参数多大、快多少倍),往往没有经过独立第三方验证,听听就好,别全当真。
+
+---
+
+# 第四章:什么是"世界模型"?
+
+现在进入最核心、也最热的话题。前面讲的是"立体",这一章讲的是"想象和预测"。
+
+## 一个会"做梦"的 AI(2018 年的奠基思想)
+
+世界模型的经典思想来自 2018 年一篇著名论文。它的想法是:让 AI 先在脑子里建一个**简化版的小世界**,然后**在这个"梦境"里反复练习**,练熟了再拿到真实环境里用。
+
+> **打个比方**:就像运动员会做"表象训练"——闭上眼在脑海里一遍遍预演比赛动作,不用真的上场就能提升水平。这个 AI 也是先造一个"内心小剧场",在里面练上千万次,再上场。
+
+后续最有名的一个系列叫 **Dreamer**(名字就是"做梦者")。它的最新版 **DreamerV3** 在 2025 年登上了顶级期刊《自然》(Nature),因为它创下一个纪录:**在游戏《我的世界》(Minecraft)里,没有任何人教、没给任何攻略,自己从零摸索出了"挖到钻石"** ——这在业内是个多年攻不下的难题,因为它需要一长串正确的步骤环环相扣。它靠的就是在脑内"做梦"预演,大大减少了真实试错的次数。
+
+## 两大门派:是"放电影",还是"抓重点"?
+
+如今,"世界模型"分成了两个思路完全不同的门派,这场路线之争是理解整个领域的关键。
+
+<figure class="ill">
+<svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="世界模型两大门派对比">
+  <!-- left panel: film school -->
+  <rect x="24" y="24" width="270" height="200" rx="14" fill="#fbf3ea" stroke="#b5602f" stroke-width="2"/>
+  <text x="159" y="52" text-anchor="middle" font-size="15" font-weight="800" fill="#b5602f">放电影派</text>
+  <text x="159" y="72" text-anchor="middle" font-size="12" fill="#8a7d6c">生成逼真画面,越像越好</text>
+  <!-- filmstrip -->
+  <rect x="54" y="92" width="210" height="70" rx="4" fill="#3a332c"/>
+  <g fill="#fff"><rect x="60" y="96" width="8" height="10"/><rect x="60" y="150" width="8" height="10"/><rect x="250" y="96" width="8" height="10"/><rect x="250" y="150" width="8" height="10"/></g>
+  <rect x="78" y="102" width="52" height="52" fill="#8fae9c"/>
+  <rect x="134" y="102" width="52" height="52" fill="#c98a5a"/>
+  <rect x="190" y="102" width="52" height="52" fill="#c99a3c"/>
+  <text x="159" y="192" text-anchor="middle" font-size="12" fill="#57493c">代表:Sora、Genie</text>
+  <text x="159" y="210" text-anchor="middle" font-size="11.5" fill="#8a7d6c">画面精美,但可能"画错物理"</text>
+  <!-- right panel: gist school -->
+  <rect x="346" y="24" width="270" height="200" rx="14" fill="#eef5f2" stroke="#3f7d6e" stroke-width="2"/>
+  <text x="481" y="52" text-anchor="middle" font-size="15" font-weight="800" fill="#3f7d6e">抓重点派</text>
+  <text x="481" y="72" text-anchor="middle" font-size="12" fill="#8a7d6c">只预测关键要素,不画细节</text>
+  <!-- abstract dots + arrows -->
+  <circle cx="404" cy="120" r="14" fill="#3f7d6e"/><text x="404" y="124" text-anchor="middle" font-size="11" fill="#fff">车</text>
+  <circle cx="404" cy="120" r="14" fill="none"/>
+  <path d="M424 120 L470 120" stroke="#3f7d6e" stroke-width="2.5"/><path d="M470 120 l -11 -6 l 0 12 Z" fill="#3f7d6e"/>
+  <text x="447" y="108" text-anchor="middle" font-size="10.5" fill="#8a7d6c">在减速</text>
+  <circle cx="500" cy="120" r="14" fill="#c99a3c"/><text x="500" y="124" text-anchor="middle" font-size="11" fill="#fff">我</text>
+  <path d="M500 138 L500 162" stroke="#3f7d6e" stroke-width="2.5"/><path d="M500 162 l -6 -11 l 12 0 Z" fill="#3f7d6e"/>
+  <text x="500" y="182" text-anchor="middle" font-size="11" fill="#57493c">→ 我也该刹车</text>
+  <text x="481" y="210" text-anchor="middle" font-size="11.5" fill="#8a7d6c">省力、更接近人脑思路</text>
+</svg>
+<figcaption>图 6 · 两大门派:一派把未来"演成电影"(逼真但可能不懂物理),一派只抓"谁在动、会怎样"的关键信息(省力、更像人脑)。</figcaption>
+</figure>
+
+### 门派一:放电影派(生成逼真画面)
+
+这一派主张:世界模型就应该像**放电影一样,把未来会发生的画面一帧帧生成出来**,越逼真越好。
+
+最有名的例子是 OpenAI 的 **Sora**(能根据文字生成以假乱真视频的那个),以及谷歌 DeepMind 的 **Genie**(能凭一张图生成一个你可以像玩游戏一样实时操控的虚拟世界)。甚至有人用这种技术,**不靠传统游戏引擎、纯靠 AI 一帧帧"画",就跑起了一个能玩的《毁灭战士》游戏**。
+
+> **打个比方**:放电影派就像一个想象力极其丰富的说书人,你给个开头,他能绘声绘色地把后面的故事"演"出来,画面精美。
+
+### 门派二:抓重点派(只预测关键要素)
+
+另一派——领头的是 AI 大牛杨立昆(Yann LeCun)——认为放电影是**浪费精力**。他的理由很实在:
+
+> **打个比方**:你开车时要预判前车会不会急刹,你需要在脑子里精确渲染出前车每一片树叶的反光、每一粒尘土吗?当然不用。你只需要抓住"车在减速"这个**关键信息**就够了。放电影派非要把每片树叶都画出来,既费劲又容易画错。
+
+所以这一派(代表作叫 **JEPA / V-JEPA**)主张:别去生成逼真像素,只在脑子里预测**抽象的关键要素**——谁在动、往哪去、会不会撞上。他们认为这样才更接近人脑的运作方式,也更适合用来做决策。
+
+这两派谁对?目前还没有定论,很可能最终是**互补**的。而下一章的那场争论,恰恰是"抓重点派"手里最有力的证据。
+
+---
+
+# 第五章:一场关键争论——AI 视频真的"懂"物理吗?
+
+当 Sora 这类视频 AI 生成出水流、碰撞、下落都很逼真的画面时,很多人惊呼:"AI 已经学会物理定律了!"但事实真是如此吗?这是理解世界模型现状最重要的一个问题。
+
+科学家做了严谨的测试,结论出人意料:**并没有真懂。**
+
+有两组独立的研究,一组用简化的实验场景、一组用几百段真实世界视频,分别去考这些 AI 的"物理"。结果高度一致:
+
+- **它答不好"没见过的情况"。** 在训练时见过的场景里,它表现不错;可一旦换成没见过的组合,错误率暴增,而且**你给它再多数据、把模型做再大,也救不回来**。
+- **研究者发现了原因**:这些 AI 其实不是学会了"规律",而是在**"照猫画虎"**——它记住了一大堆见过的画面,遇到新情况就找个最像的模仿一下。这跟真正理解"物体受力会怎么动"是两码事。
+- **一个惊人的发现**:画面越逼真,不代表越懂物理。有个测试里,最顶尖的视频模型在物理理解上只拿了 **24 分(满分 100)**。也就是说,**"看起来对"和"真的对"完全是两回事。**
+
+> **打个比方**:这就像一个学生把往年考题的答案全背下来了。考原题他门门满分,你以为他学神;可一换新题型就全懵——因为他从来没真正理解知识点,只是记忆力惊人。
+
+<figure class="ill">
+<svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="背答案的学生:原题满分,新题全懵">
+  <!-- exam papers -->
+  <g transform="translate(70,40)">
+    <rect x="0" y="0" width="130" height="110" rx="8" fill="#fff" stroke="#e3d9c9" stroke-width="2"/>
+    <line x1="18" y1="26" x2="112" y2="26" stroke="#e3d9c9" stroke-width="3"/>
+    <line x1="18" y1="46" x2="112" y2="46" stroke="#eee6d8" stroke-width="3"/>
+    <line x1="18" y1="66" x2="90" y2="66" stroke="#eee6d8" stroke-width="3"/>
+    <circle cx="100" cy="88" r="18" fill="none" stroke="#3f7d6e" stroke-width="3"/>
+    <path d="M92 88 l 6 7 l 12 -16" stroke="#3f7d6e" stroke-width="3" fill="none"/>
+  </g>
+  <text x="135" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#3f7d6e">原题(见过):满分</text>
+  <!-- vs -->
+  <text x="320" y="100" text-anchor="middle" font-size="18" font-weight="800" fill="#b5602f">但…</text>
+  <!-- new exam -->
+  <g transform="translate(440,40)">
+    <rect x="0" y="0" width="130" height="110" rx="8" fill="#fff" stroke="#e3d9c9" stroke-width="2"/>
+    <text x="65" y="42" text-anchor="middle" font-size="30" font-weight="800" fill="#c9bda6">?</text>
+    <text x="65" y="70" text-anchor="middle" font-size="30" font-weight="800" fill="#c9bda6">?</text>
+    <path d="M40 92 l 44 0" stroke="#c94a3a" stroke-width="3"/>
+    <path d="M52 84 l 20 16 M72 84 l -20 16" stroke="#c94a3a" stroke-width="3"/>
+  </g>
+  <text x="505" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#b5602f">新题型(没见过):全懵</text>
+</svg>
+<figcaption>图 7 · 测试证明:逼真的视频 AI 更像"背答案的学霸"——没真懂物理规律,一遇没见过的情况就出错。</figcaption>
+</figure>
+
+这个发现非常重要。它说明:**光靠"看视频、生成逼真画面",造不出真正靠谱的世界模型。** 要让 AI 真懂这个世界,还得给它补上一样东西——对**立体结构和物理规律**的真正理解。而这,正好把我们带回了"3D"。
+
+---
+
+# 第六章:为什么"立体"和"想象"必须合在一起?
+
+现在我们可以回答开头那个问题了:为什么 3D 和世界模型要走到一起?答案在机器人和自动驾驶这些**真的要在物理世界里干活**的场景里最清楚。
+
+## 李飞飞的精辟总结:三种"世界模型"
+
+著名科学家李飞飞把世界模型的用途分成三种,这个框架特别好懂:
+
+<figure class="ill">
+<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="世界模型的三种类型">
+  <!-- card 1: renderer / painter -->
+  <rect x="20" y="30" width="180" height="150" rx="14" fill="#fbf3ea" stroke="#b5602f" stroke-width="2"/>
+  <g transform="translate(110,78)">
+    <path d="M0 -22 a24 24 0 1 0 0 48 c6 0 8 -4 8 -8 c0 -6 6 -6 10 -6 c8 0 12 -6 12 -14 a20 20 0 0 0 -30 -20 Z" fill="#e0b07a"/>
+    <circle cx="-8" cy="-8" r="3.5" fill="#b5602f"/><circle cx="4" cy="-12" r="3.5" fill="#3f7d6e"/><circle cx="12" cy="0" r="3.5" fill="#c99a3c"/>
+  </g>
+  <text x="110" y="126" text-anchor="middle" font-size="15" font-weight="800" fill="#b5602f">画面型</text>
+  <text x="110" y="147" text-anchor="middle" font-size="12" fill="#57493c">像画家</text>
+  <text x="110" y="165" text-anchor="middle" font-size="11.5" fill="#8a7d6c">画得漂亮,但不懂立体</text>
+  <!-- card 2: simulator / lab -->
+  <rect x="230" y="30" width="180" height="150" rx="14" fill="#eef5f2" stroke="#3f7d6e" stroke-width="2"/>
+  <g transform="translate(320,80)" fill="none" stroke="#3f7d6e" stroke-width="3">
+    <circle cx="-12" cy="-6" r="15"/><circle cx="14" cy="8" r="11"/>
+    <line x1="-12" y1="-24" x2="-12" y2="-28"/><line x1="-12" y1="12" x2="-12" y2="16"/>
+    <line x1="-30" y1="-6" x2="-34" y2="-6"/><line x1="6" y1="-6" x2="10" y2="-6"/>
+  </g>
+  <text x="320" y="126" text-anchor="middle" font-size="15" font-weight="800" fill="#3f7d6e">仿真型</text>
+  <text x="320" y="147" text-anchor="middle" font-size="12" fill="#57493c">像物理实验室</text>
+  <text x="320" y="165" text-anchor="middle" font-size="11.5" fill="#8a7d6c">几何/重力都真实,最难造</text>
+  <!-- card 3: planner / strategist -->
+  <rect x="440" y="30" width="180" height="150" rx="14" fill="#f6f0e4" stroke="#c99a3c" stroke-width="2"/>
+  <g transform="translate(530,78)">
+    <rect x="-20" y="-4" width="40" height="34" rx="3" fill="#e0b07a"/>
+    <circle cx="-10" cy="-16" r="8" fill="#c99a3c"/><rect x="-14" y="-10" width="8" height="14" fill="#c99a3c"/>
+    <circle cx="10" cy="-16" r="8" fill="#8a5a34"/><rect x="6" y="-10" width="8" height="14" fill="#8a5a34"/>
+    <path d="M-24 30 h48" stroke="#8a5a34" stroke-width="3"/>
+  </g>
+  <text x="530" y="126" text-anchor="middle" font-size="15" font-weight="800" fill="#b58a2c">决策型</text>
+  <text x="530" y="147" text-anchor="middle" font-size="12" fill="#57493c">像军师</text>
+  <text x="530" y="165" text-anchor="middle" font-size="11.5" fill="#8a7d6c">想清楚下一步该怎么做</text>
+  <text x="320" y="205" text-anchor="middle" font-size="12.5" fill="#b5602f" font-weight="700">终极目标:把三种能力合成一个"全能世界模型"</text>
+</svg>
+<figcaption>图 8 · 李飞飞的三分法。只会"画得像"(画面型)远远不够,还得懂真实的立体与物理(仿真型),才能支撑起靠谱的决策(决策型)。</figcaption>
+</figure>
+
+| 类型 | 好比是 | 它擅长什么 | 它的短板 |
+|---|---|---|---|
+| **画面型** | 一个画家 | 生成漂亮逼真的画面给人看 | 不懂立体结构——"楼房从天上看很完美,可你想开车穿过城市,它们就塌了" |
+| **仿真型** | 一个物理实验室 | 保证几何、重力、碰撞都真实可靠 | 造起来最难,需要真正的 3D 和物理 |
+| **决策型** | 一个军师 | 想清楚"下一步该怎么做" | 需要前两者提供靠谱的世界 |
+
+李飞飞有一句话点破了要害(大意):**"如果说语言是对世界的抽象、画面是世界的投影,那么几何、物理和动态,才是世界本身。"** 换句话说,只会"画得像"是不够的,得真正搞懂立体结构和物理规律,机器人才能真的在现实里干活。
+
+## 在自动驾驶里,这个道理最明显
+
+自动驾驶是世界模型落地最深的地方。车企们让 AI 学会"预演"路况:预测前方几秒钟其他车、行人会怎么动,然后规划自己怎么开。这里也分成两派:
+
+- **一派专注立体结构**:让 AI 直接理解"路上每个方块空间是不是被占了"(专业上叫 3D occupancy),再据此规划。这派天生就懂立体。
+- **一派用"放电影"**(比如英国 Wayve 公司的 GAIA 系列):生成逼真的未来路面视频来"预演",还能造出各种罕见的危险场景来给自动驾驶做压力测试。
+
+不管哪派,套路都是一样的:**先在脑子里预演接下来的画面 → 想象几种开法各会怎样 → 选最安全的那种。** 这就是世界模型在替司机"提前一步想"。
+
+## 机器人:进步很大,但别被演示视频骗了
+
+机器人也在用世界模型学习抓取、搬运——有的甚至用"看视频学动作"的方式训练。这是很有前景的方向。
+
+但这里要泼一盆冷静的水。**李飞飞本人都坦白说**:过去两年那些惊艳的机器人演示视频,几乎**全是在高度受控的实验室里、用固定的几样物品、做很短的任务**拍出来的。**没有一个**真正达到了现实世界所要求的复杂度和可靠性。所以看到炫酷的机器人视频,不妨多一分清醒。
+
+## 融合正在发生:一个模型,又能画又能算
+
+最激动人心的是,这两条线正在**真的合体**。李飞飞团队 2025 年底推出的产品 **Marble** 就是个例子:你给它一句话或一张图,它生成的虚拟世界**同时输出两样东西**——一份漂亮的画面(供人观看),外加一份看不见的"碰撞骨架"(供物理引擎计算,让东西能真实地碰撞、堆叠)。李飞飞形容这是"**溶解了'画家'和'物理实验室'之间的边界**"。
+
+> **一句话概括**:未来的目标,是造出一个"全能世界模型"——它既能画出逼真的画面,又能保证背后的立体结构和物理是真实的,还能据此帮机器人、汽车做决策。三种能力合为一体。这一天还没到,但方向已经很清楚了。
+
+---
+
+# 第七章:三分钟回顾
+
+如果你只想记住几句话,就是下面这些:
+
+1. **3D 模型** = 电脑里可以自由旋转、走动查看的立体物件或场景。制造它有两条路:**把真东西拍照搬进来**(重建),或者**凭一句话无中生有造出来**(生成)。这两条路这几年都快得惊人。
+
+2. **世界模型** = AI 脑子里的"想象引擎",能预演接下来会发生什么,让 AI 不用真的试错就能做决策。它是通往聪明机器人和自动驾驶的关键一步。
+
+3. **一个关键教训**:光靠"生成逼真视频"并不能让 AI 真懂物理——测试证明它只是在"照猫画虎",画面越像不代表越懂。
+
+4. **所以"立体"和"想象"必须合体**:要让 AI 的预演靠谱,它必须真正理解这个世界是立体的、有遮挡的、遵守物理规律的。这就是为什么全世界最顶尖的实验室,正在把 3D 技术和世界模型融合到一起。这被很多人视为**人工智能的下一个大前沿**。
+
+---
+
+# 附录:名词小词典
+
+遇到这些词不用怕,这里是"人话翻译":
+
+- **3D / 立体**:有前后深浅的、能转着看的,区别于平面的照片(2D)。
+- **3D 模型**:电脑里一个立体物件的数字版本。
+- **重建**:根据实拍照片,让电脑还原出立体场景。
+- **生成**:凭文字或一张图,让 AI 无中生有造出立体物件。
+- **NeRF(神经辐射场)**:2020 年的技术,像"记忆力超群的画师",凭几张照片就能补出任意新角度。慢但精致。
+- **高斯泼溅**:2023 年的技术,用几百万个"彩色半透明棉花糖"堆出场景。飞快、能实时游走。
+- **世界模型(World Model)**:AI 脑内的"想象/预测引擎",能预演未来、辅助决策。
+- **Sora / Genie**:两个著名的"放电影派"世界模型,能生成逼真视频或可操控的虚拟世界。
+- **JEPA**:"抓重点派"世界模型,主张只预测关键要素、不生成逼真画面。
+- **物理理解**:AI 是否真的懂重力、碰撞等规律。目前研究表明,视频 AI 大多**只是看起来懂**。
+- **具身智能 / 机器人**:让 AI 有个身体、能在真实物理世界里行动。世界模型 + 3D 就是为它服务的。
+
+> **最后一句**:这份材料为了好懂做了大量简化,每个比方都不完美,但方向是对的。如果你想深入任何一块,专业版报告里有完整的技术细节和论文出处。
+</script>
+
+<script>
+(function(){
+  var md = document.getElementById('md').textContent;
+  marked.setOptions({ headerIds:false, mangle:false });
+  document.getElementById('content').innerHTML = marked.parse(md);
+  var content = document.getElementById('content');
+  content.querySelectorAll('a[href^="http"]').forEach(function(a){ a.target="_blank"; a.rel="noopener"; });
+  var toc = document.getElementById('toc');
+  var heads = content.querySelectorAll('h1, h2');
+  var idx=0;
+  heads.forEach(function(h){
+    idx++; var id='sec-'+idx; h.id=id;
+    var a=document.createElement('a');
+    a.href='#'+id; a.textContent=h.textContent;
+    a.className = h.tagName==='H1' ? 'lvl-1' : 'lvl-2';
+    a.dataset.target=id; toc.appendChild(a);
+  });
+  var links=Array.prototype.slice.call(toc.querySelectorAll('a'));
+  var bar=document.getElementById('bar');
+  function onScroll(){
+    var st=window.scrollY||document.documentElement.scrollTop;
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    bar.style.width=(h>0?(st/h*100):0)+'%';
+    var cur=null;
+    heads.forEach(function(hd){ if(hd.getBoundingClientRect().top<=120) cur=hd.id; });
+    links.forEach(function(l){ l.classList.toggle('active', l.dataset.target===cur); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+})();
+</script>
+</body>
+</html>
