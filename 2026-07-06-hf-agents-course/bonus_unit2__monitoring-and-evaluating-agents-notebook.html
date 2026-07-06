@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>监控和评估智能体 · HF AI Agents 课程(中文)</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2620;--muted:#7a6f61;--accent:#d97e30;--accent-soft:#fdeedd;--line:#e8e0d4;--green:#3d8a5f;--green-soft:#e4f2ea;--red:#b3452f;--red-soft:#fbe7e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+.layout{display:flex;min-height:100vh}
+aside{width:300px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
+aside .home{display:block;font-weight:700;margin-bottom:12px;color:var(--ink);text-decoration:none;font-size:.98rem}
+.nav-chap{margin-bottom:6px}
+.nav-chap summary{cursor:pointer;font-weight:600;font-size:.88rem;padding:6px 8px;border-radius:8px;color:var(--ink)}
+.nav-chap summary:hover{background:var(--accent-soft)}
+.nav-link{display:block;padding:5px 10px 5px 22px;font-size:.85rem;color:var(--muted);text-decoration:none;border-radius:8px}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:40px 48px 80px;max-width:860px;margin:0 auto}
+main img{max-width:100%;border-radius:10px;margin:14px 0}
+main h1{font-size:1.7rem;margin:0 0 18px}
+main h2{font-size:1.3rem;margin:30px 0 12px;padding-top:10px;border-top:1px solid var(--line)}
+main h3{font-size:1.1rem;margin:22px 0 10px}
+main p{margin:0 0 14px}
+main ul,main ol{margin:0 0 14px 1.5em}
+main li{margin-bottom:6px}
+main a{color:var(--accent)}
+main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+main th{background:var(--accent-soft)}
+pre{background:#2b2620;color:#f0e9dd;padding:16px;border-radius:10px;overflow-x:auto;margin:16px 0;line-height:1.55;font-size:.85rem}
+code{font-family:"SF Mono",Consolas,Menlo,monospace}
+p code,li code,td code{background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-size:.86em}
+blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.tip.warn{background:var(--red-soft);border-left-color:var(--red)}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}
+.quiz-q{font-weight:600;margin-bottom:10px}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);cursor:pointer;font-size:.92rem;font-family:inherit;line-height:1.6}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.right{background:var(--green-soft);border-color:var(--green)}
+.quiz-opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.quiz-explain{margin-top:6px;font-size:.9rem;padding:10px 14px;border-radius:8px;background:var(--accent-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-size:.9rem}
+.pager a:hover{border-color:var(--accent)}
+.pager .next{text-align:right}
+.attrib{margin-top:36px;font-size:.8rem;color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:900px){
+ aside{position:fixed;left:-320px;z-index:20;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+ aside.open{left:0}
+ .menu-btn{display:block;position:fixed;top:12px;left:12px;z-index:21;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.9rem}
+ main{padding:64px 20px 60px}
+}
+</style></head><body>
+<button class="menu-btn">☰ 目录</button>
+<div class="layout">
+<aside><a class="home" href="index.html">🤗 AI Agents 课程(中文)</a><details class="nav-chap" open><summary>第 0 单元. 课程欢迎</summary><a class="nav-link" data-local="unit0/introduction" href="unit0__introduction.html">欢迎来到课程 🤗</a><a class="nav-link" data-local="unit0/onboarding" href="unit0__onboarding.html">入门指南</a><a class="nav-link" data-local="unit0/discord101" href="unit0__discord101.html">(可选) Discord 使用指南</a></details>
+<details class="nav-chap"><summary>直播 1. 课程运作方式和问答</summary><a class="nav-link" data-local="communication/live1" href="communication__live1.html">直播 1. 课程运作方式和问答</a></details>
+<details class="nav-chap"><summary>第 1 单元. 智能体简介</summary><a class="nav-link" data-local="unit1/introduction" href="unit1__introduction.html">简介</a><a class="nav-link" data-local="unit1/what-are-agents" href="unit1__what-are-agents.html">什么是智能体？</a><a class="nav-link" data-local="unit1/quiz1" href="unit1__quiz1.html">快速测验 1</a><a class="nav-link" data-local="unit1/what-are-llms" href="unit1__what-are-llms.html">什么是 LLMs？</a><a class="nav-link" data-local="unit1/messages-and-special-tokens" href="unit1__messages-and-special-tokens.html">消息和特殊 token</a><a class="nav-link" data-local="unit1/tools" href="unit1__tools.html">什么是工具？</a><a class="nav-link" data-local="unit1/quiz2" href="unit1__quiz2.html">快速测验 2</a><a class="nav-link" data-local="unit1/agent-steps-and-structure" href="unit1__agent-steps-and-structure.html">通过思考-行动-观察循环理解 AI 智能体</a><a class="nav-link" data-local="unit1/thoughts" href="unit1__thoughts.html">思考、内部推理和 Re-Act 方法</a><a class="nav-link" data-local="unit1/actions" href="unit1__actions.html">行动，使智能体能够与环境交互</a><a class="nav-link" data-local="unit1/observations" href="unit1__observations.html">观察，整合反馈以反思和适应</a><a class="nav-link" data-local="unit1/dummy-agent-library" href="unit1__dummy-agent-library.html">简单智能体库</a><a class="nav-link" data-local="unit1/tutorial" href="unit1__tutorial.html">使用 Smolagents 创建我们的第一个智能体</a><a class="nav-link" data-local="unit1/final-quiz" href="unit1__final-quiz.html">第 1 单元最终测验</a><a class="nav-link" data-local="unit1/conclusion" href="unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2 单元. AI 智能体框架</summary><a class="nav-link" data-local="unit2/introduction" href="unit2__introduction.html">AI 智能体框架</a></details>
+<details class="nav-chap"><summary>第 2.1 单元. smolagents 框架</summary><a class="nav-link" data-local="unit2/smolagents/introduction" href="unit2__smolagents__introduction.html">smolagents 简介</a><a class="nav-link" data-local="unit2/smolagents/why_use_smolagents" href="unit2__smolagents__why_use_smolagents.html">为什么使用 smolagents？</a><a class="nav-link" data-local="unit2/smolagents/quiz1" href="unit2__smolagents__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/smolagents/code_agents" href="unit2__smolagents__code_agents.html">构建使用代码的智能体</a><a class="nav-link" data-local="unit2/smolagents/tool_calling_agents" href="unit2__smolagents__tool_calling_agents.html">将智能体与工具集成</a><a class="nav-link" data-local="unit2/smolagents/tools" href="unit2__smolagents__tools.html">工具</a><a class="nav-link" data-local="unit2/smolagents/retrieval_agents" href="unit2__smolagents__retrieval_agents.html">检索智能体</a><a class="nav-link" data-local="unit2/smolagents/quiz2" href="unit2__smolagents__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/smolagents/multi_agent_systems" href="unit2__smolagents__multi_agent_systems.html">多智能体系统</a><a class="nav-link" data-local="unit2/smolagents/vision_agents" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体</a><a class="nav-link" data-local="unit2/smolagents/final_quiz" href="unit2__smolagents__final_quiz.html">最终测验</a><a class="nav-link" data-local="unit2/smolagents/conclusion" href="unit2__smolagents__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.2 单元. LlamaIndex 框架</summary><a class="nav-link" data-local="unit2/llama-index/introduction" href="unit2__llama-index__introduction.html">LlamaIndex 简介</a><a class="nav-link" data-local="unit2/llama-index/llama-hub" href="unit2__llama-index__llama-hub.html">LlamaHub 简介</a><a class="nav-link" data-local="unit2/llama-index/components" href="unit2__llama-index__components.html">LlamaIndex 中的组件是什么？</a><a class="nav-link" data-local="unit2/llama-index/tools" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具</a><a class="nav-link" data-local="unit2/llama-index/quiz1" href="unit2__llama-index__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/llama-index/agents" href="unit2__llama-index__agents.html">在 LlamaIndex 中使用智能体</a><a class="nav-link" data-local="unit2/llama-index/workflows" href="unit2__llama-index__workflows.html">在 LlamaIndex 中创建智能工作流</a><a class="nav-link" data-local="unit2/llama-index/quiz2" href="unit2__llama-index__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/llama-index/conclusion" href="unit2__llama-index__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.3 单元. LangGraph 框架</summary><a class="nav-link" data-local="unit2/langgraph/introduction" href="unit2__langgraph__introduction.html">LangGraph 是什么？</a><a class="nav-link" data-local="unit2/langgraph/when_to_use_langgraph" href="unit2__langgraph__when_to_use_langgraph.html">何时使用 LangGraph？</a><a class="nav-link" data-local="unit2/langgraph/building_blocks" href="unit2__langgraph__building_blocks.html">LangGraph 的构建模块</a><a class="nav-link" data-local="unit2/langgraph/first_graph" href="unit2__langgraph__first_graph.html">创建你的第一个 LangGraph</a><a class="nav-link" data-local="unit2/langgraph/document_analysis_agent" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体</a><a class="nav-link" data-local="unit2/langgraph/quiz1" href="unit2__langgraph__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/langgraph/conclusion" href="unit2__langgraph__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 3 单元. Agentic RAG 的用例</summary><a class="nav-link" data-local="unit3/agentic-rag/introduction" href="unit3__agentic-rag__introduction.html">Agentic RAG 用例简介</a><a class="nav-link" data-local="unit3/agentic-rag/agentic-rag" href="unit3__agentic-rag__agentic-rag.html">Agentic 检索增强生成（RAG）</a><a class="nav-link" data-local="unit3/agentic-rag/invitees" href="unit3__agentic-rag__invitees.html">为宾客故事创建 RAG 工具</a><a class="nav-link" data-local="unit3/agentic-rag/tools" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具</a><a class="nav-link" data-local="unit3/agentic-rag/agent" href="unit3__agentic-rag__agent.html">创建你的 Gala 智能体</a><a class="nav-link" data-local="unit3/agentic-rag/conclusion" href="unit3__agentic-rag__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 4 单元. 最终项目 - 创建，测试和认证你的智能体</summary><a class="nav-link" data-local="unit4/introduction" href="unit4__introduction.html">欢迎来到最后一个单元</a><a class="nav-link" data-local="unit4/what-is-gaia" href="unit4__what-is-gaia.html">什么是GAIA？</a><a class="nav-link" data-local="unit4/hands-on" href="unit4__hands-on.html">动手实践</a><a class="nav-link" data-local="unit4/get-your-certificate" href="unit4__get-your-certificate.html">领取你的证书</a><a class="nav-link" data-local="unit4/conclusion" href="unit4__conclusion.html">结论</a><a class="nav-link" data-local="unit4/additional-readings" href="unit4__additional-readings.html">那现在呢？我应该学习哪些主题？</a></details>
+<details class="nav-chap"><summary>附加单元 1. 为函数调用微调大型语言模型</summary><a class="nav-link" data-local="bonus-unit1/introduction" href="bonus-unit1__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit1/what-is-function-calling" href="bonus-unit1__what-is-function-calling.html">什么是函数调用？</a><a class="nav-link" data-local="bonus-unit1/fine-tuning" href="bonus-unit1__fine-tuning.html">让我们为函数调用微调模型</a><a class="nav-link" data-local="bonus-unit1/conclusion" href="bonus-unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>附加单元 2. 智能体可观察性和评估</summary><a class="nav-link" data-local="bonus_unit2/introduction" href="bonus_unit2__introduction.html">简介</a><a class="nav-link" data-local="bonus_unit2/what-is-agent-observability-and-evaluation" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">什么是智能体可观察性和评估？</a><a class="nav-link active" data-local="bonus_unit2/monitoring-and-evaluating-agents-notebook" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体</a><a class="nav-link" data-local="bonus_unit2/quiz" href="bonus_unit2__quiz.html">测验</a></details>
+<details class="nav-chap"><summary>附加单元 3. 宝可梦中的AI智能体</summary><a class="nav-link" data-local="bonus-unit3/introduction" href="bonus-unit3__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit3/state-of-art" href="bonus-unit3__state-of-art.html">游戏中使用 LLM 的最新技术</a><a class="nav-link" data-local="bonus-unit3/from-llm-to-agents" href="bonus-unit3__from-llm-to-agents.html">从LLM到AI智能体</a><a class="nav-link" data-local="bonus-unit3/building_your_pokemon_agent" href="bonus-unit3__building_your_pokemon_agent.html">构建你自己的宝可梦对战智能体</a><a class="nav-link" data-local="bonus-unit3/launching_agent_battle" href="bonus-unit3__launching_agent_battle.html">启动你的宝可梦战斗智能体</a><a class="nav-link" data-local="bonus-unit3/conclusion" href="bonus-unit3__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>后续内容何时发布？</summary><a class="nav-link" data-local="communication/next-units" href="communication__next-units.html">后续单元</a></details></aside>
+<main>
+<h1 id="2ai-ai-agent">附加单元 2：AI 智能体(AI Agent)的可观测性与评估</h1>
+<blockquote>
+<p>[!TIP]
+你可以跟随<a href="https://huggingface.co/agents-course/notebooks/blob/main/bonus-unit2/monitoring-and-evaluating-agents-notebook.ipynb" target="_blank">这个 notebook</a> 中的代码进行操作，你可以在 Google Colab 上运行它。</p>
+</blockquote>
+<p>在这个 notebook 中，我们将学习如何使用开源可观测性工具来<strong>监督我们 AI 智能体的内部步骤（追踪）</strong>并<strong>评估其性能</strong>。</p>
+<p>观测和评估智能体行为的能力对于以下方面至关重要：
+- 当任务失败或产生次优结果时调试问题
+- 实时跟踪成本和性能
+- 通过持续反馈提高可靠性和安全性</p>
+<h2 id="_1">练习先决条件 🏗️</h2>
+<p>在运行此 notebook 之前，请确保你已经：</p>
+<p>🔲 📚  <strong>学习了</strong> <a href="https://huggingface.co/learn/agents-course/unit1/introduction">智能体简介</a></p>
+<p>🔲 📚  <strong>学习了</strong> <a href="https://huggingface.co/learn/agents-course/unit2/smolagents/introduction">smolagents 框架</a></p>
+<h2 id="0">步骤 0：安装所需的库</h2>
+<p>我们将需要一些库，以便我们能够运行、监控和评估我们的智能体：</p>
+<pre><code class="language-python">%pip install 'smolagents[telemetry]'
+%pip install opentelemetry-sdk opentelemetry-exporter-otlp openinference-instrumentation-smolagents
+%pip install langfuse datasets 'smolagents[gradio]'
+</code></pre>
+<h2 id="1">步骤 1：检测你的智能体</h2>
+<p>在这个 notebook 中，我们将使用 <a href="https://langfuse.com/">Langfuse</a> 作为我们的可观测性工具，但你可以使用<strong>任何其他兼容 OpenTelemetry 的服务</strong>。下面的代码展示了如何为 Langfuse（或任何 OTel 端点）设置环境变量，以及如何检测你的 smolagent。</p>
+<p><strong>请注意：</strong> 如果你正在使用 LlamaIndex 或 LangGraph，你可以在<a href="https://langfuse.com/docs/integrations/llama-index/workflows">这里</a>和<a href="https://langfuse.com/docs/integrations/langchain/example-python-langgraph">这里</a>找到检测它们的文档。</p>
+<p>首先，让我们配置正确的环境变量，以设置到 Langfuse OpenTelemetry 端点的连接。</p>
+<pre><code class="language-python">import os
+import base64
+
+# 从 https://cloud.langfuse.com 获取你自己的密钥
+LANGFUSE_PUBLIC_KEY = &quot;pk-lf-...&quot;
+LANGFUSE_SECRET_KEY = &quot;sk-lf-...&quot;
+os.environ[&quot;LANGFUSE_PUBLIC_KEY&quot;] = LANGFUSE_PUBLIC_KEY
+os.environ[&quot;LANGFUSE_SECRET_KEY&quot;] = LANGFUSE_SECRET_KEY
+os.environ[&quot;LANGFUSE_HOST&quot;] = &quot;https://cloud.langfuse.com&quot;  # 🇪🇺 欧盟区域示例
+# os.environ[&quot;LANGFUSE_HOST&quot;] = &quot;https://us.cloud.langfuse.com&quot;  # 🇺🇸 美国区域示例
+
+LANGFUSE_AUTH = base64.b64encode(
+    f&quot;{LANGFUSE_PUBLIC_KEY}:{LANGFUSE_SECRET_KEY}&quot;.encode()
+).decode()
+
+os.environ[&quot;OTEL_EXPORTER_OTLP_ENDPOINT&quot;] = os.environ.get(&quot;LANGFUSE_HOST&quot;) + &quot;/api/public/otel&quot;
+os.environ[&quot;OTEL_EXPORTER_OTLP_HEADERS&quot;] = f&quot;Authorization=Basic {LANGFUSE_AUTH}&quot;
+</code></pre>
+<p>我们还需要配置我们的 Hugging Face token 用于推理调用。</p>
+<pre><code class="language-python"># 将你的 Hugging Face 和其他 token或者密钥设置为环境变量
+os.environ[&quot;HF_TOKEN&quot;] = &quot;hf_...&quot;
+</code></pre>
+<p>接下来，我们可以为我们配置的 OpenTelemetry 设置一个 tracer-provider。</p>
+<pre><code class="language-python">from opentelemetry.sdk.trace import TracerProvider
+from openinference.instrumentation.smolagents import SmolagentsInstrumentor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+
+# 为 OpenTelemetry 创建一个 TracerProvider
+trace_provider = TracerProvider()
+
+# 添加一个带有 OTLPSpanExporter 的 SimpleSpanProcessor 来发送追踪
+trace_provider.add_span_processor(SimpleSpanProcessor(OTLPSpanExporter()))
+
+# 设置全局默认 tracer provider
+from opentelemetry import trace
+trace.set_tracer_provider(trace_provider)
+tracer = trace.get_tracer(__name__)
+
+# 使用配置的 provider 检测 smolagents
+SmolagentsInstrumentor().instrument(tracer_provider=trace_provider)
+
+</code></pre>
+<h2 id="2">步骤 2：测试你的检测</h2>
+<p>这里有一个来自 smolagents 的简单 CodeAgent，用于计算 <code>1+1</code>。我们运行它来确认检测是否正常工作。如果一切设置正确，你将在你的可观测性仪表板中看到日志/跨度（spans）。</p>
+<pre><code class="language-python">from smolagents import InferenceClientModel, CodeAgent
+
+# 创建一个简单的智能体来测试检测
+agent = CodeAgent(
+    tools=[],
+    model=InferenceClientModel()
+)
+
+agent.run(&quot;1+1=&quot;)
+</code></pre>
+<p>检查你的 <a href="https://cloud.langfuse.com">Langfuse Traces Dashboard</a>（或你选择的可观测性工具）以确认跨度（spans）和日志已被记录。</p>
+<p>Langfuse 中的示例截图：</p>
+<p><img alt="Example trace in Langfuse" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/first-example-trace.png" /></p>
+<p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/1b94d6888258e0998329cdb72a371155?timestamp=2025-03-10T11%3A59%3A41.743Z">追踪链接</a></em></p>
+<h2 id="3ai">步骤 3：观测和评估更复杂的AI智能体</h2>
+<p>既然你已经确认你的检测工作正常，让我们尝试一个更复杂的查询，这样我们就可以看到高级指标（token 使用量、延迟、成本等）是如何被追踪的。</p>
+<pre><code class="language-python">from smolagents import (CodeAgent, DuckDuckGoSearchTool, InferenceClientModel)
+
+search_tool = DuckDuckGoSearchTool()
+agent = CodeAgent(tools=[search_tool], model=InferenceClientModel())
+
+agent.run(&quot;How many Rubik's Cubes could you fit inside the Notre Dame Cathedral?&quot;)
+</code></pre>
+<h3 id="_2">追踪结构</h3>
+<p>大多数可观测性工具会记录一个<strong>追踪（trace）</strong>，其中包含<strong>跨度（spans）</strong>，每个跨度代表你的智能体逻辑的一个步骤。在这里，追踪包含了整体的智能体运行以及用于以下内容的子跨度：
+- 工具调用 (DuckDuckGoSearchTool)
+- LLM 调用 (InferenceClientModel)</p>
+<p>你可以检查这些跨度，以精确地了解时间花在哪里、使用了多少 token 等等：</p>
+<p>Langfuse 中的追踪树：</p>
+<p><img alt="Trace tree in Langfuse" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/trace-tree.png" /></p>
+<p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/1ac33b89ffd5e75d4265b62900c348ed?timestamp=2025-03-07T13%3A45%3A09.149Z&amp;display=preview">前往追踪（trace）的链接</a></em></p>
+<h2 id="_3">在线评估</h2>
+<p>在上一节中，我们了解了在线评估和离线评估的区别。现在，我们将了解如何在生产环境中监控你的智能体并实时评估它。</p>
+<h3 id="_4">生产环境中要追踪的常见指标</h3>
+<ol>
+<li><strong>成本</strong> — smolagents 检测会捕获 token 使用量，你可以通过为每个 token 分配价格将其转换为近似成本。</li>
+<li><strong>延迟</strong> — 观察完成每个步骤或整个运行所需的时间。</li>
+<li><strong>用户反馈</strong> — 用户可以提供直接反馈（点赞/点踩）来帮助优化或纠正智能体。</li>
+<li><strong>LLM 作为评判者</strong> — 使用一个单独的 LLM 来近乎实时地评估你的智能体的输出（例如，检查毒性或正确性）。</li>
+</ol>
+<p>下面，我们展示这些指标的示例。</p>
+<h4 id="1_1">1. 成本</h4>
+<p>下面是一个显示 <code>Qwen2.5-Coder-32B-Instruct</code> 调用使用情况的截图。这对于查看成本高昂的步骤并优化你的智能体很有用。</p>
+<p><img alt="Costs" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/smolagents-costs.png" /></p>
+<p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/1ac33b89ffd5e75d4265b62900c348ed?timestamp=2025-03-07T13%3A45%3A09.149Z&amp;display=preview">前往追踪（trace）的链接</a></em></p>
+<h4 id="2_1">2. 延迟</h4>
+<p>我们还可以看到完成每个步骤所需的时间。在下面的示例中，整个对话花费了 32 秒，你可以按步骤分解。这有助于你识别瓶颈并优化你的智能体。</p>
+<p><img alt="Latency" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/smolagents-latency.png" /></p>
+<p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/1ac33b89ffd5e75d4265b62900c348ed?timestamp=2025-03-07T13%3A45%3A09.149Z&amp;display=preview">前往追踪（trace）的链接</a></em></p>
+<h4 id="3">3. 附加属性</h4>
+<p>你还可以通过在跨度（spans）上设置附加属性——例如用户 ID、会话 ID 或标签。例如，smolagents 检测使用 OpenTelemetry 来附加诸如 <code>langfuse.user.id</code> 或自定义标签之类的属性。</p>
+<pre><code class="language-python">from smolagents import (CodeAgent, DuckDuckGoSearchTool, InferenceClientModel)
+from opentelemetry import trace
+
+search_tool = DuckDuckGoSearchTool()
+agent = CodeAgent(
+    tools=[search_tool],
+    model=InferenceClientModel()
+)
+
+with tracer.start_as_current_span(&quot;Smolagent-Trace&quot;) as span:
+    span.set_attribute(&quot;langfuse.user.id&quot;, &quot;smolagent-user-123&quot;)
+    span.set_attribute(&quot;langfuse.session.id&quot;, &quot;smolagent-session-123456789&quot;)
+    span.set_attribute(&quot;langfuse.tags&quot;, [&quot;city-question&quot;, &quot;testing-agents&quot;])
+
+    agent.run(&quot;What is the capital of Germany?&quot;)
+
+</code></pre>
+<p><img alt="Enhancing agent runs with additional metrics" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/smolagents-attributes.png" /></p>
+<h4 id="4">4. 用户反馈</h4>
+<p>如果你的智能体嵌入到用户界面中，你可以记录直接的用户反馈（例如聊天界面中的点赞/点踩）。下面是使用 <a href="https://gradio.app/">Gradio</a> 嵌入带有简单反馈机制的聊天示例。</p>
+<p>在下面的代码片段中，当用户发送聊天消息时，我们捕获 OpenTelemetry 追踪 ID。如果用户喜欢/不喜欢上一个答案，我们将评分附加到该追踪上。</p>
+<pre><code class="language-python">import gradio as gr
+from opentelemetry.trace import format_trace_id
+from smolagents import (CodeAgent, InferenceClientModel)
+from langfuse import Langfuse
+
+langfuse = Langfuse()
+model = InferenceClientModel()
+agent = CodeAgent(tools=[], model=model, add_base_tools=True)
+
+formatted_trace_id = None  # 为演示目的，我们将在全局存储当前的 trace_id
+
+def respond(prompt, history):
+    with trace.get_tracer(__name__).start_as_current_span(&quot;Smolagent-Trace&quot;) as span:
+        output = agent.run(prompt)
+
+        current_span = trace.get_current_span()
+        span_context = current_span.get_span_context()
+        trace_id = span_context.trace_id
+        global formatted_trace_id
+        formatted_trace_id = str(format_trace_id(trace_id))
+        langfuse.trace(id=formatted_trace_id, input=prompt, output=output)
+
+    history.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: str(output)})
+    return history
+
+def handle_like(data: gr.LikeData):
+    # 作为演示，我们将用户反馈映射为 1 (喜欢) 或 0 (不喜欢)
+    if data.liked:
+        langfuse.score(
+            value=1,
+            name=&quot;user-feedback&quot;,
+            trace_id=formatted_trace_id
+        )
+    else:
+        langfuse.score(
+            value=0,
+            name=&quot;user-feedback&quot;,
+            trace_id=formatted_trace_id
+        )
+
+with gr.Blocks() as demo:
+    chatbot = gr.Chatbot(label=&quot;Chat&quot;, type=&quot;messages&quot;)
+    prompt_box = gr.Textbox(placeholder=&quot;Type your message...&quot;, label=&quot;Your message&quot;)
+
+    # 当用户在提示框上按 'Enter' 时，我们运行 'respond'
+    prompt_box.submit(
+        fn=respond,
+        inputs=[prompt_box, chatbot],
+        outputs=chatbot
+    )
+
+    # 当用户点击消息上的 '喜欢' 按钮时，我们运行 'handle_like'
+    chatbot.like(handle_like, None, None)
+
+demo.launch()
+
+</code></pre>
+<p>然后，用户反馈会被捕获到你的可观测性工具中：</p>
+<p><img alt="User feedback is being captured in Langfuse" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/user-feedback-gradio.png" /></p>
+<h4 id="5-llm">5. LLM 作为评判者</h4>
+<p>LLM 作为评判者（LLM-as-a-Judge）是另一种自动评估你的智能体输出的方法。你可以设置一个单独的 LLM 调用来衡量输出的正确性、毒性、风格或你关心的任何其他标准。</p>
+<p><strong>工作流程</strong>：
+1.  你定义一个<strong>评估模板</strong>，例如，“检查文本是否有毒。”
+2.  每次你的智能体生成输出时，你将该输出连同模板一起传递给你的“评判者” LLM。
+3.  评判者 LLM 会返回一个评分或标签，你将其记录到你的可观测性工具中。</p>
+<p>来自 Langfuse 的示例：</p>
+<p><img alt="LLM-as-a-Judge Evaluation Template" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/evaluator-template.png" />
+<img alt="LLM-as-a-Judge Evaluator" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/evaluator.png" /></p>
+<pre><code class="language-python"># 示例：检查智能体的输出是否有毒。
+from smolagents import (CodeAgent, DuckDuckGoSearchTool, InferenceClientModel)
+
+search_tool = DuckDuckGoSearchTool()
+agent = CodeAgent(tools=[search_tool], model=InferenceClientModel())
+
+agent.run(&quot;Can eating carrots improve your vision?&quot;)
+
+</code></pre>
+<p>你可以看到这个例子的答案被判定为“无毒”。</p>
+<p><img alt="LLM-as-a-Judge Evaluation Score" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/llm-as-a-judge-score.png" /></p>
+<h4 id="6">6. 可观测性指标概览</h4>
+<p>所有这些指标都可以在仪表板中一起可视化。这使你能够快速查看你的智能体在多个会话中的表现，并帮助你随时间追踪质量指标。</p>
+<p><img alt="Observability metrics overview" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/langfuse-dashboard.png" /></p>
+<h2 id="_5">离线评估</h2>
+<p>在线评估对于实时反馈至关重要，但你还需要<strong>离线评估</strong>——在开发之前或期间进行系统性检查。这有助于在将更改推送到生产环境之前维护质量和可靠性。</p>
+<h3 id="_6">数据集评估</h3>
+<p>在离线评估中，你通常：
+1.  拥有一个基准数据集（包含提示和预期输出对）
+2.  在该数据集上运行你的智能体
+3.  将输出与预期结果进行比较，或使用额外的评分机制</p>
+<p>下面，我们使用 <a href="https://huggingface.co/datasets/gsm8k">GSM8K 数据集</a> 来演示这种方法，该数据集包含数学问题和解决方案。</p>
+<pre><code class="language-python">import pandas as pd
+from datasets import load_dataset
+
+# 从 Hugging Face 获取 GSM8K
+dataset = load_dataset(&quot;openai/gsm8k&quot;, 'main', split='train')
+df = pd.DataFrame(dataset)
+print(&quot;GSM8K 数据集的前几行：&quot;)
+print(df.head())
+
+</code></pre>
+<p>接下来，我们在 Langfuse 中创建一个数据集实体来追踪运行。然后，我们将数据集中的每个项目添加到系统中。（如果你不使用 Langfuse，你可以简单地将这些存储在你自己的数据库或本地文件中进行分析。）</p>
+<pre><code class="language-python">from langfuse import Langfuse
+langfuse = Langfuse()
+
+langfuse_dataset_name = &quot;gsm8k_dataset_huggingface&quot;
+
+# 在 Langfuse 中创建数据集
+langfuse.create_dataset(
+    name=langfuse_dataset_name,
+    description=&quot;从 Huggingface 上传的 GSM8K 基准数据集&quot;,
+    metadata={
+        &quot;date&quot;: &quot;2025-03-10&quot;,
+        &quot;type&quot;: &quot;benchmark&quot;
+    }
+)
+
+</code></pre>
+<pre><code class="language-python">for idx, row in df.iterrows():
+    langfuse.create_dataset_item(
+        dataset_name=langfuse_dataset_name,
+        input={&quot;text&quot;: row[&quot;question&quot;]},
+        expected_output={&quot;text&quot;: row[&quot;answer&quot;]},
+        metadata={&quot;source_index&quot;: idx}
+    )
+    if idx &gt;= 9: # 仅上传前 10 个项目用于演示
+        break
+
+</code></pre>
+<p><img alt="Dataset items in Langfuse" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/example-dataset.png" /></p>
+<h4 id="_7">在数据集上运行智能体</h4>
+<p>我们定义一个辅助函数 <code>run_smolagent()</code>，它：
+1.  启动一个 OpenTelemetry 跨度（span）
+2.  在提示上运行我们的智能体
+3.  在 Langfuse 中记录追踪 ID</p>
+<p>然后，我们遍历每个数据集项目，运行智能体，并将追踪链接到数据集项目。如果需要，我们还可以附加一个快速评估分数。</p>
+<pre><code class="language-python">from opentelemetry.trace import format_trace_id
+from smolagents import (CodeAgent, InferenceClientModel, LiteLLMModel)
+
+# 示例：使用 InferenceClientModel 或 LiteLLMModel 访问 openai、anthropic、gemini 等模型：
+model = InferenceClientModel()
+
+agent = CodeAgent(
+    tools=[],
+    model=model,
+    add_base_tools=True
+)
+
+def run_smolagent(question):
+    with tracer.start_as_current_span(&quot;Smolagent-Trace&quot;) as span:
+        span.set_attribute(&quot;langfuse.tag&quot;, &quot;dataset-run&quot;)
+        output = agent.run(question)
+
+        current_span = trace.get_current_span()
+        span_context = current_span.get_span_context()
+        trace_id = span_context.trace_id
+        formatted_trace_id = format_trace_id(trace_id)
+
+        langfuse_trace = langfuse.trace(
+            id=formatted_trace_id,
+            input=question,
+            output=output
+        )
+    return langfuse_trace, output
+
+</code></pre>
+<pre><code class="language-python">dataset = langfuse.get_dataset(langfuse_dataset_name)
+
+# 针对每个数据集项目运行我们的智能体（上面限制为前 10 个）
+for item in dataset.items:
+    langfuse_trace, output = run_smolagent(item.input[&quot;text&quot;])
+
+    # 将追踪链接到数据集项目以供分析
+    item.link(
+        langfuse_trace,
+        run_name=&quot;smolagent-notebook-run-01&quot;,
+        run_metadata={ &quot;model&quot;: model.model_id }
+    )
+
+    # 可选地，存储一个快速评估分数用于演示
+    langfuse_trace.score(
+        name=&quot;&lt;example_eval&gt;&quot;,
+        value=1,
+        comment=&quot;这是一条评论&quot;
+    )
+
+# 刷新数据以确保所有遥测数据都已发送
+langfuse.flush()
+
+</code></pre>
+<p>你可以用不同的配置重复这个过程：
+- 模型 (OpenAI GPT, 本地 LLM 等)
+- 工具 (使用搜索 vs. 不使用搜索)
+- 提示 (不同的系统消息)</p>
+<p>然后在你的可观测性工具中并排比较它们：</p>
+<p><img alt="Dataset run overview" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/dataset_runs.png" />
+<img alt="Dataset run comparison" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/dataset-run-comparison.png" /></p>
+<h2 id="_8">结语</h2>
+<p>在这个 notebook 中，我们介绍了如何：
+1.  <strong>设置可观测性</strong> 使用 smolagents + OpenTelemetry 导出器
+2.  <strong>检查检测</strong> 通过运行一个简单的智能体
+3.  <strong>捕获详细指标</strong> (成本、延迟等) 通过可观测性工具
+4.  <strong>收集用户反馈</strong> 通过 Gradio 界面
+5.  <strong>使用 LLM 作为评判者</strong> 自动评估输出
+6.  <strong>执行离线评估</strong> 使用基准数据集</p>
+<p>🤗 编代码愉快！</p>
+<div class="pager"><a class="prev" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">← 什么是智能体可观察性和评估？</a><a class="next" href="bonus_unit2__quiz.html">测验 →</a></div>
+<p class="attrib">内容来自 <a href="https://huggingface.co/learn/agents-course/zh-cn/unit0/introduction">Hugging Face AI Agents Course</a>(官方中文翻译),Apache 2.0 协议开源。本站为方便阅读的镜像整理,证书与测验请前往官方课程完成。</p>
+</main></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  var exp=q.querySelector('.quiz-explain');
+  q.querySelectorAll('.quiz-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('right','wrong')});
+      var ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'right':'wrong');
+      exp.hidden=false;
+      exp.textContent=(ok?'✅ 答对了!':'❌ 再想想:')+' '+btn.dataset.explain;
+    });
+  });
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.querySelector('aside').classList.toggle('open')});}
+</script></body></html>

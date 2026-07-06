@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多智能体系统 · HF AI Agents 课程(中文)</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2620;--muted:#7a6f61;--accent:#d97e30;--accent-soft:#fdeedd;--line:#e8e0d4;--green:#3d8a5f;--green-soft:#e4f2ea;--red:#b3452f;--red-soft:#fbe7e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+.layout{display:flex;min-height:100vh}
+aside{width:300px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
+aside .home{display:block;font-weight:700;margin-bottom:12px;color:var(--ink);text-decoration:none;font-size:.98rem}
+.nav-chap{margin-bottom:6px}
+.nav-chap summary{cursor:pointer;font-weight:600;font-size:.88rem;padding:6px 8px;border-radius:8px;color:var(--ink)}
+.nav-chap summary:hover{background:var(--accent-soft)}
+.nav-link{display:block;padding:5px 10px 5px 22px;font-size:.85rem;color:var(--muted);text-decoration:none;border-radius:8px}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:40px 48px 80px;max-width:860px;margin:0 auto}
+main img{max-width:100%;border-radius:10px;margin:14px 0}
+main h1{font-size:1.7rem;margin:0 0 18px}
+main h2{font-size:1.3rem;margin:30px 0 12px;padding-top:10px;border-top:1px solid var(--line)}
+main h3{font-size:1.1rem;margin:22px 0 10px}
+main p{margin:0 0 14px}
+main ul,main ol{margin:0 0 14px 1.5em}
+main li{margin-bottom:6px}
+main a{color:var(--accent)}
+main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+main th{background:var(--accent-soft)}
+pre{background:#2b2620;color:#f0e9dd;padding:16px;border-radius:10px;overflow-x:auto;margin:16px 0;line-height:1.55;font-size:.85rem}
+code{font-family:"SF Mono",Consolas,Menlo,monospace}
+p code,li code,td code{background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-size:.86em}
+blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.tip.warn{background:var(--red-soft);border-left-color:var(--red)}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}
+.quiz-q{font-weight:600;margin-bottom:10px}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);cursor:pointer;font-size:.92rem;font-family:inherit;line-height:1.6}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.right{background:var(--green-soft);border-color:var(--green)}
+.quiz-opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.quiz-explain{margin-top:6px;font-size:.9rem;padding:10px 14px;border-radius:8px;background:var(--accent-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-size:.9rem}
+.pager a:hover{border-color:var(--accent)}
+.pager .next{text-align:right}
+.attrib{margin-top:36px;font-size:.8rem;color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:900px){
+ aside{position:fixed;left:-320px;z-index:20;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+ aside.open{left:0}
+ .menu-btn{display:block;position:fixed;top:12px;left:12px;z-index:21;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.9rem}
+ main{padding:64px 20px 60px}
+}
+</style></head><body>
+<button class="menu-btn">☰ 目录</button>
+<div class="layout">
+<aside><a class="home" href="index.html">🤗 AI Agents 课程(中文)</a><details class="nav-chap" open><summary>第 0 单元. 课程欢迎</summary><a class="nav-link" data-local="unit0/introduction" href="unit0__introduction.html">欢迎来到课程 🤗</a><a class="nav-link" data-local="unit0/onboarding" href="unit0__onboarding.html">入门指南</a><a class="nav-link" data-local="unit0/discord101" href="unit0__discord101.html">(可选) Discord 使用指南</a></details>
+<details class="nav-chap"><summary>直播 1. 课程运作方式和问答</summary><a class="nav-link" data-local="communication/live1" href="communication__live1.html">直播 1. 课程运作方式和问答</a></details>
+<details class="nav-chap"><summary>第 1 单元. 智能体简介</summary><a class="nav-link" data-local="unit1/introduction" href="unit1__introduction.html">简介</a><a class="nav-link" data-local="unit1/what-are-agents" href="unit1__what-are-agents.html">什么是智能体？</a><a class="nav-link" data-local="unit1/quiz1" href="unit1__quiz1.html">快速测验 1</a><a class="nav-link" data-local="unit1/what-are-llms" href="unit1__what-are-llms.html">什么是 LLMs？</a><a class="nav-link" data-local="unit1/messages-and-special-tokens" href="unit1__messages-and-special-tokens.html">消息和特殊 token</a><a class="nav-link" data-local="unit1/tools" href="unit1__tools.html">什么是工具？</a><a class="nav-link" data-local="unit1/quiz2" href="unit1__quiz2.html">快速测验 2</a><a class="nav-link" data-local="unit1/agent-steps-and-structure" href="unit1__agent-steps-and-structure.html">通过思考-行动-观察循环理解 AI 智能体</a><a class="nav-link" data-local="unit1/thoughts" href="unit1__thoughts.html">思考、内部推理和 Re-Act 方法</a><a class="nav-link" data-local="unit1/actions" href="unit1__actions.html">行动，使智能体能够与环境交互</a><a class="nav-link" data-local="unit1/observations" href="unit1__observations.html">观察，整合反馈以反思和适应</a><a class="nav-link" data-local="unit1/dummy-agent-library" href="unit1__dummy-agent-library.html">简单智能体库</a><a class="nav-link" data-local="unit1/tutorial" href="unit1__tutorial.html">使用 Smolagents 创建我们的第一个智能体</a><a class="nav-link" data-local="unit1/final-quiz" href="unit1__final-quiz.html">第 1 单元最终测验</a><a class="nav-link" data-local="unit1/conclusion" href="unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2 单元. AI 智能体框架</summary><a class="nav-link" data-local="unit2/introduction" href="unit2__introduction.html">AI 智能体框架</a></details>
+<details class="nav-chap"><summary>第 2.1 单元. smolagents 框架</summary><a class="nav-link" data-local="unit2/smolagents/introduction" href="unit2__smolagents__introduction.html">smolagents 简介</a><a class="nav-link" data-local="unit2/smolagents/why_use_smolagents" href="unit2__smolagents__why_use_smolagents.html">为什么使用 smolagents？</a><a class="nav-link" data-local="unit2/smolagents/quiz1" href="unit2__smolagents__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/smolagents/code_agents" href="unit2__smolagents__code_agents.html">构建使用代码的智能体</a><a class="nav-link" data-local="unit2/smolagents/tool_calling_agents" href="unit2__smolagents__tool_calling_agents.html">将智能体与工具集成</a><a class="nav-link" data-local="unit2/smolagents/tools" href="unit2__smolagents__tools.html">工具</a><a class="nav-link" data-local="unit2/smolagents/retrieval_agents" href="unit2__smolagents__retrieval_agents.html">检索智能体</a><a class="nav-link" data-local="unit2/smolagents/quiz2" href="unit2__smolagents__quiz2.html">快速测验2</a><a class="nav-link active" data-local="unit2/smolagents/multi_agent_systems" href="unit2__smolagents__multi_agent_systems.html">多智能体系统</a><a class="nav-link" data-local="unit2/smolagents/vision_agents" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体</a><a class="nav-link" data-local="unit2/smolagents/final_quiz" href="unit2__smolagents__final_quiz.html">最终测验</a><a class="nav-link" data-local="unit2/smolagents/conclusion" href="unit2__smolagents__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.2 单元. LlamaIndex 框架</summary><a class="nav-link" data-local="unit2/llama-index/introduction" href="unit2__llama-index__introduction.html">LlamaIndex 简介</a><a class="nav-link" data-local="unit2/llama-index/llama-hub" href="unit2__llama-index__llama-hub.html">LlamaHub 简介</a><a class="nav-link" data-local="unit2/llama-index/components" href="unit2__llama-index__components.html">LlamaIndex 中的组件是什么？</a><a class="nav-link" data-local="unit2/llama-index/tools" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具</a><a class="nav-link" data-local="unit2/llama-index/quiz1" href="unit2__llama-index__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/llama-index/agents" href="unit2__llama-index__agents.html">在 LlamaIndex 中使用智能体</a><a class="nav-link" data-local="unit2/llama-index/workflows" href="unit2__llama-index__workflows.html">在 LlamaIndex 中创建智能工作流</a><a class="nav-link" data-local="unit2/llama-index/quiz2" href="unit2__llama-index__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/llama-index/conclusion" href="unit2__llama-index__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.3 单元. LangGraph 框架</summary><a class="nav-link" data-local="unit2/langgraph/introduction" href="unit2__langgraph__introduction.html">LangGraph 是什么？</a><a class="nav-link" data-local="unit2/langgraph/when_to_use_langgraph" href="unit2__langgraph__when_to_use_langgraph.html">何时使用 LangGraph？</a><a class="nav-link" data-local="unit2/langgraph/building_blocks" href="unit2__langgraph__building_blocks.html">LangGraph 的构建模块</a><a class="nav-link" data-local="unit2/langgraph/first_graph" href="unit2__langgraph__first_graph.html">创建你的第一个 LangGraph</a><a class="nav-link" data-local="unit2/langgraph/document_analysis_agent" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体</a><a class="nav-link" data-local="unit2/langgraph/quiz1" href="unit2__langgraph__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/langgraph/conclusion" href="unit2__langgraph__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 3 单元. Agentic RAG 的用例</summary><a class="nav-link" data-local="unit3/agentic-rag/introduction" href="unit3__agentic-rag__introduction.html">Agentic RAG 用例简介</a><a class="nav-link" data-local="unit3/agentic-rag/agentic-rag" href="unit3__agentic-rag__agentic-rag.html">Agentic 检索增强生成（RAG）</a><a class="nav-link" data-local="unit3/agentic-rag/invitees" href="unit3__agentic-rag__invitees.html">为宾客故事创建 RAG 工具</a><a class="nav-link" data-local="unit3/agentic-rag/tools" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具</a><a class="nav-link" data-local="unit3/agentic-rag/agent" href="unit3__agentic-rag__agent.html">创建你的 Gala 智能体</a><a class="nav-link" data-local="unit3/agentic-rag/conclusion" href="unit3__agentic-rag__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 4 单元. 最终项目 - 创建，测试和认证你的智能体</summary><a class="nav-link" data-local="unit4/introduction" href="unit4__introduction.html">欢迎来到最后一个单元</a><a class="nav-link" data-local="unit4/what-is-gaia" href="unit4__what-is-gaia.html">什么是GAIA？</a><a class="nav-link" data-local="unit4/hands-on" href="unit4__hands-on.html">动手实践</a><a class="nav-link" data-local="unit4/get-your-certificate" href="unit4__get-your-certificate.html">领取你的证书</a><a class="nav-link" data-local="unit4/conclusion" href="unit4__conclusion.html">结论</a><a class="nav-link" data-local="unit4/additional-readings" href="unit4__additional-readings.html">那现在呢？我应该学习哪些主题？</a></details>
+<details class="nav-chap"><summary>附加单元 1. 为函数调用微调大型语言模型</summary><a class="nav-link" data-local="bonus-unit1/introduction" href="bonus-unit1__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit1/what-is-function-calling" href="bonus-unit1__what-is-function-calling.html">什么是函数调用？</a><a class="nav-link" data-local="bonus-unit1/fine-tuning" href="bonus-unit1__fine-tuning.html">让我们为函数调用微调模型</a><a class="nav-link" data-local="bonus-unit1/conclusion" href="bonus-unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>附加单元 2. 智能体可观察性和评估</summary><a class="nav-link" data-local="bonus_unit2/introduction" href="bonus_unit2__introduction.html">简介</a><a class="nav-link" data-local="bonus_unit2/what-is-agent-observability-and-evaluation" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">什么是智能体可观察性和评估？</a><a class="nav-link" data-local="bonus_unit2/monitoring-and-evaluating-agents-notebook" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体</a><a class="nav-link" data-local="bonus_unit2/quiz" href="bonus_unit2__quiz.html">测验</a></details>
+<details class="nav-chap"><summary>附加单元 3. 宝可梦中的AI智能体</summary><a class="nav-link" data-local="bonus-unit3/introduction" href="bonus-unit3__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit3/state-of-art" href="bonus-unit3__state-of-art.html">游戏中使用 LLM 的最新技术</a><a class="nav-link" data-local="bonus-unit3/from-llm-to-agents" href="bonus-unit3__from-llm-to-agents.html">从LLM到AI智能体</a><a class="nav-link" data-local="bonus-unit3/building_your_pokemon_agent" href="bonus-unit3__building_your_pokemon_agent.html">构建你自己的宝可梦对战智能体</a><a class="nav-link" data-local="bonus-unit3/launching_agent_battle" href="bonus-unit3__launching_agent_battle.html">启动你的宝可梦战斗智能体</a><a class="nav-link" data-local="bonus-unit3/conclusion" href="bonus-unit3__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>后续内容何时发布？</summary><a class="nav-link" data-local="communication/next-units" href="communication__next-units.html">后续单元</a></details></aside>
+<main>
+<h1 id="_1">多智能体系统</h1>
+<p>多智能体系统使<strong>专业智能体能够在复杂任务上进行协作</strong>，提高模块化、可扩展性和稳健性。不依赖单一智能体，任务分配给具有不同能力的智能体。</p>
+<p>在 <strong>smolagents</strong> 中，不同的智能体可以组合起来生成 Python 代码、调用外部工具、执行网络搜索等。通过编排这些智能体，我们可以创建强大的工作流。</p>
+<p>一个典型的设置可能包括：</p>
+<ul>
+<li><strong>管理智能体（Manager Agent）</strong> 用于任务委派</li>
+<li><strong>代码解释器智能体（Code Interpreter Agent）</strong> 用于代码执行</li>
+<li><strong>网络搜索智能体（Web Search Agent）</strong> 用于信息检索</li>
+</ul>
+<p>下图说明了一个简单的多智能体架构，其中<strong>管理智能体</strong>协调<strong>代码解释器工具</strong>和<strong>网络搜索智能体</strong>，后者利用像 <code>DuckDuckGoSearchTool</code> 和 <code>VisitWebpageTool</code> 这样的工具来收集相关信息。</p>
+<p><img src="https://mermaid.ink/img/pako:eNp1kc1qhTAQRl9FUiQb8wIpdNO76eKubrmFks1oRg3VSYgjpYjv3lFL_2hnMWQOJwn5sqgmelRWleUSKLAtFs09jqhtoWuYUFfFAa6QA9QDTnpzamheuhxn8pt40-6l13UtS0ddhtQXj6dbR4XUGQg6zEYasTF393KjeSDGnDJKNxzj8I_7hLW5IOSmP9CH9hv_NL-d94d4DVNg84p1EnK4qlIj5hGClySWbadT-6OdsrL02MI8sFOOVkciw8zx8kaNspxnrJQE0fXKtjBMMs3JA-MpgOQwftIE9Bzj14w-cMznI_39E9Z3p0uFoA?type=png" style='background: white;'></p>
+<h2 id="_2">多智能体系统实战</h2>
+<p>多智能体系统由多个专业智能体在 <strong>编排智能体（Orchestrator Agent）</strong> 的协调下共同工作组成。这种方法通过在具有不同角色的智能体之间分配任务来实现复杂的工作流。</p>
+<p>例如，<strong>多智能体 RAG 系统</strong>可以整合：</p>
+<ul>
+<li><strong>网络智能体（Web Agent）</strong> 用于浏览互联网。</li>
+<li><strong>检索智能体（Retriever Agent）</strong> 用于从知识库获取信息。</li>
+<li><strong>图像生成智能体（Image Generation Agent）</strong> 用于生成视觉内容。</li>
+</ul>
+<p>所有这些智能体在管理任务委派和交互的编排者下运行。</p>
+<h2 id="_3">用多智能体层次结构解决复杂任务</h2>
+<blockquote>
+<p>[!TIP]
+你可以在{" "}
+  &lt;a
+    href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/multiagent_notebook.ipynb"
+    target="_blank"</p>
+<blockquote>
+<pre><code>这个笔记本
+</code></pre>
+<p></a>{" "}
+  中跟随代码，可以使用 Google Colab 运行。</p>
+</blockquote>
+</blockquote>
+<p>接待会即将到来！在你的帮助下，阿尔弗雷德现在几乎完成了准备工作。</p>
+<p>但现在有个问题：蝙蝠车不见了。阿尔弗雷德需要找到替代品，而且要快。</p>
+<p>幸运的是，已经有一些关于布鲁斯·韦恩生活的传记电影，所以也许阿尔弗雷德可以从某个电影拍摄现场留下的汽车中获取一辆，并将其重新改造到现代标准，这当然会包括完全自动驾驶选项。</p>
+<p>但这可能在世界各地的任何拍摄地点——可能数量众多。</p>
+<p>所以阿尔弗雷德需要你的帮助。你能构建一个能够解决这个任务的智能体吗？</p>
+<blockquote>
+<p>👉 Find all Batman filming locations in the world, calculate the time to transfer via boat to there, and represent them on a map, with a color varying by boat transfer time. Also represent some supercar factories with the same boat transfer time.</p>
+</blockquote>
+<p>让我们来构建这个！</p>
+<p>这个例子需要一些额外的包，所以首先安装它们：</p>
+<pre><code class="language-bash">pip install 'smolagents[litellm]' matplotlib geopandas shapely kaleido -q
+</code></pre>
+<h3 id="_4">我们首先制作一个工具来获取货运飞机转运时间。</h3>
+<pre><code class="language-python">import math
+from typing import Optional, Tuple
+
+from smolagents import tool
+
+
+@tool
+def calculate_cargo_travel_time(
+    origin_coords: Tuple[float, float],
+    destination_coords: Tuple[float, float],
+    cruising_speed_kmh: Optional[float] = 750.0,  # 货运飞机的平均速度
+) -&gt; float:
+    &quot;&quot;&quot;
+    Calculate the travel time for a cargo plane between two points on Earth using great-circle distance.
+
+    Args:
+        origin_coords: Tuple of (latitude, longitude) for the starting point
+        destination_coords: Tuple of (latitude, longitude) for the destination
+        cruising_speed_kmh: Optional cruising speed in km/h (defaults to 750 km/h for typical cargo planes)
+
+    Returns:
+        float: The estimated travel time in hours
+
+    Example:
+        &gt;&gt;&gt; # Chicago (41.8781° N, 87.6298° W) to Sydney (33.8688° S, 151.2093° E)
+        &gt;&gt;&gt; result = calculate_cargo_travel_time((41.8781, -87.6298), (-33.8688, 151.2093))
+    &quot;&quot;&quot;
+
+    def to_radians(degrees: float) -&gt; float:
+        return degrees * (math.pi / 180)
+
+    # 提取坐标
+    lat1, lon1 = map(to_radians, origin_coords)
+    lat2, lon2 = map(to_radians, destination_coords)
+
+    # 地球半径（公里）
+    EARTH_RADIUS_KM = 6371.0
+
+    # 使用半正矢公式计算大圆距离
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    )
+    c = 2 * math.asin(math.sqrt(a))
+    distance = EARTH_RADIUS_KM * c
+
+    # 增加10%以考虑非直接路线和空中交通管制
+    actual_distance = distance * 1.1
+
+    # 计算飞行时间
+    # 为起飞和着陆程序增加1小时
+    flight_time = (actual_distance / cruising_speed_kmh) + 1.0
+
+    # 格式化结果
+    return round(flight_time, 2)
+
+
+print(calculate_cargo_travel_time((41.8781, -87.6298), (-33.8688, 151.2093)))
+</code></pre>
+<h3 id="_5">设置智能体</h3>
+<p>对于模型提供商，我们使用 Together AI，这是 <a href="https://huggingface.co/blog/inference-providers">Hub 上的新推理提供商</a>之一！</p>
+<p>GoogleSearchTool 使用 <a href="https://serper.dev">Serper API</a> 搜索网络，因此这需要设置环境变量 <code>SERPAPI_API_KEY</code> 并传递 <code>provider="serpapi"</code> 或者拥有 <code>SERPER_API_KEY</code> 并传递 <code>provider=serper</code>。</p>
+<p>如果你没有设置任何 Serp API 提供商，你可以使用 <code>DuckDuckGoSearchTool</code>，但请注意它有速率限制。</p>
+<pre><code class="language-python">import os
+from PIL import Image
+from smolagents import CodeAgent, GoogleSearchTool, InferenceClientModel, VisitWebpageTool
+
+model = InferenceClientModel(model_id=&quot;Qwen/Qwen2.5-Coder-32B-Instruct&quot;, provider=&quot;together&quot;)
+</code></pre>
+<p>我们可以先创建一个简单的智能体作为基线，为我们提供一个简单的报告。</p>
+<pre><code class="language-python">task = &quot;&quot;&quot;Find all Batman filming locations in the world, calculate the time to transfer via cargo plane to here (we're in Gotham, 40.7128° N, 74.0060° W), and return them to me as a pandas dataframe.
+Also give me some supercar factories with the same cargo plane transfer time.&quot;&quot;&quot;
+</code></pre>
+<pre><code class="language-python">agent = CodeAgent(
+    model=model,
+    tools=[GoogleSearchTool(&quot;serper&quot;), VisitWebpageTool(), calculate_cargo_travel_time],
+    additional_authorized_imports=[&quot;pandas&quot;],
+    max_steps=20,
+)
+</code></pre>
+<pre><code class="language-python">result = agent.run(task)
+</code></pre>
+<pre><code class="language-python">result
+</code></pre>
+<p>在我们的例子中，它生成了这个输出：</p>
+<pre><code class="language-python">|  | Location                                             | Travel Time to Gotham (hours) |
+|--|------------------------------------------------------|------------------------------|
+| 0  | Necropolis Cemetery, Glasgow, Scotland, UK         | 8.60                         |
+| 1  | St. George's Hall, Liverpool, England, UK         | 8.81                         |
+| 2  | Two Temple Place, London, England, UK             | 9.17                         |
+| 3  | Wollaton Hall, Nottingham, England, UK           | 9.00                         |
+| 4  | Knebworth House, Knebworth, Hertfordshire, UK    | 9.15                         |
+| 5  | Acton Lane Power Station, Acton Lane, Acton, UK  | 9.16                         |
+| 6  | Queensboro Bridge, New York City, USA            | 1.01                         |
+| 7  | Wall Street, New York City, USA                  | 1.00                         |
+| 8  | Mehrangarh Fort, Jodhpur, Rajasthan, India       | 18.34                        |
+| 9  | Turda Gorge, Turda, Romania                      | 11.89                        |
+| 10 | Chicago, USA                                     | 2.68                         |
+| 11 | Hong Kong, China                                 | 19.99                        |
+| 12 | Cardington Studios, Northamptonshire, UK        | 9.10                         |
+| 13 | Warner Bros. Leavesden Studios, Hertfordshire, UK | 9.13                         |
+| 14 | Westwood, Los Angeles, CA, USA                  | 6.79                         |
+| 15 | Woking, UK (McLaren)                             | 9.13                         |
+</code></pre>
+<p>我们可以通过添加一些专门的规划步骤和更多的提示来进一步改进这一点。</p>
+<p>规划步骤允许智能体提前思考并规划其下一步行动，这对于更复杂的任务非常有用。</p>
+<pre><code class="language-python">agent.planning_interval = 4
+
+detailed_report = agent.run(f&quot;&quot;&quot;
+You're an expert analyst. You make comprehensive reports after visiting many websites.
+Don't hesitate to search for many queries at once in a for loop.
+For each data point that you find, visit the source url to confirm numbers.
+
+{task}
+&quot;&quot;&quot;)
+
+print(detailed_report)
+</code></pre>
+<pre><code class="language-python">detailed_report
+</code></pre>
+<p>在我们的例子中，它生成了这个输出：</p>
+<pre><code class="language-python">|  | Location                                         | Travel Time (hours) |
+|--|--------------------------------------------------|---------------------|
+| 0  | Bridge of Sighs, Glasgow Necropolis, Glasgow, UK | 8.6                 |
+| 1  | Wishart Street, Glasgow, Scotland, UK         | 8.6                 |
+</code></pre>
+<p>感谢这些快速更改，我们通过简单地为我们的智能体提供详细提示，并赋予它规划能力，获得了更加简洁的报告！</p>
+<p>模型的上下文窗口正在快速填满。所以<strong>如果我们要求我们的智能体将详细搜索的结果与另一个结合起来，它将变得更慢，并且会迅速增加 token 数量和成本</strong>。</p>
+<p>➡️ 我们需要改进系统的结构。</p>
+<h3 id="_6">✌️ 在两个智能体之间分割任务</h3>
+<p>多智能体结构允许在不同子任务之间分离记忆，带来两大好处：</p>
+<ul>
+<li>每个智能体更专注于其核心任务，因此性能更佳</li>
+<li>分离记忆减少了每个步骤的输入 token 数量，从而减少延迟和成本。</li>
+</ul>
+<p>让我们创建一个团队，包含一个专门的网络搜索智能体，由另一个智能体管理。</p>
+<p>管理智能体应该具有绘图功能来编写其最终报告：因此让我们给它访问额外导入的权限，包括 <code>matplotlib</code> 和 <code>geopandas</code> + <code>shapely</code> 用于空间绘图。</p>
+<pre><code class="language-python">model = InferenceClientModel(
+    &quot;Qwen/Qwen2.5-Coder-32B-Instruct&quot;, provider=&quot;together&quot;, max_tokens=8096
+)
+
+web_agent = CodeAgent(
+    model=model,
+    tools=[
+        GoogleSearchTool(provider=&quot;serper&quot;),
+        VisitWebpageTool(),
+        calculate_cargo_travel_time,
+    ],
+    name=&quot;web_agent&quot;,
+    description=&quot;Browses the web to find information&quot;,
+    verbosity_level=0,
+    max_steps=10,
+)
+</code></pre>
+<p>管理智能体需要进行一些较重的思考工作。</p>
+<p>所以我们给它更强大的模型 <a href="https://huggingface.co/deepseek-ai/DeepSeek-R1">DeepSeek-R1</a>，并添加 <code>planning_interval</code> 到组合中。</p>
+<pre><code class="language-python">from smolagents.utils import encode_image_base64, make_image_url
+from smolagents import OpenAIServerModel
+
+
+def check_reasoning_and_plot(final_answer, agent_memory):
+    final_answer
+    multimodal_model = OpenAIServerModel(&quot;gpt-4o&quot;, max_tokens=8096)
+    filepath = &quot;saved_map.png&quot;
+    assert os.path.exists(filepath), &quot;Make sure to save the plot under saved_map.png!&quot;
+    image = Image.open(filepath)
+    prompt = (
+        f&quot;Here is a user-given task and the agent steps: {agent_memory.get_succinct_steps()}. Now here is the plot that was made.&quot;
+        &quot;Please check that the reasoning process and plot are correct: do they correctly answer the given task?&quot;
+        &quot;First list reasons why yes/no, then write your final decision: PASS in caps lock if it is satisfactory, FAIL if it is not.&quot;
+        &quot;Don't be harsh: if the plot mostly solves the task, it should pass.&quot;
+        &quot;To pass, a plot should be made using px.scatter_map and not any other method (scatter_map looks nicer).&quot;
+    )
+    messages = [
+        {
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: [
+                {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;text&quot;: prompt,
+                },
+                {
+                    &quot;type&quot;: &quot;image_url&quot;,
+                    &quot;image_url&quot;: {&quot;url&quot;: make_image_url(encode_image_base64(image))},
+                },
+            ],
+        }
+    ]
+    output = multimodal_model(messages).content
+    print(&quot;Feedback: &quot;, output)
+    if &quot;FAIL&quot; in output:
+        raise Exception(output)
+    return True
+
+
+manager_agent = CodeAgent(
+    model=InferenceClientModel(&quot;deepseek-ai/DeepSeek-R1&quot;, provider=&quot;together&quot;, max_tokens=8096),
+    tools=[calculate_cargo_travel_time],
+    managed_agents=[web_agent],
+    additional_authorized_imports=[
+        &quot;geopandas&quot;,
+        &quot;plotly&quot;,
+        &quot;shapely&quot;,
+        &quot;json&quot;,
+        &quot;pandas&quot;,
+        &quot;numpy&quot;,
+    ],
+    planning_interval=5,
+    verbosity_level=2,
+    final_answer_checks=[check_reasoning_and_plot],
+    max_steps=15,
+)
+</code></pre>
+<p>让我们检查这个团队是什么样子：</p>
+<pre><code class="language-python">manager_agent.visualize()
+</code></pre>
+<p>这将生成类似于下面的内容，帮助我们理解智能体和使用的工具之间的结构和关系：</p>
+<pre><code class="language-python">CodeAgent | deepseek-ai/DeepSeek-R1
+├── ✅ Authorized imports: ['geopandas', 'plotly', 'shapely', 'json', 'pandas', 'numpy']
+├── 🛠️ Tools:
+│   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+│   ┃ Name                        ┃ Description                           ┃ Arguments                             ┃
+│   ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│   │ calculate_cargo_travel_time │ Calculate the travel time for a cargo │ origin_coords (`array`): Tuple of     │
+│   │                             │ plane between two points on Earth     │ (latitude, longitude) for the         │
+│   │                             │ using great-circle distance.          │ starting point                        │
+│   │                             │                                       │ destination_coords (`array`): Tuple   │
+│   │                             │                                       │ of (latitude, longitude) for the      │
+│   │                             │                                       │ destination                           │
+│   │                             │                                       │ cruising_speed_kmh (`number`):        │
+│   │                             │                                       │ Optional cruising speed in km/h       │
+│   │                             │                                       │ (defaults to 750 km/h for typical     │
+│   │                             │                                       │ cargo planes)                         │
+│   │ final_answer                │ Provides a final answer to the given  │ answer (`any`): The final answer to   │
+│   │                             │ problem.                              │ the problem                           │
+│   └─────────────────────────────┴───────────────────────────────────────┴───────────────────────────────────────┘
+└── 🤖 Managed agents:
+    └── web_agent | CodeAgent | Qwen/Qwen2.5-Coder-32B-Instruct
+        ├── ✅ Authorized imports: []
+        ├── 📝 Description: Browses the web to find information
+        └── 🛠️ Tools:
+            ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+            ┃ Name                        ┃ Description                       ┃ Arguments                         ┃
+            ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+            │ web_search                  │ Performs a google web search for  │ query (`string`): The search      │
+            │                             │ your query then returns a string  │ query to perform.                 │
+            │                             │ of the top search results.        │ filter_year (`integer`):          │
+            │                             │                                   │ Optionally restrict results to a  │
+            │                             │                                   │ certain year                      │
+            │ visit_webpage               │ Visits a webpage at the given url │ url (`string`): The url of the    │
+            │                             │ and reads its content as a        │ webpage to visit.                 │
+            │                             │ markdown string. Use this to      │                                   │
+            │                             │ browse webpages.                  │                                   │
+            │ calculate_cargo_travel_time │ Calculate the travel time for a   │ origin_coords (`array`): Tuple of │
+            │                             │ cargo plane between two points on │ (latitude, longitude) for the     │
+            │                             │ Earth using great-circle          │ starting point                    │
+            │                             │ distance.                         │ destination_coords (`array`):     │
+            │                             │                                   │ Tuple of (latitude, longitude)    │
+            │                             │                                   │ for the destination               │
+            │                             │                                   │ cruising_speed_kmh (`number`):    │
+            │                             │                                   │ Optional cruising speed in km/h   │
+            │                             │                                   │ (defaults to 750 km/h for typical │
+            │                             │                                   │ cargo planes)                     │
+            │ final_answer                │ Provides a final answer to the    │ answer (`any`): The final answer  │
+            │                             │ given problem.                    │ to the problem                    │
+            └─────────────────────────────┴───────────────────────────────────┴───────────────────────────────────┘
+</code></pre>
+<pre><code class="language-python">manager_agent.run(&quot;&quot;&quot;
+Find all Batman filming locations in the world, calculate the time to transfer via cargo plane to here (we're in Gotham, 40.7128° N, 74.0060° W).
+Also give me some supercar factories with the same cargo plane transfer time. You need at least 6 points in total.
+Represent this as spatial map of the world, with the locations represented as scatter points with a color that depends on the travel time, and save it to saved_map.png!
+
+Here's an example of how to plot and return a map:
+import plotly.express as px
+df = px.data.carshare()
+fig = px.scatter_map(df, lat=&quot;centroid_lat&quot;, lon=&quot;centroid_lon&quot;, text=&quot;name&quot;, color=&quot;peak_hour&quot;, size=100,
+     color_continuous_scale=px.colors.sequential.Magma, size_max=15, zoom=1)
+fig.show()
+fig.write_image(&quot;saved_image.png&quot;)
+final_answer(fig)
+
+Never try to process strings using code: when you have a string to read, just print it and you'll see it.
+&quot;&quot;&quot;)
+</code></pre>
+<p>我不知道在你的运行中情况如何，但在我的运行中，管理智能体巧妙地将任务分配给网络智能体，首先是 <code>1. Search for Batman filming locations</code>，然后是 <code>2. Find supercar factories</code>，最后聚合列表并绘制地图。</p>
+<p>让我们通过直接从智能体状态查看地图：</p>
+<pre><code class="language-python">manager_agent.python_executor.state[&quot;fig&quot;]
+</code></pre>
+<p>这将输出地图：</p>
+<p><img alt="多智能体系统示例输出地图" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/smolagents/output_map.png" /></p>
+<h2 id="_7">资源</h2>
+<ul>
+<li><a href="https://huggingface.co/docs/smolagents/main/en/examples/multiagents">多智能体系统</a> – 多智能体系统概述。</li>
+<li><a href="https://weaviate.io/blog/what-is-agentic-rag">什么是智能体 RAG？</a> – 智能体 RAG 介绍。</li>
+<li><a href="https://huggingface.co/learn/cookbook/multiagent_rag_system">多智能体 RAG 系统 🤖🤝🤖 配方</a> – 构建多智能体 RAG 系统的分步指南。</li>
+</ul>
+<div class="pager"><a class="prev" href="unit2__smolagents__quiz2.html">← 快速测验2</a><a class="next" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体 →</a></div>
+<p class="attrib">内容来自 <a href="https://huggingface.co/learn/agents-course/zh-cn/unit0/introduction">Hugging Face AI Agents Course</a>(官方中文翻译),Apache 2.0 协议开源。本站为方便阅读的镜像整理,证书与测验请前往官方课程完成。</p>
+</main></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  var exp=q.querySelector('.quiz-explain');
+  q.querySelectorAll('.quiz-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('right','wrong')});
+      var ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'right':'wrong');
+      exp.hidden=false;
+      exp.textContent=(ok?'✅ 答对了!':'❌ 再想想:')+' '+btn.dataset.explain;
+    });
+  });
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.querySelector('aside').classList.toggle('open')});}
+</script></body></html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创建你的第一个 LangGraph · HF AI Agents 课程(中文)</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2620;--muted:#7a6f61;--accent:#d97e30;--accent-soft:#fdeedd;--line:#e8e0d4;--green:#3d8a5f;--green-soft:#e4f2ea;--red:#b3452f;--red-soft:#fbe7e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+.layout{display:flex;min-height:100vh}
+aside{width:300px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
+aside .home{display:block;font-weight:700;margin-bottom:12px;color:var(--ink);text-decoration:none;font-size:.98rem}
+.nav-chap{margin-bottom:6px}
+.nav-chap summary{cursor:pointer;font-weight:600;font-size:.88rem;padding:6px 8px;border-radius:8px;color:var(--ink)}
+.nav-chap summary:hover{background:var(--accent-soft)}
+.nav-link{display:block;padding:5px 10px 5px 22px;font-size:.85rem;color:var(--muted);text-decoration:none;border-radius:8px}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:40px 48px 80px;max-width:860px;margin:0 auto}
+main img{max-width:100%;border-radius:10px;margin:14px 0}
+main h1{font-size:1.7rem;margin:0 0 18px}
+main h2{font-size:1.3rem;margin:30px 0 12px;padding-top:10px;border-top:1px solid var(--line)}
+main h3{font-size:1.1rem;margin:22px 0 10px}
+main p{margin:0 0 14px}
+main ul,main ol{margin:0 0 14px 1.5em}
+main li{margin-bottom:6px}
+main a{color:var(--accent)}
+main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+main th{background:var(--accent-soft)}
+pre{background:#2b2620;color:#f0e9dd;padding:16px;border-radius:10px;overflow-x:auto;margin:16px 0;line-height:1.55;font-size:.85rem}
+code{font-family:"SF Mono",Consolas,Menlo,monospace}
+p code,li code,td code{background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-size:.86em}
+blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.tip.warn{background:var(--red-soft);border-left-color:var(--red)}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}
+.quiz-q{font-weight:600;margin-bottom:10px}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);cursor:pointer;font-size:.92rem;font-family:inherit;line-height:1.6}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.right{background:var(--green-soft);border-color:var(--green)}
+.quiz-opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.quiz-explain{margin-top:6px;font-size:.9rem;padding:10px 14px;border-radius:8px;background:var(--accent-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-size:.9rem}
+.pager a:hover{border-color:var(--accent)}
+.pager .next{text-align:right}
+.attrib{margin-top:36px;font-size:.8rem;color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:900px){
+ aside{position:fixed;left:-320px;z-index:20;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+ aside.open{left:0}
+ .menu-btn{display:block;position:fixed;top:12px;left:12px;z-index:21;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.9rem}
+ main{padding:64px 20px 60px}
+}
+</style></head><body>
+<button class="menu-btn">☰ 目录</button>
+<div class="layout">
+<aside><a class="home" href="index.html">🤗 AI Agents 课程(中文)</a><details class="nav-chap" open><summary>第 0 单元. 课程欢迎</summary><a class="nav-link" data-local="unit0/introduction" href="unit0__introduction.html">欢迎来到课程 🤗</a><a class="nav-link" data-local="unit0/onboarding" href="unit0__onboarding.html">入门指南</a><a class="nav-link" data-local="unit0/discord101" href="unit0__discord101.html">(可选) Discord 使用指南</a></details>
+<details class="nav-chap"><summary>直播 1. 课程运作方式和问答</summary><a class="nav-link" data-local="communication/live1" href="communication__live1.html">直播 1. 课程运作方式和问答</a></details>
+<details class="nav-chap"><summary>第 1 单元. 智能体简介</summary><a class="nav-link" data-local="unit1/introduction" href="unit1__introduction.html">简介</a><a class="nav-link" data-local="unit1/what-are-agents" href="unit1__what-are-agents.html">什么是智能体？</a><a class="nav-link" data-local="unit1/quiz1" href="unit1__quiz1.html">快速测验 1</a><a class="nav-link" data-local="unit1/what-are-llms" href="unit1__what-are-llms.html">什么是 LLMs？</a><a class="nav-link" data-local="unit1/messages-and-special-tokens" href="unit1__messages-and-special-tokens.html">消息和特殊 token</a><a class="nav-link" data-local="unit1/tools" href="unit1__tools.html">什么是工具？</a><a class="nav-link" data-local="unit1/quiz2" href="unit1__quiz2.html">快速测验 2</a><a class="nav-link" data-local="unit1/agent-steps-and-structure" href="unit1__agent-steps-and-structure.html">通过思考-行动-观察循环理解 AI 智能体</a><a class="nav-link" data-local="unit1/thoughts" href="unit1__thoughts.html">思考、内部推理和 Re-Act 方法</a><a class="nav-link" data-local="unit1/actions" href="unit1__actions.html">行动，使智能体能够与环境交互</a><a class="nav-link" data-local="unit1/observations" href="unit1__observations.html">观察，整合反馈以反思和适应</a><a class="nav-link" data-local="unit1/dummy-agent-library" href="unit1__dummy-agent-library.html">简单智能体库</a><a class="nav-link" data-local="unit1/tutorial" href="unit1__tutorial.html">使用 Smolagents 创建我们的第一个智能体</a><a class="nav-link" data-local="unit1/final-quiz" href="unit1__final-quiz.html">第 1 单元最终测验</a><a class="nav-link" data-local="unit1/conclusion" href="unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2 单元. AI 智能体框架</summary><a class="nav-link" data-local="unit2/introduction" href="unit2__introduction.html">AI 智能体框架</a></details>
+<details class="nav-chap"><summary>第 2.1 单元. smolagents 框架</summary><a class="nav-link" data-local="unit2/smolagents/introduction" href="unit2__smolagents__introduction.html">smolagents 简介</a><a class="nav-link" data-local="unit2/smolagents/why_use_smolagents" href="unit2__smolagents__why_use_smolagents.html">为什么使用 smolagents？</a><a class="nav-link" data-local="unit2/smolagents/quiz1" href="unit2__smolagents__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/smolagents/code_agents" href="unit2__smolagents__code_agents.html">构建使用代码的智能体</a><a class="nav-link" data-local="unit2/smolagents/tool_calling_agents" href="unit2__smolagents__tool_calling_agents.html">将智能体与工具集成</a><a class="nav-link" data-local="unit2/smolagents/tools" href="unit2__smolagents__tools.html">工具</a><a class="nav-link" data-local="unit2/smolagents/retrieval_agents" href="unit2__smolagents__retrieval_agents.html">检索智能体</a><a class="nav-link" data-local="unit2/smolagents/quiz2" href="unit2__smolagents__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/smolagents/multi_agent_systems" href="unit2__smolagents__multi_agent_systems.html">多智能体系统</a><a class="nav-link" data-local="unit2/smolagents/vision_agents" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体</a><a class="nav-link" data-local="unit2/smolagents/final_quiz" href="unit2__smolagents__final_quiz.html">最终测验</a><a class="nav-link" data-local="unit2/smolagents/conclusion" href="unit2__smolagents__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.2 单元. LlamaIndex 框架</summary><a class="nav-link" data-local="unit2/llama-index/introduction" href="unit2__llama-index__introduction.html">LlamaIndex 简介</a><a class="nav-link" data-local="unit2/llama-index/llama-hub" href="unit2__llama-index__llama-hub.html">LlamaHub 简介</a><a class="nav-link" data-local="unit2/llama-index/components" href="unit2__llama-index__components.html">LlamaIndex 中的组件是什么？</a><a class="nav-link" data-local="unit2/llama-index/tools" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具</a><a class="nav-link" data-local="unit2/llama-index/quiz1" href="unit2__llama-index__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/llama-index/agents" href="unit2__llama-index__agents.html">在 LlamaIndex 中使用智能体</a><a class="nav-link" data-local="unit2/llama-index/workflows" href="unit2__llama-index__workflows.html">在 LlamaIndex 中创建智能工作流</a><a class="nav-link" data-local="unit2/llama-index/quiz2" href="unit2__llama-index__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/llama-index/conclusion" href="unit2__llama-index__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.3 单元. LangGraph 框架</summary><a class="nav-link" data-local="unit2/langgraph/introduction" href="unit2__langgraph__introduction.html">LangGraph 是什么？</a><a class="nav-link" data-local="unit2/langgraph/when_to_use_langgraph" href="unit2__langgraph__when_to_use_langgraph.html">何时使用 LangGraph？</a><a class="nav-link" data-local="unit2/langgraph/building_blocks" href="unit2__langgraph__building_blocks.html">LangGraph 的构建模块</a><a class="nav-link active" data-local="unit2/langgraph/first_graph" href="unit2__langgraph__first_graph.html">创建你的第一个 LangGraph</a><a class="nav-link" data-local="unit2/langgraph/document_analysis_agent" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体</a><a class="nav-link" data-local="unit2/langgraph/quiz1" href="unit2__langgraph__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/langgraph/conclusion" href="unit2__langgraph__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 3 单元. Agentic RAG 的用例</summary><a class="nav-link" data-local="unit3/agentic-rag/introduction" href="unit3__agentic-rag__introduction.html">Agentic RAG 用例简介</a><a class="nav-link" data-local="unit3/agentic-rag/agentic-rag" href="unit3__agentic-rag__agentic-rag.html">Agentic 检索增强生成（RAG）</a><a class="nav-link" data-local="unit3/agentic-rag/invitees" href="unit3__agentic-rag__invitees.html">为宾客故事创建 RAG 工具</a><a class="nav-link" data-local="unit3/agentic-rag/tools" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具</a><a class="nav-link" data-local="unit3/agentic-rag/agent" href="unit3__agentic-rag__agent.html">创建你的 Gala 智能体</a><a class="nav-link" data-local="unit3/agentic-rag/conclusion" href="unit3__agentic-rag__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 4 单元. 最终项目 - 创建，测试和认证你的智能体</summary><a class="nav-link" data-local="unit4/introduction" href="unit4__introduction.html">欢迎来到最后一个单元</a><a class="nav-link" data-local="unit4/what-is-gaia" href="unit4__what-is-gaia.html">什么是GAIA？</a><a class="nav-link" data-local="unit4/hands-on" href="unit4__hands-on.html">动手实践</a><a class="nav-link" data-local="unit4/get-your-certificate" href="unit4__get-your-certificate.html">领取你的证书</a><a class="nav-link" data-local="unit4/conclusion" href="unit4__conclusion.html">结论</a><a class="nav-link" data-local="unit4/additional-readings" href="unit4__additional-readings.html">那现在呢？我应该学习哪些主题？</a></details>
+<details class="nav-chap"><summary>附加单元 1. 为函数调用微调大型语言模型</summary><a class="nav-link" data-local="bonus-unit1/introduction" href="bonus-unit1__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit1/what-is-function-calling" href="bonus-unit1__what-is-function-calling.html">什么是函数调用？</a><a class="nav-link" data-local="bonus-unit1/fine-tuning" href="bonus-unit1__fine-tuning.html">让我们为函数调用微调模型</a><a class="nav-link" data-local="bonus-unit1/conclusion" href="bonus-unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>附加单元 2. 智能体可观察性和评估</summary><a class="nav-link" data-local="bonus_unit2/introduction" href="bonus_unit2__introduction.html">简介</a><a class="nav-link" data-local="bonus_unit2/what-is-agent-observability-and-evaluation" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">什么是智能体可观察性和评估？</a><a class="nav-link" data-local="bonus_unit2/monitoring-and-evaluating-agents-notebook" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体</a><a class="nav-link" data-local="bonus_unit2/quiz" href="bonus_unit2__quiz.html">测验</a></details>
+<details class="nav-chap"><summary>附加单元 3. 宝可梦中的AI智能体</summary><a class="nav-link" data-local="bonus-unit3/introduction" href="bonus-unit3__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit3/state-of-art" href="bonus-unit3__state-of-art.html">游戏中使用 LLM 的最新技术</a><a class="nav-link" data-local="bonus-unit3/from-llm-to-agents" href="bonus-unit3__from-llm-to-agents.html">从LLM到AI智能体</a><a class="nav-link" data-local="bonus-unit3/building_your_pokemon_agent" href="bonus-unit3__building_your_pokemon_agent.html">构建你自己的宝可梦对战智能体</a><a class="nav-link" data-local="bonus-unit3/launching_agent_battle" href="bonus-unit3__launching_agent_battle.html">启动你的宝可梦战斗智能体</a><a class="nav-link" data-local="bonus-unit3/conclusion" href="bonus-unit3__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>后续内容何时发布？</summary><a class="nav-link" data-local="communication/next-units" href="communication__next-units.html">后续单元</a></details></aside>
+<main>
+<h1 id="langgraph">构建你的第一个 LangGraph</h1>
+<p>现在我们已经理解了基本构建模块，让我们通过构建第一个功能图来实践。我们将实现 Alfred 的邮件处理系统，他需要：</p>
+<ol>
+<li>阅读 incoming emails</li>
+<li>将其分类为 spam 或 legitimate</li>
+<li>为 legitimate 邮件起草初步响应</li>
+<li>当邮件合法时向 Mr. Wayne 发送信息（仅打印）</li>
+</ol>
+<p>这个示例演示了如何使用 LangGraph 构建涉及基于 LLM 决策的工作流程结构。虽然这不能算是真正的 Agent（因为没有涉及工具），但本节更侧重于学习 LangGraph 框架而非 Agents。</p>
+<blockquote>
+<p>[!TIP]
+你可以在 <a href="https://huggingface.co/agents-course/notebooks/resolve/main/unit2/langgraph/mail_sorting.ipynb" target="_blank">这个 notebook</a> 中查看完整代码，并通过 Google Colab 运行。</p>
+</blockquote>
+<h2 id="_1">工作流程</h2>
+<p>这是我们将要构建的工作流程：
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/LangGraph/first_graph.png" alt="First LangGraph"/></p>
+<h2 id="_2">环境设置</h2>
+<p>首先安装必要的包：</p>
+<pre><code class="language-python">%pip install langgraph langchain_openai
+</code></pre>
+<p>接下来，让我们导入必要的模块：</p>
+<pre><code class="language-python">import os
+from typing import TypedDict, List, Dict, Any, Optional
+from langgraph.graph import StateGraph, END
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, AIMessage
+</code></pre>
+<h2 id="1">步骤 1：定义我们的状态</h2>
+<p>让我们定义 Alfred 在电子邮件处理工作流程中需要跟踪哪些信息：</p>
+<pre><code class="language-python">class EmailState(TypedDict):
+    # 正在处理的电子邮件
+    email: Dict[str, Any]  # 包含主题、发件人、正文等。
+
+    # 分析与决策
+    is_spam: Optional[bool]
+
+    # 响应生成
+    draft_response: Optional[str]
+
+    # 处理元数据
+    messages: List[Dict[str, Any]]  # 跟踪与 LLM 的对话以进行分析
+</code></pre>
+<blockquote>
+<p>💡 <strong>提示：</strong>让您的状态足够全面，以跟踪所有重要信息，但避免用不必要的细节使其变得臃肿。</p>
+</blockquote>
+<h2 id="2">第 2 步：定义我们的节点</h2>
+<p>现在，让我们创建将形成我们节点的处理函数：</p>
+<pre><code class="language-python"># Initialize our LLM
+model = ChatOpenAI(temperature=0)
+
+def read_email(state: EmailState):
+    &quot;&quot;&quot;Alfred reads and logs the incoming email&quot;&quot;&quot;
+    email = state[&quot;email&quot;]
+
+    # 在这里我们可能会做一些初步的预处理
+    print(f&quot;Alfred is processing an email from {email['sender']} with subject: {email['subject']}&quot;)
+
+    # 这里不需要更改状态
+    return {}
+
+def classify_email(state: EmailState):
+    &quot;&quot;&quot;Alfred uses an LLM to determine if the email is spam or legitimate&quot;&quot;&quot;
+    email = state[&quot;email&quot;]
+
+    # 为 LLM 准备提示
+    prompt = f&quot;&quot;&quot;
+    As Alfred the butler, analyze this email and determine if it is spam or legitimate.
+
+    Email:
+    From: {email['sender']}
+    Subject: {email['subject']}
+    Body: {email['body']}
+
+    First, determine if this email is spam. If it is spam, explain why.
+    If it is legitimate, categorize it (inquiry, complaint, thank you, etc.).
+    &quot;&quot;&quot;
+
+    # Call the LLM
+    messages = [HumanMessage(content=prompt)]
+    response = model.invoke(messages)
+
+    # 解析响应的简单逻辑（在实际应用中，您需要更强大的解析）
+    response_text = response.content.lower()
+    is_spam = &quot;spam&quot; in response_text and &quot;not spam&quot; not in response_text
+
+    # 如果是垃圾邮件，请提取原因
+    spam_reason = None
+    if is_spam and &quot;reason:&quot; in response_text:
+        spam_reason = response_text.split(&quot;reason:&quot;)[1].strip()
+
+    # 确定类别是否合法
+    email_category = None
+    if not is_spam:
+        categories = [&quot;inquiry&quot;, &quot;complaint&quot;, &quot;thank you&quot;, &quot;request&quot;, &quot;information&quot;]
+        for category in categories:
+            if category in response_text:
+                email_category = category
+                break
+
+    # 更新消息以进行追踪
+    new_messages = state.get(&quot;messages&quot;, []) + [
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt},
+        {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: response.content}
+    ]
+
+    # 返回状态更新
+    return {
+        &quot;is_spam&quot;: is_spam,
+        &quot;spam_reason&quot;: spam_reason,
+        &quot;email_category&quot;: email_category,
+        &quot;messages&quot;: new_messages
+    }
+
+def handle_spam(state: EmailState):
+    &quot;&quot;&quot;Alfred discards spam email with a note&quot;&quot;&quot;
+    print(f&quot;Alfred has marked the email as spam. Reason: {state['spam_reason']}&quot;)
+    print(&quot;The email has been moved to the spam folder.&quot;)
+
+    # 我们已处理完这封电子邮件
+    return {}
+
+def draft_response(state: EmailState):
+    &quot;&quot;&quot;Alfred drafts a preliminary response for legitimate emails&quot;&quot;&quot;
+    email = state[&quot;email&quot;]
+    category = state[&quot;email_category&quot;] or &quot;general&quot;
+
+    # 为 LLM 准备提示词
+    prompt = f&quot;&quot;&quot;
+    As Alfred the butler, draft a polite preliminary response to this email.
+
+    Email:
+    From: {email['sender']}
+    Subject: {email['subject']}
+    Body: {email['body']}
+
+    This email has been categorized as: {category}
+
+    Draft a brief, professional response that Mr. Hugg can review and personalize before sending.
+    &quot;&quot;&quot;
+
+    # Call the LLM
+    messages = [HumanMessage(content=prompt)]
+    response = model.invoke(messages)
+
+    # 更新消息以进行追踪
+    new_messages = state.get(&quot;messages&quot;, []) + [
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt},
+        {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: response.content}
+    ]
+
+    # 返回状态更新
+    return {
+        &quot;draft_response&quot;: response.content,
+        &quot;messages&quot;: new_messages
+    }
+
+def notify_mr_hugg(state: EmailState):
+    &quot;&quot;&quot;Alfred notifies Mr. Hugg about the email and presents the draft response&quot;&quot;&quot;
+    email = state[&quot;email&quot;]
+
+    print(&quot;\n&quot; + &quot;=&quot;*50)
+    print(f&quot;Sir, you've received an email from {email['sender']}.&quot;)
+    print(f&quot;Subject: {email['subject']}&quot;)
+    print(f&quot;Category: {state['email_category']}&quot;)
+    print(&quot;\nI've prepared a draft response for your review:&quot;)
+    print(&quot;-&quot;*50)
+    print(state[&quot;draft_response&quot;])
+    print(&quot;=&quot;*50 + &quot;\n&quot;)
+
+    # 我们已处理完这封电子邮件
+    return {}
+</code></pre>
+<h2 id="3">步骤 3：定义我们的路由逻辑</h2>
+<p>我们需要一个函数来确定分类后要采取哪条路径：</p>
+<pre><code class="language-python">def route_email(state: EmailState) -&gt; str:
+    &quot;&quot;&quot;Determine the next step based on spam classification&quot;&quot;&quot;
+    if state[&quot;is_spam&quot;]:
+        return &quot;spam&quot;
+    else:
+        return &quot;legitimate&quot;
+</code></pre>
+<blockquote>
+<p>💡 <strong>注意：</strong> LangGraph 调用此路由函数来确定在分类节点之后要跟随哪条边。返回值必须与我们的条件边映射中的一个键匹配。</p>
+</blockquote>
+<h2 id="4-stategraph">步骤 4：创建 StateGraph 并定义边</h2>
+<p>现在我们将所有内容连接在一起：</p>
+<pre><code class="language-python"># 创建 graph
+email_graph = StateGraph(EmailState)
+
+# 添加 nodes
+email_graph.add_node(&quot;read_email&quot;, read_email)
+email_graph.add_node(&quot;classify_email&quot;, classify_email)
+email_graph.add_node(&quot;handle_spam&quot;, handle_spam)
+email_graph.add_node(&quot;draft_response&quot;, draft_response)
+email_graph.add_node(&quot;notify_mr_hugg&quot;, notify_mr_hugg)
+
+# 添加 edges - 定义流程
+email_graph.add_edge(&quot;read_email&quot;, &quot;classify_email&quot;)
+
+# 从 classify_email 添加条件分支
+email_graph.add_conditional_edges(
+    &quot;classify_email&quot;,
+    route_email,
+    {
+        &quot;spam&quot;: &quot;handle_spam&quot;,
+        &quot;legitimate&quot;: &quot;draft_response&quot;
+    }
+)
+
+# 添加最后的 edges
+email_graph.add_edge(&quot;handle_spam&quot;, END)
+email_graph.add_edge(&quot;draft_response&quot;, &quot;notify_mr_hugg&quot;)
+email_graph.add_edge(&quot;notify_mr_hugg&quot;, END)
+
+# 编译 graph
+compiled_graph = email_graph.compile()
+</code></pre>
+<p>注意我们如何使用 LangGraph 提供的特殊“END”节点。这表示工作流完成的终端状态。</p>
+<h2 id="5">步骤 5：运行应用程序</h2>
+<p>让我们用一封合法的电子邮件和一封垃圾邮件来测试我们的图表：</p>
+<pre><code class="language-python"># 合法电子邮件示例
+legitimate_email = {
+    &quot;sender&quot;: &quot;john.smith@example.com&quot;,
+    &quot;subject&quot;: &quot;Question about your services&quot;,
+    &quot;body&quot;: &quot;Dear Mr. Hugg, I was referred to you by a colleague and I'm interested in learning more about your consulting services. Could we schedule a call next week? Best regards, John Smith&quot;
+}
+
+# 垃圾邮件示例
+spam_email = {
+    &quot;sender&quot;: &quot;winner@lottery-intl.com&quot;,
+    &quot;subject&quot;: &quot;YOU HAVE WON $5,000,000!!!&quot;,
+    &quot;body&quot;: &quot;CONGRATULATIONS! You have been selected as the winner of our international lottery! To claim your $5,000,000 prize, please send us your bank details and a processing fee of $100.&quot;
+}
+
+# 处理合法电子邮件
+print(&quot;\nProcessing legitimate email...&quot;)
+legitimate_result = compiled_graph.invoke({
+    &quot;email&quot;: legitimate_email,
+    &quot;is_spam&quot;: None,
+    &quot;spam_reason&quot;: None,
+    &quot;email_category&quot;: None,
+    &quot;draft_response&quot;: None,
+    &quot;messages&quot;: []
+})
+
+# 处理垃圾邮件
+print(&quot;\nProcessing spam email...&quot;)
+spam_result = compiled_graph.invoke({
+    &quot;email&quot;: spam_email,
+    &quot;is_spam&quot;: None,
+    &quot;spam_reason&quot;: None,
+    &quot;email_category&quot;: None,
+    &quot;draft_response&quot;: None,
+    &quot;messages&quot;: []
+})
+</code></pre>
+<h2 id="6-langfuse">第 6 步：使用 Langfuse 检查我们的邮件分类智能体 📡</h2>
+<p>随着 Alfred 对主分类智能体进行微调，他越来越厌倦调试其运行。智能体本质上是不可预测的，难以检查。但由于他的目标是构建终极垃圾邮件检测智能体并将其部署到生产中，因此他需要强大的可追溯性以供将来监控和分析。</p>
+<p>为此，Alfred 可以使用可观察性工具（例如 <a href="https://langfuse.com/">Langfuse</a>）来跟踪和监控智能体。</p>
+<p>首先，我们 pip install Langfuse：</p>
+<pre><code class="language-python">%pip install -q langfuse
+</code></pre>
+<p>接下来，我们将 Langfuse API 密钥和主机地址添加为环境变量。您可以通过注册 <a href="https://cloud.langfuse.com">Langfuse Cloud</a> 或 <a href="https://langfuse.com/self-hosting">self-host Langfuse</a> 获取 Langfuse 凭据。</p>
+<pre><code class="language-python">import os
+
+# Get keys for your project from the project settings page: https://cloud.langfuse.com
+os.environ[&quot;LANGFUSE_PUBLIC_KEY&quot;] = &quot;pk-lf-...&quot; 
+os.environ[&quot;LANGFUSE_SECRET_KEY&quot;] = &quot;sk-lf-...&quot;
+os.environ[&quot;LANGFUSE_HOST&quot;] = &quot;https://cloud.langfuse.com&quot; # 🇪🇺 EU region
+# os.environ[&quot;LANGFUSE_HOST&quot;] = &quot;https://us.cloud.langfuse.com&quot; # 🇺🇸 US region
+</code></pre>
+<p>然后，我们配置 <a href="https://langfuse.com/docs/integrations/langchain/tracing#add-langfuse-to-your-langchain-application">Langfuse <code>callback_handler</code></a>，并通过将 <code>langfuse_callback</code> 添加到图的调用来检测智能体：<code>config={"callbacks": [langfuse_handler]}</code>。</p>
+<pre><code class="language-python">from langfuse.langchain import CallbackHandler
+
+# 为 LangGraph/Langchain 初始化 Langfuse CallbackHandler（跟踪）
+langfuse_handler = CallbackHandler()
+
+# 处理合法电子邮件
+legitimate_result = compiled_graph.invoke(
+    input={&quot;email&quot;: legitimate_email, &quot;is_spam&quot;: None, &quot;spam_reason&quot;: None, &quot;email_category&quot;: None, &quot;draft_response&quot;: None, &quot;messages&quot;: []},
+    config={&quot;callbacks&quot;: [langfuse_handler]}
+)
+</code></pre>
+<p>Alfred 现已连接 🔌！LangGraph 的运行记录在 Langfuse 中，使他能够全面了解智能体的行为。通过此设置，他可以重新查看之前的运行并进一步完善他的邮件分类智能体。</p>
+<p><img alt="Langfuse 中的示例跟踪" src="https://langfuse.com/images/cookbook/huggingface-agent-course/langgraph-trace-legit.png" /></p>
+<p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/f5d6d72e-20af-4357-b232-af44c3728a7b?timestamp=2025-03-17T10%3A13%3A28.413Z&amp;observation=6997ba69-043f-4f77-9445-700a033afba1">带有合法电子邮件的跟踪的公共链接</a></em></p>
+<h2 id="_3">可视化我们的图表</h2>
+<p>LangGraph 允许我们可视化我们的工作流程，以便更好地理解和调试其结构：</p>
+<pre><code class="language-python">compiled_graph.get_graph().draw_mermaid_png()
+</code></pre>
+<p><img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/LangGraph/mail_flow.png" alt="Mail LangGraph"/></p>
+<p>这会产生一个可视化表示，显示我们的节点如何连接以及可以采取的条件路径。</p>
+<h2 id="_4">我们构建了什么</h2>
+<p>我们创建了一个完整的电子邮件处理工作流程：</p>
+<ol>
+<li>接收传入的电子邮件</li>
+<li>使用 LLM 将其分类为垃圾邮件或合法邮件</li>
+<li>通过丢弃垃圾邮件来处理垃圾邮件</li>
+<li>对于合法电子邮件，起草回复并通知 Mr. Hugg</li>
+</ol>
+<p>这展示了 LangGraph 使用 LLM 编排复杂工作流程同时保持清晰、结构化流程的强大功能。</p>
+<h2 id="_5">关键要点</h2>
+<ul>
+<li><strong>状态管理</strong>：我们定义了全面的状态来跟踪电子邮件处理的所有方面</li>
+<li><strong>节点实现</strong>：我们创建了与 LLM 交互的功能节点</li>
+<li><strong>条件路由</strong>：我们根据电子邮件分类实现了分支逻辑</li>
+<li><strong>终端状态</strong>：我们使用 END 节点标记工作流程中的完成点</li>
+</ul>
+<h2 id="_6">下一步是什么？</h2>
+<p>在下一部分中，我们将探索 LangGraph 的更多高级功能，包括处理工作流中的人机交互以及根据多种条件实现更复杂的分支逻辑。</p>
+<div class="pager"><a class="prev" href="unit2__langgraph__building_blocks.html">← LangGraph 的构建模块</a><a class="next" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体 →</a></div>
+<p class="attrib">内容来自 <a href="https://huggingface.co/learn/agents-course/zh-cn/unit0/introduction">Hugging Face AI Agents Course</a>(官方中文翻译),Apache 2.0 协议开源。本站为方便阅读的镜像整理,证书与测验请前往官方课程完成。</p>
+</main></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  var exp=q.querySelector('.quiz-explain');
+  q.querySelectorAll('.quiz-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('right','wrong')});
+      var ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'right':'wrong');
+      exp.hidden=false;
+      exp.textContent=(ok?'✅ 答对了!':'❌ 再想想:')+' '+btn.dataset.explain;
+    });
+  });
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.querySelector('aside').classList.toggle('open')});}
+</script></body></html>

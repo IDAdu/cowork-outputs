@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>什么是 LLMs？ · HF AI Agents 课程(中文)</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2620;--muted:#7a6f61;--accent:#d97e30;--accent-soft:#fdeedd;--line:#e8e0d4;--green:#3d8a5f;--green-soft:#e4f2ea;--red:#b3452f;--red-soft:#fbe7e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+.layout{display:flex;min-height:100vh}
+aside{width:300px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
+aside .home{display:block;font-weight:700;margin-bottom:12px;color:var(--ink);text-decoration:none;font-size:.98rem}
+.nav-chap{margin-bottom:6px}
+.nav-chap summary{cursor:pointer;font-weight:600;font-size:.88rem;padding:6px 8px;border-radius:8px;color:var(--ink)}
+.nav-chap summary:hover{background:var(--accent-soft)}
+.nav-link{display:block;padding:5px 10px 5px 22px;font-size:.85rem;color:var(--muted);text-decoration:none;border-radius:8px}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:40px 48px 80px;max-width:860px;margin:0 auto}
+main img{max-width:100%;border-radius:10px;margin:14px 0}
+main h1{font-size:1.7rem;margin:0 0 18px}
+main h2{font-size:1.3rem;margin:30px 0 12px;padding-top:10px;border-top:1px solid var(--line)}
+main h3{font-size:1.1rem;margin:22px 0 10px}
+main p{margin:0 0 14px}
+main ul,main ol{margin:0 0 14px 1.5em}
+main li{margin-bottom:6px}
+main a{color:var(--accent)}
+main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+main th{background:var(--accent-soft)}
+pre{background:#2b2620;color:#f0e9dd;padding:16px;border-radius:10px;overflow-x:auto;margin:16px 0;line-height:1.55;font-size:.85rem}
+code{font-family:"SF Mono",Consolas,Menlo,monospace}
+p code,li code,td code{background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-size:.86em}
+blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.tip.warn{background:var(--red-soft);border-left-color:var(--red)}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}
+.quiz-q{font-weight:600;margin-bottom:10px}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);cursor:pointer;font-size:.92rem;font-family:inherit;line-height:1.6}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.right{background:var(--green-soft);border-color:var(--green)}
+.quiz-opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.quiz-explain{margin-top:6px;font-size:.9rem;padding:10px 14px;border-radius:8px;background:var(--accent-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-size:.9rem}
+.pager a:hover{border-color:var(--accent)}
+.pager .next{text-align:right}
+.attrib{margin-top:36px;font-size:.8rem;color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:900px){
+ aside{position:fixed;left:-320px;z-index:20;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+ aside.open{left:0}
+ .menu-btn{display:block;position:fixed;top:12px;left:12px;z-index:21;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.9rem}
+ main{padding:64px 20px 60px}
+}
+</style></head><body>
+<button class="menu-btn">☰ 目录</button>
+<div class="layout">
+<aside><a class="home" href="index.html">🤗 AI Agents 课程(中文)</a><details class="nav-chap" open><summary>第 0 单元. 课程欢迎</summary><a class="nav-link" data-local="unit0/introduction" href="unit0__introduction.html">欢迎来到课程 🤗</a><a class="nav-link" data-local="unit0/onboarding" href="unit0__onboarding.html">入门指南</a><a class="nav-link" data-local="unit0/discord101" href="unit0__discord101.html">(可选) Discord 使用指南</a></details>
+<details class="nav-chap"><summary>直播 1. 课程运作方式和问答</summary><a class="nav-link" data-local="communication/live1" href="communication__live1.html">直播 1. 课程运作方式和问答</a></details>
+<details class="nav-chap"><summary>第 1 单元. 智能体简介</summary><a class="nav-link" data-local="unit1/introduction" href="unit1__introduction.html">简介</a><a class="nav-link" data-local="unit1/what-are-agents" href="unit1__what-are-agents.html">什么是智能体？</a><a class="nav-link" data-local="unit1/quiz1" href="unit1__quiz1.html">快速测验 1</a><a class="nav-link active" data-local="unit1/what-are-llms" href="unit1__what-are-llms.html">什么是 LLMs？</a><a class="nav-link" data-local="unit1/messages-and-special-tokens" href="unit1__messages-and-special-tokens.html">消息和特殊 token</a><a class="nav-link" data-local="unit1/tools" href="unit1__tools.html">什么是工具？</a><a class="nav-link" data-local="unit1/quiz2" href="unit1__quiz2.html">快速测验 2</a><a class="nav-link" data-local="unit1/agent-steps-and-structure" href="unit1__agent-steps-and-structure.html">通过思考-行动-观察循环理解 AI 智能体</a><a class="nav-link" data-local="unit1/thoughts" href="unit1__thoughts.html">思考、内部推理和 Re-Act 方法</a><a class="nav-link" data-local="unit1/actions" href="unit1__actions.html">行动，使智能体能够与环境交互</a><a class="nav-link" data-local="unit1/observations" href="unit1__observations.html">观察，整合反馈以反思和适应</a><a class="nav-link" data-local="unit1/dummy-agent-library" href="unit1__dummy-agent-library.html">简单智能体库</a><a class="nav-link" data-local="unit1/tutorial" href="unit1__tutorial.html">使用 Smolagents 创建我们的第一个智能体</a><a class="nav-link" data-local="unit1/final-quiz" href="unit1__final-quiz.html">第 1 单元最终测验</a><a class="nav-link" data-local="unit1/conclusion" href="unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2 单元. AI 智能体框架</summary><a class="nav-link" data-local="unit2/introduction" href="unit2__introduction.html">AI 智能体框架</a></details>
+<details class="nav-chap"><summary>第 2.1 单元. smolagents 框架</summary><a class="nav-link" data-local="unit2/smolagents/introduction" href="unit2__smolagents__introduction.html">smolagents 简介</a><a class="nav-link" data-local="unit2/smolagents/why_use_smolagents" href="unit2__smolagents__why_use_smolagents.html">为什么使用 smolagents？</a><a class="nav-link" data-local="unit2/smolagents/quiz1" href="unit2__smolagents__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/smolagents/code_agents" href="unit2__smolagents__code_agents.html">构建使用代码的智能体</a><a class="nav-link" data-local="unit2/smolagents/tool_calling_agents" href="unit2__smolagents__tool_calling_agents.html">将智能体与工具集成</a><a class="nav-link" data-local="unit2/smolagents/tools" href="unit2__smolagents__tools.html">工具</a><a class="nav-link" data-local="unit2/smolagents/retrieval_agents" href="unit2__smolagents__retrieval_agents.html">检索智能体</a><a class="nav-link" data-local="unit2/smolagents/quiz2" href="unit2__smolagents__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/smolagents/multi_agent_systems" href="unit2__smolagents__multi_agent_systems.html">多智能体系统</a><a class="nav-link" data-local="unit2/smolagents/vision_agents" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体</a><a class="nav-link" data-local="unit2/smolagents/final_quiz" href="unit2__smolagents__final_quiz.html">最终测验</a><a class="nav-link" data-local="unit2/smolagents/conclusion" href="unit2__smolagents__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.2 单元. LlamaIndex 框架</summary><a class="nav-link" data-local="unit2/llama-index/introduction" href="unit2__llama-index__introduction.html">LlamaIndex 简介</a><a class="nav-link" data-local="unit2/llama-index/llama-hub" href="unit2__llama-index__llama-hub.html">LlamaHub 简介</a><a class="nav-link" data-local="unit2/llama-index/components" href="unit2__llama-index__components.html">LlamaIndex 中的组件是什么？</a><a class="nav-link" data-local="unit2/llama-index/tools" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具</a><a class="nav-link" data-local="unit2/llama-index/quiz1" href="unit2__llama-index__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/llama-index/agents" href="unit2__llama-index__agents.html">在 LlamaIndex 中使用智能体</a><a class="nav-link" data-local="unit2/llama-index/workflows" href="unit2__llama-index__workflows.html">在 LlamaIndex 中创建智能工作流</a><a class="nav-link" data-local="unit2/llama-index/quiz2" href="unit2__llama-index__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/llama-index/conclusion" href="unit2__llama-index__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.3 单元. LangGraph 框架</summary><a class="nav-link" data-local="unit2/langgraph/introduction" href="unit2__langgraph__introduction.html">LangGraph 是什么？</a><a class="nav-link" data-local="unit2/langgraph/when_to_use_langgraph" href="unit2__langgraph__when_to_use_langgraph.html">何时使用 LangGraph？</a><a class="nav-link" data-local="unit2/langgraph/building_blocks" href="unit2__langgraph__building_blocks.html">LangGraph 的构建模块</a><a class="nav-link" data-local="unit2/langgraph/first_graph" href="unit2__langgraph__first_graph.html">创建你的第一个 LangGraph</a><a class="nav-link" data-local="unit2/langgraph/document_analysis_agent" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体</a><a class="nav-link" data-local="unit2/langgraph/quiz1" href="unit2__langgraph__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/langgraph/conclusion" href="unit2__langgraph__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 3 单元. Agentic RAG 的用例</summary><a class="nav-link" data-local="unit3/agentic-rag/introduction" href="unit3__agentic-rag__introduction.html">Agentic RAG 用例简介</a><a class="nav-link" data-local="unit3/agentic-rag/agentic-rag" href="unit3__agentic-rag__agentic-rag.html">Agentic 检索增强生成（RAG）</a><a class="nav-link" data-local="unit3/agentic-rag/invitees" href="unit3__agentic-rag__invitees.html">为宾客故事创建 RAG 工具</a><a class="nav-link" data-local="unit3/agentic-rag/tools" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具</a><a class="nav-link" data-local="unit3/agentic-rag/agent" href="unit3__agentic-rag__agent.html">创建你的 Gala 智能体</a><a class="nav-link" data-local="unit3/agentic-rag/conclusion" href="unit3__agentic-rag__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 4 单元. 最终项目 - 创建，测试和认证你的智能体</summary><a class="nav-link" data-local="unit4/introduction" href="unit4__introduction.html">欢迎来到最后一个单元</a><a class="nav-link" data-local="unit4/what-is-gaia" href="unit4__what-is-gaia.html">什么是GAIA？</a><a class="nav-link" data-local="unit4/hands-on" href="unit4__hands-on.html">动手实践</a><a class="nav-link" data-local="unit4/get-your-certificate" href="unit4__get-your-certificate.html">领取你的证书</a><a class="nav-link" data-local="unit4/conclusion" href="unit4__conclusion.html">结论</a><a class="nav-link" data-local="unit4/additional-readings" href="unit4__additional-readings.html">那现在呢？我应该学习哪些主题？</a></details>
+<details class="nav-chap"><summary>附加单元 1. 为函数调用微调大型语言模型</summary><a class="nav-link" data-local="bonus-unit1/introduction" href="bonus-unit1__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit1/what-is-function-calling" href="bonus-unit1__what-is-function-calling.html">什么是函数调用？</a><a class="nav-link" data-local="bonus-unit1/fine-tuning" href="bonus-unit1__fine-tuning.html">让我们为函数调用微调模型</a><a class="nav-link" data-local="bonus-unit1/conclusion" href="bonus-unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>附加单元 2. 智能体可观察性和评估</summary><a class="nav-link" data-local="bonus_unit2/introduction" href="bonus_unit2__introduction.html">简介</a><a class="nav-link" data-local="bonus_unit2/what-is-agent-observability-and-evaluation" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">什么是智能体可观察性和评估？</a><a class="nav-link" data-local="bonus_unit2/monitoring-and-evaluating-agents-notebook" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体</a><a class="nav-link" data-local="bonus_unit2/quiz" href="bonus_unit2__quiz.html">测验</a></details>
+<details class="nav-chap"><summary>附加单元 3. 宝可梦中的AI智能体</summary><a class="nav-link" data-local="bonus-unit3/introduction" href="bonus-unit3__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit3/state-of-art" href="bonus-unit3__state-of-art.html">游戏中使用 LLM 的最新技术</a><a class="nav-link" data-local="bonus-unit3/from-llm-to-agents" href="bonus-unit3__from-llm-to-agents.html">从LLM到AI智能体</a><a class="nav-link" data-local="bonus-unit3/building_your_pokemon_agent" href="bonus-unit3__building_your_pokemon_agent.html">构建你自己的宝可梦对战智能体</a><a class="nav-link" data-local="bonus-unit3/launching_agent_battle" href="bonus-unit3__launching_agent_battle.html">启动你的宝可梦战斗智能体</a><a class="nav-link" data-local="bonus-unit3/conclusion" href="bonus-unit3__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>后续内容何时发布？</summary><a class="nav-link" data-local="communication/next-units" href="communication__next-units.html">后续单元</a></details></aside>
+<main>
+<h1 id="llms">什么是大语言模型（LLMs）？</h1>
+<p><img
+  src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/whiteboard-check-1.jpg"
+  alt="Unit 1 planning"
+/></p>
+<p>在上一节中，我们了解到每个智能体都需要一个核心的人工智能模型，而大语言模型 (LLM) 是实现这一目标最常见的 AI 模型类型。</p>
+<p>现在，我们将学习什么是大语言模型，以及它们如何为智能体提供动力。</p>
+<p>本节将提供一个简洁的技术解释，说明大语言模型的用途。如果你想更深入地了解相关内容，可以参考我们的 <a href="https://huggingface.co/learn/nlp-course/chapter1/1" target="_blank">免费自然语言处理课程</a>。</p>
+<h2 id="_1">什么是大语言模型？</h2>
+<p>大语言模型 (LLM) 是一种擅长理解和生成人类语言的人工智能模型。它们通过大量文本数据的训练，能够学习语言中的模式、结构，甚至细微差别。这些模型通常包含数千万甚至更多的参数。</p>
+<p>如今，大多数大语言模型都是基于 Transformer 架构构建的 —— 这是一种基于“注意力”算法的深度学习架构。自 2018 年 Google 推出 BERT 以来，这种架构引起了广泛关注。</p>
+<figure>
+  <img
+    src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/transformer.jpg"
+    alt="Transformer"
+  />
+  <figcaption>
+    原始的 Transformer
+    架构如下所示，左侧是编码器（encoder），右侧是解码器（decoder）。
+  </figcaption>
+</figure>
+
+<p>Transformer 有三种类型：</p>
+<ol>
+<li>
+<p><strong>编码器（Encoders）</strong><br />
+   基于编码器的 Transformer 接收文本（或其他数据）作为输入，并输出该文本的密集表示（或嵌入）。</p>
+</li>
+<li>
+<p><strong>示例</strong>：Google 的 BERT</p>
+</li>
+<li><strong>用例</strong>：文本分类、语义搜索、命名实体识别</li>
+<li>
+<p><strong>典型规模</strong>：数百万个参数</p>
+</li>
+<li>
+<p><strong>解码器（Decoders）</strong><br />
+   基于解码器的 Transformer 专注于<strong>逐个生成 token 以完成序列</strong>。</p>
+</li>
+<li>
+<p><strong>示例</strong>：Meta 的 Llama</p>
+</li>
+<li><strong>用例</strong>：文本生成、聊天机器人、代码生成</li>
+<li>
+<p><strong>典型规模</strong>：数十亿（按美国用法，即 10^9）个参数</p>
+</li>
+<li>
+<p><strong>序列到序列（编码器-解码器，Seq2Seq（Encoder–Decoder））</strong><br />
+   序列到序列的 Transformer <em>结合</em>了编码器和解码器。编码器首先将输入序列处理成上下文表示，然后解码器生成输出序列。</p>
+</li>
+<li>
+<p><strong>示例</strong>：T5、BART</p>
+</li>
+<li><strong>用例</strong>：翻译、摘要、改写</li>
+<li><strong>典型规模</strong>：数百万个参数</li>
+</ol>
+<p>虽然大语言模型 (LLMs) 有多种形式，但它们通常是基于解码器的模型，拥有数十亿个参数。以下是一些最知名的大语言模型：</p>
+<table>
+<thead>
+<tr>
+<th><strong>模型</strong></th>
+<th><strong>提供商</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Deepseek-R1</strong></td>
+<td>DeepSeek</td>
+</tr>
+<tr>
+<td><strong>GPT4</strong></td>
+<td>OpenAI</td>
+</tr>
+<tr>
+<td><strong>Llama 3</strong></td>
+<td>Meta（Facebook AI Research）</td>
+</tr>
+<tr>
+<td><strong>SmolLM2</strong></td>
+<td>Hugging Face</td>
+</tr>
+<tr>
+<td><strong>Gemma</strong></td>
+<td>Google</td>
+</tr>
+<tr>
+<td><strong>Mistral</strong></td>
+<td>Mistral</td>
+</tr>
+</tbody>
+</table>
+<p>大语言模型 (LLM) 的基本原理简单却极其有效：<strong>其目标是在给定一系列前一个 token 的情况下，预测下一个 token</strong>。这里的“token”是 LLM 处理信息的基本单位。你可以把 “token”想象成“单词”，但出于效率考虑，LLM 并不直接使用整个单词。</p>
+<p>例如，虽然英语估计有 60 万个单词，但一个 LLM 的词汇表可能只有大约 32,000 个 token（如 Llama 2 的情况）。Tokenization 通常作用于可以组合的子词单元。</p>
+<p>举个例子，考虑如何将 token“interest”和“ing”组合成“interesting”，或者添加“ed”形成“interested”。</p>
+<p>你可以在下面的交互式游乐场中尝试不同的 tokenizer 来实验：</p>
+<p><iframe
+  src="https://agents-course-the-tokenizer-playground.static.hf.space"
+  frameborder="0"
+  width="850"
+  height="450"
+></iframe>
+</p>
+<p>每个大语言模型 (LLM) 都有一些特定于该模型的<strong>特殊 token</strong>。LLM 使用这些 token 来开启和关闭其生成过程中的结构化组件。例如，用于指示序列、消息或响应的开始或结束。此外，我们传递给模型的输入提示也使用特殊 token 进行结构化。其中最重要的是<strong>序列结束 token</strong> (EOS，End of Sequence token)。</p>
+<p>不同模型提供商使用的特殊 token 形式差异很大。</p>
+<p>下表展示了特殊 token 的多样性：</p>
+<table>
+  <thead>
+    <tr>
+      <th>
+        <strong>Model</strong>
+      </th>
+      <th>
+        <strong>Provider</strong>
+      </th>
+      <th>
+        <strong>EOS Token</strong>
+      </th>
+      <th>
+        <strong>Functionality</strong>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>GPT4</strong>
+      </td>
+      <td>OpenAI</td>
+      <td>
+        <code>&lt;|endoftext|&gt;</code>
+      </td>
+      <td>End of message text</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Llama 3</strong>
+      </td>
+      <td>Meta (Facebook AI Research)</td>
+      <td>
+        <code>&lt;|eot_id|&gt;</code>
+      </td>
+      <td>End of sequence</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Deepseek-R1</strong>
+      </td>
+      <td>DeepSeek</td>
+      <td>
+        <code>&lt;|end_of_sentence|&gt;</code>
+      </td>
+      <td>End of message text</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>SmolLM2</strong>
+      </td>
+      <td>Hugging Face</td>
+      <td>
+        <code>&lt;|im_end|&gt;</code>
+      </td>
+      <td>End of instruction or message</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Gemma</strong>
+      </td>
+      <td>Google</td>
+      <td>
+        <code>&lt;end_of_turn&gt;</code>
+      </td>
+      <td>End of conversation turn</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>[!TIP]
+我们并不期望你记住这些特 token，但重要的是要理解它们的多样性以及它们在大语言模型 (LLM) 文本生成中所扮演的角色。如果你想了解更多关于特殊 token 的信息，可以查看模型在其 Hub 仓库中的配置。例如，你可以在<a href="https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct/blob/main/tokenizer_config.json">SmolLM2 模型的 tokenizer_config.json 文件</a>中找到该模型的特殊 token。</p>
+</blockquote>
+<h2 id="_2">理解下一个词元预测</h2>
+<p>大语言模型 (LLM) 被认为是<strong>自回归</strong>的，这意味着<strong>一次通过的输出成为下一次的输入</strong>。这个循环持续进行，直到模型预测下一个词元为 EOS（结束符）词元，此时模型可以停止。</p>
+<p><img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/AutoregressionSchema.gif" alt="自回归解码的视觉 GIF 图" width="60%"></p>
+<p>换句话说，LLM 会解码文本，直到达到 EOS。但在单个解码循环中会发生什么？</p>
+<p>虽然对于学习智能体而言，整个过程可能相当技术化，但以下是简要概述：</p>
+<ul>
+<li>一旦输入文本被<strong>词元化</strong>，模型就会计算序列的表示，该表示捕获输入序列中每个词元的意义和位置信息。</li>
+<li>这个表示被输入到模型中，模型输出分数，这些分数对词汇表中每个词元作为序列中下一个词元的可能性进行排名。</li>
+</ul>
+<p><img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/DecodingFinal.gif" alt="解码的视觉 GIF 图" width="60%"></p>
+<p>基于这些分数，我们有多种策略来选择词元以完成句子。</p>
+<ul>
+<li>最简单的解码策略是总是选择分数最高的词元。</li>
+</ul>
+<p>您可以在此 Space 中使用 SmolLM2 自己与解码过程进行交互（记住，它会一直解码，直到达到 <strong>EOS</strong> 词元，对于这个模型来说，EOS 词元是<strong>&lt;|im_end|&gt;</strong>）：</p>
+<p><iframe
+  src="https://agents-course-decoding-visualizer.hf.space"
+  frameborder="0"
+  width="850"
+  height="450"
+></iframe>
+</p>
+<ul>
+<li>但还有更先进的解码策略。例如， <em>束搜索（beam search）</em> 会探索多个候选序列，以找到总分数最高的序列——即使其中一些单个词元的分数较低。</li>
+</ul>
+<p><iframe
+  src="https://agents-course-beam-search-visualizer.hf.space"
+  frameborder="0"
+  width="850"
+  height="450"
+></iframe>
+</p>
+<p>如果你想了解更多关于解码的信息，可以查看<a href="https://huggingface.co/learn/nlp-course">NLP 课程</a>。</p>
+<h2 id="_3">注意力机制就是你的全部所需</h2>
+<p>Transformer 架构的一个关键方面是<strong>注意力机制</strong>。在预测下一个词时，句子中的每个词并不是同等重要的；例如，在句子 <em>“The capital of France is ...”</em> 中，“France” 和 “capital” 这样的词携带了最多的意义。</p>
+<p><img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/AttentionSceneFinal.gif" alt="注意力机制的视觉 GIF 图" width="60%"></p>
+<p>这种识别最相关词以预测下一个词元的过程已被证明是非常有效的。</p>
+<p>尽管自 GPT-2 以来，大语言模型（LLM）的基本原理——预测下一个词元——一直保持不变，但在扩展神经网络以及使注意力机制能够处理越来越长的序列方面已经取得了显著进展。</p>
+<p>如果你与大语言模型交互过，你可能对<em>上下文长度</em>这个术语很熟悉，它指的是大语言模型能够处理的最大词元数，以及其最大的<em>注意力跨度</em>。</p>
+<h2 id="_4">提示大语言模型很重要</h2>
+<p>考虑到大语言模型（LLM）的唯一工作是通过查看每个输入词元来预测下一个词元，并选择哪些词元是“重要的”，因此你提供的输入序列的措辞非常重要。</p>
+<p>你提供给大语言模型的输入序列被称为<em>提示</em>。精心设计提示可以更容易地<strong>引导大语言模型的生成朝着期望的输出方向进行</strong>。</p>
+<h2 id="_5">大语言模型是如何训练的？</h2>
+<p>大语言模型是在大型文本数据集上进行训练的，它们通过自监督或掩码语言建模目标来学习预测序列中的下一个词。</p>
+<p>通过这种无监督学习，模型学习了语言的结构以及<strong>文本中的潜在模式，使模型能够泛化到未见过的数据</strong>。</p>
+<p>在这个初始的<em>预训练</em>之后，大语言模型可以在监督学习目标上进行微调，以执行特定任务。例如，一些模型被训练用于对话结构或工具使用，而其他模型则专注于分类或代码生成。</p>
+<h2 id="_6">我如何使用大语言模型？</h2>
+<p>你有两个主要选择：</p>
+<ol>
+<li>
+<p><strong>本地运行</strong>（如果你有足够的硬件资源）。</p>
+</li>
+<li>
+<p><strong>使用云服务/API</strong>（例如，通过 Hugging Face 的无服务器推理 API）。</p>
+</li>
+</ol>
+<p>在本课程中，我们将主要通过 Hugging Face Hub 上的 API 使用模型。稍后，我们将探讨如何在你的本地硬件上运行这些模型。</p>
+<h2 id="ai">大语言模型在 AI 智能体中是如何使用的？</h2>
+<p>大语言模型是 AI 智能体的关键组件，<strong>为理解和生成人类语言提供了基础</strong>。</p>
+<p>它们可以解释用户指令，在对话中保持上下文，制定计划并决定使用哪些工具。</p>
+<p>我们将在本单元中更详细地探讨这些步骤，但现在你需要理解的是，大语言模型是<strong>智能体的大脑</strong>。</p>
+<hr />
+<p>那信息量可真不小！我们已经涵盖了大语言模型（LLM）的基本概念、工作原理以及它们在驱动 AI 智能体中的作用。</p>
+<p>如果你想更深入地探索语言模型和自然语言处理这个迷人的世界，不妨查看我们的<a href="https://huggingface.co/learn/nlp-course/chapter1/1" target="_blank">免费 NLP 课程</a>。</p>
+<p>现在我们已经了解了大语言模型的工作原理，接下来是时候看看<strong>大语言模型如何在对话语境中构建其生成内容</strong>了。</p>
+<p>要运行<a href="https://huggingface.co/agents-course/notebooks/blob/main/unit1/dummy_agent_library.ipynb" target="_blank">这个笔记本</a>，<strong>你需要一个 Hugging Face token</strong>，你可以从<a href="https://hf.co/settings/tokens" target="_blank"> https://hf.co/settings/tokens </a>获取。</p>
+<p>有关如何运行 Jupyter Notebook 的更多信息，请查看<a href="https://huggingface.co/docs/hub/notebooks"> Hugging Face Hub 上的 Jupyter Notebook</a>。</p>
+<p>你还需要请求访问<a href="https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct" target="_blank"> Meta Llama 模型</a>。</p>
+<div class="pager"><a class="prev" href="unit1__quiz1.html">← 快速测验 1</a><a class="next" href="unit1__messages-and-special-tokens.html">消息和特殊 token →</a></div>
+<p class="attrib">内容来自 <a href="https://huggingface.co/learn/agents-course/zh-cn/unit0/introduction">Hugging Face AI Agents Course</a>(官方中文翻译),Apache 2.0 协议开源。本站为方便阅读的镜像整理,证书与测验请前往官方课程完成。</p>
+</main></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  var exp=q.querySelector('.quiz-explain');
+  q.querySelectorAll('.quiz-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('right','wrong')});
+      var ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'right':'wrong');
+      exp.hidden=false;
+      exp.textContent=(ok?'✅ 答对了!':'❌ 再想想:')+' '+btn.dataset.explain;
+    });
+  });
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.querySelector('aside').classList.toggle('open')});}
+</script></body></html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LlamaIndex 中的组件是什么？ · HF AI Agents 课程(中文)</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2620;--muted:#7a6f61;--accent:#d97e30;--accent-soft:#fdeedd;--line:#e8e0d4;--green:#3d8a5f;--green-soft:#e4f2ea;--red:#b3452f;--red-soft:#fbe7e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+.layout{display:flex;min-height:100vh}
+aside{width:300px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
+aside .home{display:block;font-weight:700;margin-bottom:12px;color:var(--ink);text-decoration:none;font-size:.98rem}
+.nav-chap{margin-bottom:6px}
+.nav-chap summary{cursor:pointer;font-weight:600;font-size:.88rem;padding:6px 8px;border-radius:8px;color:var(--ink)}
+.nav-chap summary:hover{background:var(--accent-soft)}
+.nav-link{display:block;padding:5px 10px 5px 22px;font-size:.85rem;color:var(--muted);text-decoration:none;border-radius:8px}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:40px 48px 80px;max-width:860px;margin:0 auto}
+main img{max-width:100%;border-radius:10px;margin:14px 0}
+main h1{font-size:1.7rem;margin:0 0 18px}
+main h2{font-size:1.3rem;margin:30px 0 12px;padding-top:10px;border-top:1px solid var(--line)}
+main h3{font-size:1.1rem;margin:22px 0 10px}
+main p{margin:0 0 14px}
+main ul,main ol{margin:0 0 14px 1.5em}
+main li{margin-bottom:6px}
+main a{color:var(--accent)}
+main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+main th{background:var(--accent-soft)}
+pre{background:#2b2620;color:#f0e9dd;padding:16px;border-radius:10px;overflow-x:auto;margin:16px 0;line-height:1.55;font-size:.85rem}
+code{font-family:"SF Mono",Consolas,Menlo,monospace}
+p code,li code,td code{background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-size:.86em}
+blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.tip.warn{background:var(--red-soft);border-left-color:var(--red)}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}
+.quiz-q{font-weight:600;margin-bottom:10px}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);cursor:pointer;font-size:.92rem;font-family:inherit;line-height:1.6}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.right{background:var(--green-soft);border-color:var(--green)}
+.quiz-opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.quiz-explain{margin-top:6px;font-size:.9rem;padding:10px 14px;border-radius:8px;background:var(--accent-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-size:.9rem}
+.pager a:hover{border-color:var(--accent)}
+.pager .next{text-align:right}
+.attrib{margin-top:36px;font-size:.8rem;color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:900px){
+ aside{position:fixed;left:-320px;z-index:20;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+ aside.open{left:0}
+ .menu-btn{display:block;position:fixed;top:12px;left:12px;z-index:21;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.9rem}
+ main{padding:64px 20px 60px}
+}
+</style></head><body>
+<button class="menu-btn">☰ 目录</button>
+<div class="layout">
+<aside><a class="home" href="index.html">🤗 AI Agents 课程(中文)</a><details class="nav-chap" open><summary>第 0 单元. 课程欢迎</summary><a class="nav-link" data-local="unit0/introduction" href="unit0__introduction.html">欢迎来到课程 🤗</a><a class="nav-link" data-local="unit0/onboarding" href="unit0__onboarding.html">入门指南</a><a class="nav-link" data-local="unit0/discord101" href="unit0__discord101.html">(可选) Discord 使用指南</a></details>
+<details class="nav-chap"><summary>直播 1. 课程运作方式和问答</summary><a class="nav-link" data-local="communication/live1" href="communication__live1.html">直播 1. 课程运作方式和问答</a></details>
+<details class="nav-chap"><summary>第 1 单元. 智能体简介</summary><a class="nav-link" data-local="unit1/introduction" href="unit1__introduction.html">简介</a><a class="nav-link" data-local="unit1/what-are-agents" href="unit1__what-are-agents.html">什么是智能体？</a><a class="nav-link" data-local="unit1/quiz1" href="unit1__quiz1.html">快速测验 1</a><a class="nav-link" data-local="unit1/what-are-llms" href="unit1__what-are-llms.html">什么是 LLMs？</a><a class="nav-link" data-local="unit1/messages-and-special-tokens" href="unit1__messages-and-special-tokens.html">消息和特殊 token</a><a class="nav-link" data-local="unit1/tools" href="unit1__tools.html">什么是工具？</a><a class="nav-link" data-local="unit1/quiz2" href="unit1__quiz2.html">快速测验 2</a><a class="nav-link" data-local="unit1/agent-steps-and-structure" href="unit1__agent-steps-and-structure.html">通过思考-行动-观察循环理解 AI 智能体</a><a class="nav-link" data-local="unit1/thoughts" href="unit1__thoughts.html">思考、内部推理和 Re-Act 方法</a><a class="nav-link" data-local="unit1/actions" href="unit1__actions.html">行动，使智能体能够与环境交互</a><a class="nav-link" data-local="unit1/observations" href="unit1__observations.html">观察，整合反馈以反思和适应</a><a class="nav-link" data-local="unit1/dummy-agent-library" href="unit1__dummy-agent-library.html">简单智能体库</a><a class="nav-link" data-local="unit1/tutorial" href="unit1__tutorial.html">使用 Smolagents 创建我们的第一个智能体</a><a class="nav-link" data-local="unit1/final-quiz" href="unit1__final-quiz.html">第 1 单元最终测验</a><a class="nav-link" data-local="unit1/conclusion" href="unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2 单元. AI 智能体框架</summary><a class="nav-link" data-local="unit2/introduction" href="unit2__introduction.html">AI 智能体框架</a></details>
+<details class="nav-chap"><summary>第 2.1 单元. smolagents 框架</summary><a class="nav-link" data-local="unit2/smolagents/introduction" href="unit2__smolagents__introduction.html">smolagents 简介</a><a class="nav-link" data-local="unit2/smolagents/why_use_smolagents" href="unit2__smolagents__why_use_smolagents.html">为什么使用 smolagents？</a><a class="nav-link" data-local="unit2/smolagents/quiz1" href="unit2__smolagents__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/smolagents/code_agents" href="unit2__smolagents__code_agents.html">构建使用代码的智能体</a><a class="nav-link" data-local="unit2/smolagents/tool_calling_agents" href="unit2__smolagents__tool_calling_agents.html">将智能体与工具集成</a><a class="nav-link" data-local="unit2/smolagents/tools" href="unit2__smolagents__tools.html">工具</a><a class="nav-link" data-local="unit2/smolagents/retrieval_agents" href="unit2__smolagents__retrieval_agents.html">检索智能体</a><a class="nav-link" data-local="unit2/smolagents/quiz2" href="unit2__smolagents__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/smolagents/multi_agent_systems" href="unit2__smolagents__multi_agent_systems.html">多智能体系统</a><a class="nav-link" data-local="unit2/smolagents/vision_agents" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体</a><a class="nav-link" data-local="unit2/smolagents/final_quiz" href="unit2__smolagents__final_quiz.html">最终测验</a><a class="nav-link" data-local="unit2/smolagents/conclusion" href="unit2__smolagents__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.2 单元. LlamaIndex 框架</summary><a class="nav-link" data-local="unit2/llama-index/introduction" href="unit2__llama-index__introduction.html">LlamaIndex 简介</a><a class="nav-link" data-local="unit2/llama-index/llama-hub" href="unit2__llama-index__llama-hub.html">LlamaHub 简介</a><a class="nav-link active" data-local="unit2/llama-index/components" href="unit2__llama-index__components.html">LlamaIndex 中的组件是什么？</a><a class="nav-link" data-local="unit2/llama-index/tools" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具</a><a class="nav-link" data-local="unit2/llama-index/quiz1" href="unit2__llama-index__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/llama-index/agents" href="unit2__llama-index__agents.html">在 LlamaIndex 中使用智能体</a><a class="nav-link" data-local="unit2/llama-index/workflows" href="unit2__llama-index__workflows.html">在 LlamaIndex 中创建智能工作流</a><a class="nav-link" data-local="unit2/llama-index/quiz2" href="unit2__llama-index__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/llama-index/conclusion" href="unit2__llama-index__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.3 单元. LangGraph 框架</summary><a class="nav-link" data-local="unit2/langgraph/introduction" href="unit2__langgraph__introduction.html">LangGraph 是什么？</a><a class="nav-link" data-local="unit2/langgraph/when_to_use_langgraph" href="unit2__langgraph__when_to_use_langgraph.html">何时使用 LangGraph？</a><a class="nav-link" data-local="unit2/langgraph/building_blocks" href="unit2__langgraph__building_blocks.html">LangGraph 的构建模块</a><a class="nav-link" data-local="unit2/langgraph/first_graph" href="unit2__langgraph__first_graph.html">创建你的第一个 LangGraph</a><a class="nav-link" data-local="unit2/langgraph/document_analysis_agent" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体</a><a class="nav-link" data-local="unit2/langgraph/quiz1" href="unit2__langgraph__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/langgraph/conclusion" href="unit2__langgraph__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 3 单元. Agentic RAG 的用例</summary><a class="nav-link" data-local="unit3/agentic-rag/introduction" href="unit3__agentic-rag__introduction.html">Agentic RAG 用例简介</a><a class="nav-link" data-local="unit3/agentic-rag/agentic-rag" href="unit3__agentic-rag__agentic-rag.html">Agentic 检索增强生成（RAG）</a><a class="nav-link" data-local="unit3/agentic-rag/invitees" href="unit3__agentic-rag__invitees.html">为宾客故事创建 RAG 工具</a><a class="nav-link" data-local="unit3/agentic-rag/tools" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具</a><a class="nav-link" data-local="unit3/agentic-rag/agent" href="unit3__agentic-rag__agent.html">创建你的 Gala 智能体</a><a class="nav-link" data-local="unit3/agentic-rag/conclusion" href="unit3__agentic-rag__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 4 单元. 最终项目 - 创建，测试和认证你的智能体</summary><a class="nav-link" data-local="unit4/introduction" href="unit4__introduction.html">欢迎来到最后一个单元</a><a class="nav-link" data-local="unit4/what-is-gaia" href="unit4__what-is-gaia.html">什么是GAIA？</a><a class="nav-link" data-local="unit4/hands-on" href="unit4__hands-on.html">动手实践</a><a class="nav-link" data-local="unit4/get-your-certificate" href="unit4__get-your-certificate.html">领取你的证书</a><a class="nav-link" data-local="unit4/conclusion" href="unit4__conclusion.html">结论</a><a class="nav-link" data-local="unit4/additional-readings" href="unit4__additional-readings.html">那现在呢？我应该学习哪些主题？</a></details>
+<details class="nav-chap"><summary>附加单元 1. 为函数调用微调大型语言模型</summary><a class="nav-link" data-local="bonus-unit1/introduction" href="bonus-unit1__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit1/what-is-function-calling" href="bonus-unit1__what-is-function-calling.html">什么是函数调用？</a><a class="nav-link" data-local="bonus-unit1/fine-tuning" href="bonus-unit1__fine-tuning.html">让我们为函数调用微调模型</a><a class="nav-link" data-local="bonus-unit1/conclusion" href="bonus-unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>附加单元 2. 智能体可观察性和评估</summary><a class="nav-link" data-local="bonus_unit2/introduction" href="bonus_unit2__introduction.html">简介</a><a class="nav-link" data-local="bonus_unit2/what-is-agent-observability-and-evaluation" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">什么是智能体可观察性和评估？</a><a class="nav-link" data-local="bonus_unit2/monitoring-and-evaluating-agents-notebook" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体</a><a class="nav-link" data-local="bonus_unit2/quiz" href="bonus_unit2__quiz.html">测验</a></details>
+<details class="nav-chap"><summary>附加单元 3. 宝可梦中的AI智能体</summary><a class="nav-link" data-local="bonus-unit3/introduction" href="bonus-unit3__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit3/state-of-art" href="bonus-unit3__state-of-art.html">游戏中使用 LLM 的最新技术</a><a class="nav-link" data-local="bonus-unit3/from-llm-to-agents" href="bonus-unit3__from-llm-to-agents.html">从LLM到AI智能体</a><a class="nav-link" data-local="bonus-unit3/building_your_pokemon_agent" href="bonus-unit3__building_your_pokemon_agent.html">构建你自己的宝可梦对战智能体</a><a class="nav-link" data-local="bonus-unit3/launching_agent_battle" href="bonus-unit3__launching_agent_battle.html">启动你的宝可梦战斗智能体</a><a class="nav-link" data-local="bonus-unit3/conclusion" href="bonus-unit3__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>后续内容何时发布？</summary><a class="nav-link" data-local="communication/next-units" href="communication__next-units.html">后续单元</a></details></aside>
+<main>
+<h1 id="llamaindex">LlamaIndex 中的组件是什么？</h1>
+<p>还记得第一单元中我们那位得力的管家智能体 Alfred 吗？
+要有效协助我们，Alfred 需要理解我们的请求，并<strong>准备、查找和使用相关信息来帮助完成任务</strong>。
+这正是 LlamaIndex 组件发挥作用的地方。</p>
+<p>虽然 LlamaIndex 包含众多组件，但<strong>我们将重点关注 <code>QueryEngine</code> 组件</strong>。
+为什么？因为它可以作为智能体的检索增强生成（RAG）工具。</p>
+<p>那么什么是 RAG？大语言模型通过海量数据训练获得通用知识，
+但它们可能缺乏相关且最新的特定领域数据。
+RAG 通过从您的数据中检索相关信息并传递给 LLM 来解决这个问题。</p>
+<p><img alt="RAG" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/llama-index/rag.png" /></p>
+<p>试想 Alfred 的工作机制：</p>
+<ol>
+<li>您让 Alfred 帮忙策划晚宴</li>
+<li>Alfred 需要查看您的日历、饮食偏好和过往成功菜单</li>
+<li><code>QueryEngine</code> 帮助 Alfred 查找这些信息并用于晚宴策划</li>
+</ol>
+<p>这使得 <code>QueryEngine</code> 成为在 LlamaIndex 中<strong>构建智能 RAG 工作流的核心组件</strong>。
+正如 Alfred 需要检索家庭信息才能发挥作用，任何智能体都需要理解和查找相关数据的能力。
+<code>QueryEngine</code> 正好提供了这种核心能力。</p>
+<p>现在让我们深入探讨如何<strong>组合组件来创建 RAG 流程</strong>。</p>
+<h2 id="rag">使用组件构建 RAG 流程</h2>
+<blockquote>
+<p>[!TIP]
+您可以通过 <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/llama-index/components.ipynb" target="_blank">这个 Notebook</a> 跟随代码实践（使用 Google Colab 运行）。</p>
+</blockquote>
+<p>RAG 包含五个关键阶段，这些阶段将构成您构建的大部分应用：</p>
+<ol>
+<li><strong>加载</strong>：将数据从原始位置（文本文件、PDF、网站、数据库或 API）导入工作流。LlamaHub 提供数百种集成方案</li>
+<li><strong>索引</strong>：创建便于查询的数据结构。对于 LLM 通常意味着创建向量嵌入——数据的语义数值表示，也可以包含其他元数据策略</li>
+<li><strong>存储</strong>：索引完成后需要持久化存储，避免重复构建</li>
+<li><strong>查询</strong>：支持多种检索策略，包括子查询、多步查询和混合策略</li>
+<li><strong>评估</strong>：通过客观指标评估响应准确性、忠实度和响应速度，对比不同策略效果</li>
+</ol>
+<p>接下来我们将演示如何使用组件实现这些阶段。</p>
+<h3 id="_1">数据加载与嵌入</h3>
+<p>如前所述，LlamaIndex 可以基于您的自有数据进行操作，但<strong>在访问数据之前，我们需要先完成加载</strong>。
+LlamaIndex 提供三种主要的数据加载方式：</p>
+<ol>
+<li><code>SimpleDirectoryReader</code>: 内置加载器，支持从本地目录加载多种文件类型</li>
+<li><code>LlamaParse</code>: LlamaIndex 官方 PDF 解析工具，提供托管 API 服务</li>
+<li><code>LlamaHub</code>: 包含数百个数据加载库的注册中心，支持从任意数据源获取数据</li>
+</ol>
+<blockquote>
+<p>[!TIP]
+对于复杂数据源，建议深入了解 <a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/connector/">LlamaHub</a> 加载器和 <a href="https://github.com/run-llama/llama_cloud_services/blob/main/parse.md">LlamaParse</a> 解析器的使用方法。</p>
+</blockquote>
+<p><strong>最简单的数据加载方式是使用 <code>SimpleDirectoryReader</code></strong>。
+这个多功能组件可以从文件夹中加载各类文件，并将其转换为 LlamaIndex 可处理的 <code>Document</code> 对象。
+以下是具体使用方法：</p>
+<pre><code class="language-python">from llama_index.core import SimpleDirectoryReader
+
+reader = SimpleDirectoryReader(input_dir=&quot;path/to/directory&quot;)
+documents = reader.load_data()
+</code></pre>
+<p>加载文档后，我们需要将其分解为更小的单元——<code>Node</code>对象。
+<code>Node</code>是原始文档中的文本片段，既便于AI处理，又保留了对原<code>Document</code>对象的引用。</p>
+<p><code>IngestionPipeline</code>通过两个关键转换步骤帮助我们创建这些节点：
+1. <code>SentenceSplitter</code>通过自然语句边界将文档拆分为可管理的文本块
+2. <code>HuggingFaceInferenceAPIEmbedding</code>将每个文本块转换为数值化的向量表示——这种以AI能高效处理的方式捕捉语义信息</p>
+<p>该流程能帮助我们以更适合搜索和分析的方式组织文档。</p>
+<pre><code class="language-python">from llama_index.core import Document
+from llama_index.embeddings.huggingface_api import HuggingFaceInferenceAPIEmbedding
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.core.ingestion import IngestionPipeline
+
+# 通过转换创建管道
+pipeline = IngestionPipeline(
+    transformations=[
+        SentenceSplitter(chunk_overlap=0),
+        HuggingFaceInferenceAPIEmbedding(model_name=&quot;BAAI/bge-small-en-v1.5&quot;),
+    ]
+)
+
+nodes = await pipeline.arun(documents=[Document.example()])
+</code></pre>
+<h3 id="_2">存储与索引文档</h3>
+<p>创建完<code>节点</code>对象后，我们需要对其进行索引，使其可以被搜索，但在此之前，我们需要一个存储数据的地方。</p>
+<p>由于我们使用的是摄取管道，因此可以直接在管道上附加一个向量存储来填充数据。
+在本例中，我们将使用 <code>Chroma</code> 来存储我们的文档。</p>
+<details>
+<summary>安装 ChromaDB</summary>
+正如在[关于 LlamaHub 的章节](llama-hub)中所介绍的，我们可以使用以下命令安装 ChromaDB 向量存储：
+
+
+<pre><code class="language-bash">pip install llama-index-vector-stores-chroma
+</code></pre>
+
+</details>
+
+<pre><code class="language-python">import chromadb
+from llama_index.vector_stores.chroma import ChromaVectorStore
+
+db = chromadb.PersistentClient(path=&quot;./alfred_chroma_db&quot;)
+chroma_collection = db.get_or_create_collection(&quot;alfred&quot;)
+vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
+
+pipeline = IngestionPipeline(
+    transformations=[
+        SentenceSplitter(chunk_size=25, chunk_overlap=0),
+        HuggingFaceInferenceAPIEmbedding(model_name=&quot;BAAI/bge-small-en-v1.5&quot;),
+    ],
+    vector_store=vector_store,
+)
+</code></pre>
+<blockquote>
+<p>[!TIP]
+An overview of the different vector stores can be found in the <a href="https://docs.llamaindex.ai/en/stable/module_guides/storing/vector_stores/">LlamaIndex documentation</a>.</p>
+</blockquote>
+<p>这就是向量嵌入的作用所在--通过将查询和节点嵌入同一向量空间，我们可以找到相关的匹配项。
+<code>向量存储索引</code>会为我们处理这个问题，使用我们在摄取时使用的相同嵌入模型来确保一致性。</p>
+<p>让我们看看如何从向量存储和嵌入中创建该索引：</p>
+<pre><code class="language-python">from llama_index.core import VectorStoreIndex
+from llama_index.embeddings.huggingface_api import HuggingFaceInferenceAPIEmbedding
+
+embed_model = HuggingFaceInferenceAPIEmbedding(model_name=&quot;BAAI/bge-small-en-v1.5&quot;)
+index = VectorStoreIndex.from_vector_store(vector_store, embed_model=embed_model)
+</code></pre>
+<p>所有信息都会自动保存在 <code>ChromaVectorStore</code> 对象和传递的目录路径中。</p>
+<p>太棒了 现在我们可以轻松保存和加载索引了，让我们探索一下如何以不同方式查询索引。</p>
+<h3 id="llm-vectorstoreindex">使用提示词和 LLM 查询 VectorStoreIndex</h3>
+<p>在查询索引之前，我们需要将其转换为查询接口。最常见的转换选项包括：</p>
+<ul>
+<li><code>as_retriever</code>：用于基础文档检索，返回带有相似度得分的<code>NodeWithScore</code>对象列表</li>
+<li><code>as_query_engine</code>：用于单次问答交互，返回书面响应</li>
+<li><code>as_chat_engine</code>：用于需要保持跨消息记忆的对话交互，通过聊天历史记录和索引上下文返回书面响应</li>
+</ul>
+<p>我们将重点介绍查询引擎（query engine），因为它在类智能体交互中更为常见。
+我们还需要向查询引擎传入一个大语言模型（LLM）用于生成响应。</p>
+<pre><code class="language-python">from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
+
+llm = HuggingFaceInferenceAPI(model_name=&quot;Qwen/Qwen2.5-Coder-32B-Instruct&quot;)
+query_engine = index.as_query_engine(
+    llm=llm,
+    response_mode=&quot;tree_summarize&quot;,
+)
+query_engine.query(&quot;What is the meaning of life?&quot;)
+# The meaning of life is 42
+</code></pre>
+<h3 id="_3">响应处理</h3>
+<p>底层实现中，查询引擎不仅使用 LLM 来回答问题，还会采用 <code>ResponseSynthesizer</code> 作为响应处理策略。
+同样，该组件完全可定制，但默认提供三种高效的工作策略：</p>
+<ul>
+<li><code>refine</code>（迭代优化）: 通过逐个处理每个检索到的文本块来创建并优化答案。每个 Node/文本块都会触发独立的 LLM 调用</li>
+<li><code>compact</code>（紧凑模式，默认）: 与迭代优化类似，但会预先拼接文本块，从而减少 LLM 调用次数</li>
+<li><code>tree_summarize</code>（树状归纳）: 通过遍历所有检索到的文本块并构建答案的树状结构来生成详细响应</li>
+</ul>
+<blockquote>
+<p>[!TIP]
+通过<a href="https://docs.llamaindex.ai/en/stable/module_guides/deploying/query_engine/usage_pattern/#low-level-composition-api">底层组合 API</a> 实现查询流程的精细控制。该 API 允许您自定义和优化查询流程的每个步骤，与 <a href="https://docs.llamaindex.ai/en/stable/module_guides/workflow/">Workflows</a> 配合使用效果更佳</p>
+</blockquote>
+<p>由于语言模型的输出具有不可预测性，我们需要<strong>通过评估答案质量</strong>来确保结果的可靠性。</p>
+<h3 id="_4">评估与可观测性</h3>
+<p>LlamaIndex 提供<strong>内置评估工具来量化响应质量</strong>。
+这些评估器利用 LLM 对回答进行多维度分析。
+主要评估器包括：</p>
+<ul>
+<li><code>FaithfulnessEvaluator</code>（忠实性评估器）: 验证答案是否得到上下文的支持</li>
+<li><code>AnswerRelevancyEvaluator</code>（答案相关性评估器）: 评估答案与问题的关联程度</li>
+<li><code>CorrectnessEvaluator</code>（正确性评估器）: 检验答案的正确性</li>
+</ul>
+<pre><code class="language-python">from llama_index.core.evaluation import FaithfulnessEvaluator
+
+query_engine = # from the previous section
+llm = # from the previous section
+
+# 查询索引
+evaluator = FaithfulnessEvaluator(llm=llm)
+response = query_engine.query(
+    &quot;What battles took place in New York City in the American Revolution?&quot;
+)
+eval_result = evaluator.evaluate_response(response=response)
+eval_result.passing
+</code></pre>
+<p>即使没有直接评估，我们也可以<strong>通过可观察性深入了解我们的系统是如何运行的。</strong>
+当我们构建更复杂的工作流程并想要了解每个组件是如何运行的时候，这尤其有用。</p>
+<details>
+<summary>安装 LlamaTrace</summary>
+正如 [LlamaHub 部分](llama-hub) 中介绍的那样，我们可以使用以下命令从 Arize Phoenix 安装 LlamaTrace 回调：
+
+
+<pre><code class="language-bash">pip install -U llama-index-callbacks-arize-phoenix
+</code></pre>
+
+
+此外，我们需要将 `PHOENIX_API_KEY` 环境变量设置为我们的 LlamaTrace API 密钥。我们可以通过以下方式获取此密钥：
+- 在 [LlamaTrace](https://llamatrace.com/login) 创建一个帐户
+- 在您的帐户设置中生成 API 密钥
+- 使用下面代码中的 API 密钥启用跟踪
+
+</details>
+
+<pre><code class="language-python">import llama_index
+import os
+
+PHOENIX_API_KEY = &quot;&lt;PHOENIX_API_KEY&gt;&quot;
+os.environ[&quot;OTEL_EXPORTER_OTLP_HEADERS&quot;] = f&quot;api_key={PHOENIX_API_KEY}&quot;
+llama_index.core.set_global_handler(
+    &quot;arize_phoenix&quot;,
+    endpoint=&quot;https://llamatrace.com/v1/traces&quot;
+)
+</code></pre>
+<blockquote>
+<p>[!TIP]
+想要了解有关组件的更多信息以及如何使用它们？继续您的旅程，阅读<a href="https://docs.llamaindex.ai/en/stable/module_guides/">组件指南</a>或<a href="https://docs.llamaindex.ai/en/stable/understanding/rag/">RAG 指南</a>。</p>
+</blockquote>
+<p>我们已经了解了如何使用组件创建 <code>QueryEngine</code>。现在，让我们看看如何<strong>将 <code>QueryEngine</code> 用作智能体的工具！</strong></p>
+<div class="pager"><a class="prev" href="unit2__llama-index__llama-hub.html">← LlamaHub 简介</a><a class="next" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具 →</a></div>
+<p class="attrib">内容来自 <a href="https://huggingface.co/learn/agents-course/zh-cn/unit0/introduction">Hugging Face AI Agents Course</a>(官方中文翻译),Apache 2.0 协议开源。本站为方便阅读的镜像整理,证书与测验请前往官方课程完成。</p>
+</main></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  var exp=q.querySelector('.quiz-explain');
+  q.querySelectorAll('.quiz-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('right','wrong')});
+      var ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'right':'wrong');
+      exp.hidden=false;
+      exp.textContent=(ok?'✅ 答对了!':'❌ 再想想:')+' '+btn.dataset.explain;
+    });
+  });
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.querySelector('aside').classList.toggle('open')});}
+</script></body></html>

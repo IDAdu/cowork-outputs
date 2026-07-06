@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>什么是智能体可观察性和评估？ · HF AI Agents 课程(中文)</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2620;--muted:#7a6f61;--accent:#d97e30;--accent-soft:#fdeedd;--line:#e8e0d4;--green:#3d8a5f;--green-soft:#e4f2ea;--red:#b3452f;--red-soft:#fbe7e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+.layout{display:flex;min-height:100vh}
+aside{width:300px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
+aside .home{display:block;font-weight:700;margin-bottom:12px;color:var(--ink);text-decoration:none;font-size:.98rem}
+.nav-chap{margin-bottom:6px}
+.nav-chap summary{cursor:pointer;font-weight:600;font-size:.88rem;padding:6px 8px;border-radius:8px;color:var(--ink)}
+.nav-chap summary:hover{background:var(--accent-soft)}
+.nav-link{display:block;padding:5px 10px 5px 22px;font-size:.85rem;color:var(--muted);text-decoration:none;border-radius:8px}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:40px 48px 80px;max-width:860px;margin:0 auto}
+main img{max-width:100%;border-radius:10px;margin:14px 0}
+main h1{font-size:1.7rem;margin:0 0 18px}
+main h2{font-size:1.3rem;margin:30px 0 12px;padding-top:10px;border-top:1px solid var(--line)}
+main h3{font-size:1.1rem;margin:22px 0 10px}
+main p{margin:0 0 14px}
+main ul,main ol{margin:0 0 14px 1.5em}
+main li{margin-bottom:6px}
+main a{color:var(--accent)}
+main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+main th{background:var(--accent-soft)}
+pre{background:#2b2620;color:#f0e9dd;padding:16px;border-radius:10px;overflow-x:auto;margin:16px 0;line-height:1.55;font-size:.85rem}
+code{font-family:"SF Mono",Consolas,Menlo,monospace}
+p code,li code,td code{background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-size:.86em}
+blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.tip.warn{background:var(--red-soft);border-left-color:var(--red)}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}
+.quiz-q{font-weight:600;margin-bottom:10px}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);cursor:pointer;font-size:.92rem;font-family:inherit;line-height:1.6}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.right{background:var(--green-soft);border-color:var(--green)}
+.quiz-opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.quiz-explain{margin-top:6px;font-size:.9rem;padding:10px 14px;border-radius:8px;background:var(--accent-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-size:.9rem}
+.pager a:hover{border-color:var(--accent)}
+.pager .next{text-align:right}
+.attrib{margin-top:36px;font-size:.8rem;color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:900px){
+ aside{position:fixed;left:-320px;z-index:20;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+ aside.open{left:0}
+ .menu-btn{display:block;position:fixed;top:12px;left:12px;z-index:21;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.9rem}
+ main{padding:64px 20px 60px}
+}
+</style></head><body>
+<button class="menu-btn">☰ 目录</button>
+<div class="layout">
+<aside><a class="home" href="index.html">🤗 AI Agents 课程(中文)</a><details class="nav-chap" open><summary>第 0 单元. 课程欢迎</summary><a class="nav-link" data-local="unit0/introduction" href="unit0__introduction.html">欢迎来到课程 🤗</a><a class="nav-link" data-local="unit0/onboarding" href="unit0__onboarding.html">入门指南</a><a class="nav-link" data-local="unit0/discord101" href="unit0__discord101.html">(可选) Discord 使用指南</a></details>
+<details class="nav-chap"><summary>直播 1. 课程运作方式和问答</summary><a class="nav-link" data-local="communication/live1" href="communication__live1.html">直播 1. 课程运作方式和问答</a></details>
+<details class="nav-chap"><summary>第 1 单元. 智能体简介</summary><a class="nav-link" data-local="unit1/introduction" href="unit1__introduction.html">简介</a><a class="nav-link" data-local="unit1/what-are-agents" href="unit1__what-are-agents.html">什么是智能体？</a><a class="nav-link" data-local="unit1/quiz1" href="unit1__quiz1.html">快速测验 1</a><a class="nav-link" data-local="unit1/what-are-llms" href="unit1__what-are-llms.html">什么是 LLMs？</a><a class="nav-link" data-local="unit1/messages-and-special-tokens" href="unit1__messages-and-special-tokens.html">消息和特殊 token</a><a class="nav-link" data-local="unit1/tools" href="unit1__tools.html">什么是工具？</a><a class="nav-link" data-local="unit1/quiz2" href="unit1__quiz2.html">快速测验 2</a><a class="nav-link" data-local="unit1/agent-steps-and-structure" href="unit1__agent-steps-and-structure.html">通过思考-行动-观察循环理解 AI 智能体</a><a class="nav-link" data-local="unit1/thoughts" href="unit1__thoughts.html">思考、内部推理和 Re-Act 方法</a><a class="nav-link" data-local="unit1/actions" href="unit1__actions.html">行动，使智能体能够与环境交互</a><a class="nav-link" data-local="unit1/observations" href="unit1__observations.html">观察，整合反馈以反思和适应</a><a class="nav-link" data-local="unit1/dummy-agent-library" href="unit1__dummy-agent-library.html">简单智能体库</a><a class="nav-link" data-local="unit1/tutorial" href="unit1__tutorial.html">使用 Smolagents 创建我们的第一个智能体</a><a class="nav-link" data-local="unit1/final-quiz" href="unit1__final-quiz.html">第 1 单元最终测验</a><a class="nav-link" data-local="unit1/conclusion" href="unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2 单元. AI 智能体框架</summary><a class="nav-link" data-local="unit2/introduction" href="unit2__introduction.html">AI 智能体框架</a></details>
+<details class="nav-chap"><summary>第 2.1 单元. smolagents 框架</summary><a class="nav-link" data-local="unit2/smolagents/introduction" href="unit2__smolagents__introduction.html">smolagents 简介</a><a class="nav-link" data-local="unit2/smolagents/why_use_smolagents" href="unit2__smolagents__why_use_smolagents.html">为什么使用 smolagents？</a><a class="nav-link" data-local="unit2/smolagents/quiz1" href="unit2__smolagents__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/smolagents/code_agents" href="unit2__smolagents__code_agents.html">构建使用代码的智能体</a><a class="nav-link" data-local="unit2/smolagents/tool_calling_agents" href="unit2__smolagents__tool_calling_agents.html">将智能体与工具集成</a><a class="nav-link" data-local="unit2/smolagents/tools" href="unit2__smolagents__tools.html">工具</a><a class="nav-link" data-local="unit2/smolagents/retrieval_agents" href="unit2__smolagents__retrieval_agents.html">检索智能体</a><a class="nav-link" data-local="unit2/smolagents/quiz2" href="unit2__smolagents__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/smolagents/multi_agent_systems" href="unit2__smolagents__multi_agent_systems.html">多智能体系统</a><a class="nav-link" data-local="unit2/smolagents/vision_agents" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体</a><a class="nav-link" data-local="unit2/smolagents/final_quiz" href="unit2__smolagents__final_quiz.html">最终测验</a><a class="nav-link" data-local="unit2/smolagents/conclusion" href="unit2__smolagents__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.2 单元. LlamaIndex 框架</summary><a class="nav-link" data-local="unit2/llama-index/introduction" href="unit2__llama-index__introduction.html">LlamaIndex 简介</a><a class="nav-link" data-local="unit2/llama-index/llama-hub" href="unit2__llama-index__llama-hub.html">LlamaHub 简介</a><a class="nav-link" data-local="unit2/llama-index/components" href="unit2__llama-index__components.html">LlamaIndex 中的组件是什么？</a><a class="nav-link" data-local="unit2/llama-index/tools" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具</a><a class="nav-link" data-local="unit2/llama-index/quiz1" href="unit2__llama-index__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/llama-index/agents" href="unit2__llama-index__agents.html">在 LlamaIndex 中使用智能体</a><a class="nav-link" data-local="unit2/llama-index/workflows" href="unit2__llama-index__workflows.html">在 LlamaIndex 中创建智能工作流</a><a class="nav-link" data-local="unit2/llama-index/quiz2" href="unit2__llama-index__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/llama-index/conclusion" href="unit2__llama-index__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.3 单元. LangGraph 框架</summary><a class="nav-link" data-local="unit2/langgraph/introduction" href="unit2__langgraph__introduction.html">LangGraph 是什么？</a><a class="nav-link" data-local="unit2/langgraph/when_to_use_langgraph" href="unit2__langgraph__when_to_use_langgraph.html">何时使用 LangGraph？</a><a class="nav-link" data-local="unit2/langgraph/building_blocks" href="unit2__langgraph__building_blocks.html">LangGraph 的构建模块</a><a class="nav-link" data-local="unit2/langgraph/first_graph" href="unit2__langgraph__first_graph.html">创建你的第一个 LangGraph</a><a class="nav-link" data-local="unit2/langgraph/document_analysis_agent" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体</a><a class="nav-link" data-local="unit2/langgraph/quiz1" href="unit2__langgraph__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/langgraph/conclusion" href="unit2__langgraph__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 3 单元. Agentic RAG 的用例</summary><a class="nav-link" data-local="unit3/agentic-rag/introduction" href="unit3__agentic-rag__introduction.html">Agentic RAG 用例简介</a><a class="nav-link" data-local="unit3/agentic-rag/agentic-rag" href="unit3__agentic-rag__agentic-rag.html">Agentic 检索增强生成（RAG）</a><a class="nav-link" data-local="unit3/agentic-rag/invitees" href="unit3__agentic-rag__invitees.html">为宾客故事创建 RAG 工具</a><a class="nav-link" data-local="unit3/agentic-rag/tools" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具</a><a class="nav-link" data-local="unit3/agentic-rag/agent" href="unit3__agentic-rag__agent.html">创建你的 Gala 智能体</a><a class="nav-link" data-local="unit3/agentic-rag/conclusion" href="unit3__agentic-rag__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 4 单元. 最终项目 - 创建，测试和认证你的智能体</summary><a class="nav-link" data-local="unit4/introduction" href="unit4__introduction.html">欢迎来到最后一个单元</a><a class="nav-link" data-local="unit4/what-is-gaia" href="unit4__what-is-gaia.html">什么是GAIA？</a><a class="nav-link" data-local="unit4/hands-on" href="unit4__hands-on.html">动手实践</a><a class="nav-link" data-local="unit4/get-your-certificate" href="unit4__get-your-certificate.html">领取你的证书</a><a class="nav-link" data-local="unit4/conclusion" href="unit4__conclusion.html">结论</a><a class="nav-link" data-local="unit4/additional-readings" href="unit4__additional-readings.html">那现在呢？我应该学习哪些主题？</a></details>
+<details class="nav-chap"><summary>附加单元 1. 为函数调用微调大型语言模型</summary><a class="nav-link" data-local="bonus-unit1/introduction" href="bonus-unit1__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit1/what-is-function-calling" href="bonus-unit1__what-is-function-calling.html">什么是函数调用？</a><a class="nav-link" data-local="bonus-unit1/fine-tuning" href="bonus-unit1__fine-tuning.html">让我们为函数调用微调模型</a><a class="nav-link" data-local="bonus-unit1/conclusion" href="bonus-unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>附加单元 2. 智能体可观察性和评估</summary><a class="nav-link" data-local="bonus_unit2/introduction" href="bonus_unit2__introduction.html">简介</a><a class="nav-link active" data-local="bonus_unit2/what-is-agent-observability-and-evaluation" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">什么是智能体可观察性和评估？</a><a class="nav-link" data-local="bonus_unit2/monitoring-and-evaluating-agents-notebook" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体</a><a class="nav-link" data-local="bonus_unit2/quiz" href="bonus_unit2__quiz.html">测验</a></details>
+<details class="nav-chap"><summary>附加单元 3. 宝可梦中的AI智能体</summary><a class="nav-link" data-local="bonus-unit3/introduction" href="bonus-unit3__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit3/state-of-art" href="bonus-unit3__state-of-art.html">游戏中使用 LLM 的最新技术</a><a class="nav-link" data-local="bonus-unit3/from-llm-to-agents" href="bonus-unit3__from-llm-to-agents.html">从LLM到AI智能体</a><a class="nav-link" data-local="bonus-unit3/building_your_pokemon_agent" href="bonus-unit3__building_your_pokemon_agent.html">构建你自己的宝可梦对战智能体</a><a class="nav-link" data-local="bonus-unit3/launching_agent_battle" href="bonus-unit3__launching_agent_battle.html">启动你的宝可梦战斗智能体</a><a class="nav-link" data-local="bonus-unit3/conclusion" href="bonus-unit3__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>后续内容何时发布？</summary><a class="nav-link" data-local="communication/next-units" href="communication__next-units.html">后续单元</a></details></aside>
+<main>
+<h1 id="ai">AI 智能体可观测性与评估</h1>
+<h2 id="_1">🔎 什么是可观测性？</h2>
+<p>可观测性是指通过查看日志、指标和追踪等外部信号来理解你的 AI 智能体内部正在发生什么。对于 AI 智能体而言，这意味着追踪行为、工具使用情况、模型调用和响应，以便调试和改进智能体性能。</p>
+<p><img alt="Observability dashboard" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/langfuse-dashboard.png" /></p>
+<h2 id="_2">🔭 为何智能体可观测性如此重要</h2>
+<p>没有可观测性，AI 智能体就是“黑匣子”。可观测性工具使智能体变得透明，让你能够：</p>
+<ul>
+<li>理解成本与准确性的权衡</li>
+<li>测量延迟</li>
+<li>检测有害语言和提示注入</li>
+<li>监测用户反馈</li>
+</ul>
+<p>换句话说，它使你的演示智能体为生产环境做好准备！</p>
+<h2 id="_3">🔨 可观测性工具</h2>
+<p>常见的 AI 智能体可观测性工具包括像 <a href="https://langfuse.com">Langfuse</a> 和 <a href="https://www.arize.com">Arize</a> 这样的平台。这些工具有助于收集详细的追踪信息，并提供仪表板来实时监测指标，从而轻松检测问题并优化性能。</p>
+<p>可观测性工具的功能和能力差异很大。有些工具是开源的，受益于庞大的社区，这些社区塑造了它们的路线图并提供了广泛的集成。此外，某些工具专注于 LLMOps 的特定方面——例如可观测性、评估或提示管理——而另一些工具则旨在覆盖整个 LLMOps 工作流程。我们鼓励你探索不同选项的文档，以选择一个适合你的解决方案。</p>
+<p>许多智能体框架，例如 <a href="https://huggingface.co/docs/smolagents/v1.12.0/en/index">smolagents</a>，使用 <a href="https://opentelemetry.io/docs/">OpenTelemetry</a> 标准向可观测性工具公开元数据。除此之外，可观测性工具还会构建自定义的检测（instrumentations），以便在快速发展的 LLM 世界中提供更大的灵活性。你应该查阅你正在使用的工具的文档，以了解其支持的功能。</p>
+<h2 id="traces-and-spans">🔬追踪与跨度（Traces and Spans）</h2>
+<p>可观测性工具通常将智能体运行表示为追踪（traces）和跨度（spans）。</p>
+<ul>
+<li><strong>追踪（Traces）</strong> 代表一个从开始到结束的完整智能体任务（例如处理用户查询）。</li>
+<li><strong>跨度（Spans）</strong> 是追踪内的单个步骤（例如调用语言模型或检索数据）。</li>
+</ul>
+<p><img alt="Example of a smolagent trace in Langfuse" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/trace-tree.png" /></p>
+<h2 id="key-metrics-to-monitor">📊 需要监控的关键指标（Key Metrics to Monitor）</h2>
+<p>以下是可观测性工具监控的一些最常见的指标：</p>
+<p><strong>延迟：</strong> 智能体响应有多快？漫长的等待时间会对用户体验产生负面影响。你应该通过追踪智能体运行来测量任务和单个步骤的延迟。例如，一个所有模型调用需要 20 秒的智能体可以通过使用更快的模型或并行运行模型调用来加速。</p>
+<p><strong>成本：</strong> 每次智能体运行的费用是多少？AI 智能体依赖于按 token 计费的 LLM 调用或外部 API。频繁的工具使用或多个提示会迅速增加成本。例如，如果一个智能体为了边际的质量提升而调用 LLM 五次，你必须评估成本是否合理，或者是否可以减少调用次数或使用更便宜的模型。实时监控也有助于识别意外的峰值（例如，导致过度 API 循环的 bug）。</p>
+<p><strong>请求错误：</strong> 智能体失败了多少次请求？这可能包括 API 错误或工具调用失败。为了使你的智能体在生产环境中对这些情况更具鲁棒性，你可以设置回退（fallbacks）或重试。例如，如果 LLM 提供商 A宕机，你可以切换到 LLM 提供商 B 作为备用。</p>
+<p><strong>用户反馈：</strong> 实施直接的用户评估可以提供有价值的见解。这可以包括明确的评分（👍赞/👎踩，⭐1-5 星）或文本评论。持续的负面反馈应该引起你的警惕，因为这表明智能体没有按预期工作。</p>
+<p><strong>隐式用户反馈：</strong> 即使用户没有明确评分，他们的行为也能提供间接反馈。这可能包括立即改述问题、重复查询或点击重试按钮。例如，如果你看到用户反复问同一个问题，这表明智能体没有按预期工作。</p>
+<p><strong>准确性：</strong> 智能体产生正确或期望输出的频率如何？准确性的定义各不相同（例如，解决问题的正确性、信息检索的准确性、用户满意度）。第一步是为你的智能体定义成功的标准。你可以通过自动化检查、评估分数或任务完成标签来追踪准确性。例如，将追踪标记为“成功”或“失败”。</p>
+<p><strong>自动化评估指标：</strong> 你也可以设置自动化评估。例如，你可以使用一个 LLM 来对智能体的输出进行评分，例如判断它是否有用、准确与否。还有一些开源库可以帮助你对智能体的不同方面进行评分。例如，用于 RAG 智能体的 <a href="https://docs.ragas.io/">RAGAS</a> 或用于检测有害语言或提示注入的 <a href="https://llm-guard.com/">LLM Guard</a>。</p>
+<p>在实践中，结合使用这些指标可以最好地覆盖 AI 智能体的健康状况。在本章的<a href="https://huggingface.co/learn/agents-course/en/bonus-unit2/monitoring-and-evaluating-agents-notebook">示例 notebook</a> 中，我们将向你展示这些指标在实际示例中的样子，但首先，我们将了解典型的评估工作流程是怎样的。</p>
+<h2 id="ai_1">👍 评估 AI 智能体</h2>
+<p>可观测性为我们提供了指标，但评估是分析这些数据（并执行测试）的过程，以确定 AI 智能体的表现如何以及如何改进它。换句话说，一旦你有了那些追踪和指标，你如何使用它们来评判智能体并做出决策？</p>
+<p>定期评估很重要，因为 AI 智能体通常是非确定性的，并且会演变（通过更新或模型行为漂移）——没有评估，你就不知道你的“智能体”是否真的做得很好，或者是否出现了退化。</p>
+<p>AI 智能体的评估有两类：<strong>在线评估</strong>和<strong>离线评估</strong>。两者都有价值，并且相辅相成。我们通常从离线评估开始，因为这是部署任何智能体之前的最低必要步骤。</p>
+<h3 id="offline-evaluation">🥷 离线评估（Offline Evaluation）</h3>
+<p><img alt="Dataset items in Langfuse" src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/example-dataset.png" /></p>
+<p>这涉及在受控环境中评估智能体，通常使用测试数据集，而不是实时用户查询。你使用精心策划的数据集，在这些数据集中你知道预期的输出或正确的行为是什么，然后让你的智能体在这些数据集上运行。</p>
+<p>例如，如果你构建了一个数学应用题智能体，你可能会有一个包含 100 个已知答案问题的<a href="https://huggingface.co/datasets/gsm8k">测试数据集</a>。离线评估通常在开发期间进行（并且可以作为 CI/CD 管道的一部分），以检查改进或防止性能退化。其好处在于它是<strong>可重复的，并且由于你有基准答案（ground truth），你可以获得清晰的准确性指标</strong>。你也可以模拟用户查询，并根据理想答案衡量智能体的响应，或使用上面描述的自动化指标。</p>
+<p>离线评估的关键挑战是确保你的测试数据集全面且保持相关性——智能体可能在固定的测试集上表现良好，但在生产环境中遇到截然不同的查询。因此，你应该用新的边缘案例和反映真实世界场景的示例来更新测试集。混合使用小型“冒烟测试”用例和大型评估集是很有用的：小型集用于快速检查，大型集用于更广泛的性能指标。</p>
+<h3 id="online-evaluation">🔄 在线评估（Online Evaluation）</h3>
+<p>这是指在实时的、真实世界的环境中评估智能体，即在生产环境中的实际使用期间。在线评估涉及监控智能体在真实用户交互中的性能，并持续分析结果。</p>
+<p>例如，你可能会追踪实时流量中的成功率、用户满意度分数或其他指标。在线评估的优势在于它<strong>能捕捉到你在实验室环境中可能预料不到的情况</strong>——你可以观察模型随时间的漂移（如果智能体的有效性随着输入模式的变化而下降），并捕捉到测试数据中没有的意外查询或情况。它提供了智能体在实际应用中行为的真实写照。</p>
+<p>在线评估通常涉及收集隐式和显式用户反馈（如前所述），并可能运行影子测试或 A/B 测试（其中新版本的智能体与旧版本并行运行以进行比较）。挑战在于为实时交互获取可靠的标签或分数可能很棘手——你可能需要依赖用户反馈或下游指标（例如用户是否点击了结果）。</p>
+<h3 id="_4">🤝 两者结合</h3>
+<p>在实践中，成功的 AI 智能体评估融合了<strong>在线</strong>和<strong>离线</strong>方法。你可能会定期运行离线基准测试，以量化评分你的智能体在定义任务上的表现，并持续监控实时使用情况，以捕捉基准测试遗漏的问题。例如，离线测试可以发现代码生成智能体在一组已知问题上的成功率是否在提高，而在线监控可能会提醒你用户开始提出智能体难以处理的新类别问题。结合两者可以提供更稳健的全局视图。</p>
+<p>事实上，许多团队采用一个循环：<em>离线评估 → 部署新智能体版本 → 监控在线指标并收集新的失败示例 → 将这些示例添加到离线测试集 → 迭代</em>。通过这种方式，评估是持续且不断改进的。</p>
+<h2 id="_5">🧑‍💻 让我们看看这在实践中是如何运作的</h2>
+<p>在下一节中，我们将看到如何使用可观测性工具来监测和评估我们的智能体的示例。</p>
+<div class="pager"><a class="prev" href="bonus_unit2__introduction.html">← 简介</a><a class="next" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体 →</a></div>
+<p class="attrib">内容来自 <a href="https://huggingface.co/learn/agents-course/zh-cn/unit0/introduction">Hugging Face AI Agents Course</a>(官方中文翻译),Apache 2.0 协议开源。本站为方便阅读的镜像整理,证书与测验请前往官方课程完成。</p>
+</main></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  var exp=q.querySelector('.quiz-explain');
+  q.querySelectorAll('.quiz-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('right','wrong')});
+      var ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'right':'wrong');
+      exp.hidden=false;
+      exp.textContent=(ok?'✅ 答对了!':'❌ 再想想:')+' '+btn.dataset.explain;
+    });
+  });
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.querySelector('aside').classList.toggle('open')});}
+</script></body></html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为宾客故事创建 RAG 工具 · HF AI Agents 课程(中文)</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2620;--muted:#7a6f61;--accent:#d97e30;--accent-soft:#fdeedd;--line:#e8e0d4;--green:#3d8a5f;--green-soft:#e4f2ea;--red:#b3452f;--red-soft:#fbe7e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+.layout{display:flex;min-height:100vh}
+aside{width:300px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
+aside .home{display:block;font-weight:700;margin-bottom:12px;color:var(--ink);text-decoration:none;font-size:.98rem}
+.nav-chap{margin-bottom:6px}
+.nav-chap summary{cursor:pointer;font-weight:600;font-size:.88rem;padding:6px 8px;border-radius:8px;color:var(--ink)}
+.nav-chap summary:hover{background:var(--accent-soft)}
+.nav-link{display:block;padding:5px 10px 5px 22px;font-size:.85rem;color:var(--muted);text-decoration:none;border-radius:8px}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:40px 48px 80px;max-width:860px;margin:0 auto}
+main img{max-width:100%;border-radius:10px;margin:14px 0}
+main h1{font-size:1.7rem;margin:0 0 18px}
+main h2{font-size:1.3rem;margin:30px 0 12px;padding-top:10px;border-top:1px solid var(--line)}
+main h3{font-size:1.1rem;margin:22px 0 10px}
+main p{margin:0 0 14px}
+main ul,main ol{margin:0 0 14px 1.5em}
+main li{margin-bottom:6px}
+main a{color:var(--accent)}
+main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+main th{background:var(--accent-soft)}
+pre{background:#2b2620;color:#f0e9dd;padding:16px;border-radius:10px;overflow-x:auto;margin:16px 0;line-height:1.55;font-size:.85rem}
+code{font-family:"SF Mono",Consolas,Menlo,monospace}
+p code,li code,td code{background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-size:.86em}
+blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.tip.warn{background:var(--red-soft);border-left-color:var(--red)}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}
+.quiz-q{font-weight:600;margin-bottom:10px}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);cursor:pointer;font-size:.92rem;font-family:inherit;line-height:1.6}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.right{background:var(--green-soft);border-color:var(--green)}
+.quiz-opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.quiz-explain{margin-top:6px;font-size:.9rem;padding:10px 14px;border-radius:8px;background:var(--accent-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-size:.9rem}
+.pager a:hover{border-color:var(--accent)}
+.pager .next{text-align:right}
+.attrib{margin-top:36px;font-size:.8rem;color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:900px){
+ aside{position:fixed;left:-320px;z-index:20;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+ aside.open{left:0}
+ .menu-btn{display:block;position:fixed;top:12px;left:12px;z-index:21;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.9rem}
+ main{padding:64px 20px 60px}
+}
+</style></head><body>
+<button class="menu-btn">☰ 目录</button>
+<div class="layout">
+<aside><a class="home" href="index.html">🤗 AI Agents 课程(中文)</a><details class="nav-chap" open><summary>第 0 单元. 课程欢迎</summary><a class="nav-link" data-local="unit0/introduction" href="unit0__introduction.html">欢迎来到课程 🤗</a><a class="nav-link" data-local="unit0/onboarding" href="unit0__onboarding.html">入门指南</a><a class="nav-link" data-local="unit0/discord101" href="unit0__discord101.html">(可选) Discord 使用指南</a></details>
+<details class="nav-chap"><summary>直播 1. 课程运作方式和问答</summary><a class="nav-link" data-local="communication/live1" href="communication__live1.html">直播 1. 课程运作方式和问答</a></details>
+<details class="nav-chap"><summary>第 1 单元. 智能体简介</summary><a class="nav-link" data-local="unit1/introduction" href="unit1__introduction.html">简介</a><a class="nav-link" data-local="unit1/what-are-agents" href="unit1__what-are-agents.html">什么是智能体？</a><a class="nav-link" data-local="unit1/quiz1" href="unit1__quiz1.html">快速测验 1</a><a class="nav-link" data-local="unit1/what-are-llms" href="unit1__what-are-llms.html">什么是 LLMs？</a><a class="nav-link" data-local="unit1/messages-and-special-tokens" href="unit1__messages-and-special-tokens.html">消息和特殊 token</a><a class="nav-link" data-local="unit1/tools" href="unit1__tools.html">什么是工具？</a><a class="nav-link" data-local="unit1/quiz2" href="unit1__quiz2.html">快速测验 2</a><a class="nav-link" data-local="unit1/agent-steps-and-structure" href="unit1__agent-steps-and-structure.html">通过思考-行动-观察循环理解 AI 智能体</a><a class="nav-link" data-local="unit1/thoughts" href="unit1__thoughts.html">思考、内部推理和 Re-Act 方法</a><a class="nav-link" data-local="unit1/actions" href="unit1__actions.html">行动，使智能体能够与环境交互</a><a class="nav-link" data-local="unit1/observations" href="unit1__observations.html">观察，整合反馈以反思和适应</a><a class="nav-link" data-local="unit1/dummy-agent-library" href="unit1__dummy-agent-library.html">简单智能体库</a><a class="nav-link" data-local="unit1/tutorial" href="unit1__tutorial.html">使用 Smolagents 创建我们的第一个智能体</a><a class="nav-link" data-local="unit1/final-quiz" href="unit1__final-quiz.html">第 1 单元最终测验</a><a class="nav-link" data-local="unit1/conclusion" href="unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2 单元. AI 智能体框架</summary><a class="nav-link" data-local="unit2/introduction" href="unit2__introduction.html">AI 智能体框架</a></details>
+<details class="nav-chap"><summary>第 2.1 单元. smolagents 框架</summary><a class="nav-link" data-local="unit2/smolagents/introduction" href="unit2__smolagents__introduction.html">smolagents 简介</a><a class="nav-link" data-local="unit2/smolagents/why_use_smolagents" href="unit2__smolagents__why_use_smolagents.html">为什么使用 smolagents？</a><a class="nav-link" data-local="unit2/smolagents/quiz1" href="unit2__smolagents__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/smolagents/code_agents" href="unit2__smolagents__code_agents.html">构建使用代码的智能体</a><a class="nav-link" data-local="unit2/smolagents/tool_calling_agents" href="unit2__smolagents__tool_calling_agents.html">将智能体与工具集成</a><a class="nav-link" data-local="unit2/smolagents/tools" href="unit2__smolagents__tools.html">工具</a><a class="nav-link" data-local="unit2/smolagents/retrieval_agents" href="unit2__smolagents__retrieval_agents.html">检索智能体</a><a class="nav-link" data-local="unit2/smolagents/quiz2" href="unit2__smolagents__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/smolagents/multi_agent_systems" href="unit2__smolagents__multi_agent_systems.html">多智能体系统</a><a class="nav-link" data-local="unit2/smolagents/vision_agents" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体</a><a class="nav-link" data-local="unit2/smolagents/final_quiz" href="unit2__smolagents__final_quiz.html">最终测验</a><a class="nav-link" data-local="unit2/smolagents/conclusion" href="unit2__smolagents__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.2 单元. LlamaIndex 框架</summary><a class="nav-link" data-local="unit2/llama-index/introduction" href="unit2__llama-index__introduction.html">LlamaIndex 简介</a><a class="nav-link" data-local="unit2/llama-index/llama-hub" href="unit2__llama-index__llama-hub.html">LlamaHub 简介</a><a class="nav-link" data-local="unit2/llama-index/components" href="unit2__llama-index__components.html">LlamaIndex 中的组件是什么？</a><a class="nav-link" data-local="unit2/llama-index/tools" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具</a><a class="nav-link" data-local="unit2/llama-index/quiz1" href="unit2__llama-index__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/llama-index/agents" href="unit2__llama-index__agents.html">在 LlamaIndex 中使用智能体</a><a class="nav-link" data-local="unit2/llama-index/workflows" href="unit2__llama-index__workflows.html">在 LlamaIndex 中创建智能工作流</a><a class="nav-link" data-local="unit2/llama-index/quiz2" href="unit2__llama-index__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/llama-index/conclusion" href="unit2__llama-index__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.3 单元. LangGraph 框架</summary><a class="nav-link" data-local="unit2/langgraph/introduction" href="unit2__langgraph__introduction.html">LangGraph 是什么？</a><a class="nav-link" data-local="unit2/langgraph/when_to_use_langgraph" href="unit2__langgraph__when_to_use_langgraph.html">何时使用 LangGraph？</a><a class="nav-link" data-local="unit2/langgraph/building_blocks" href="unit2__langgraph__building_blocks.html">LangGraph 的构建模块</a><a class="nav-link" data-local="unit2/langgraph/first_graph" href="unit2__langgraph__first_graph.html">创建你的第一个 LangGraph</a><a class="nav-link" data-local="unit2/langgraph/document_analysis_agent" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体</a><a class="nav-link" data-local="unit2/langgraph/quiz1" href="unit2__langgraph__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/langgraph/conclusion" href="unit2__langgraph__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 3 单元. Agentic RAG 的用例</summary><a class="nav-link" data-local="unit3/agentic-rag/introduction" href="unit3__agentic-rag__introduction.html">Agentic RAG 用例简介</a><a class="nav-link" data-local="unit3/agentic-rag/agentic-rag" href="unit3__agentic-rag__agentic-rag.html">Agentic 检索增强生成（RAG）</a><a class="nav-link active" data-local="unit3/agentic-rag/invitees" href="unit3__agentic-rag__invitees.html">为宾客故事创建 RAG 工具</a><a class="nav-link" data-local="unit3/agentic-rag/tools" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具</a><a class="nav-link" data-local="unit3/agentic-rag/agent" href="unit3__agentic-rag__agent.html">创建你的 Gala 智能体</a><a class="nav-link" data-local="unit3/agentic-rag/conclusion" href="unit3__agentic-rag__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 4 单元. 最终项目 - 创建，测试和认证你的智能体</summary><a class="nav-link" data-local="unit4/introduction" href="unit4__introduction.html">欢迎来到最后一个单元</a><a class="nav-link" data-local="unit4/what-is-gaia" href="unit4__what-is-gaia.html">什么是GAIA？</a><a class="nav-link" data-local="unit4/hands-on" href="unit4__hands-on.html">动手实践</a><a class="nav-link" data-local="unit4/get-your-certificate" href="unit4__get-your-certificate.html">领取你的证书</a><a class="nav-link" data-local="unit4/conclusion" href="unit4__conclusion.html">结论</a><a class="nav-link" data-local="unit4/additional-readings" href="unit4__additional-readings.html">那现在呢？我应该学习哪些主题？</a></details>
+<details class="nav-chap"><summary>附加单元 1. 为函数调用微调大型语言模型</summary><a class="nav-link" data-local="bonus-unit1/introduction" href="bonus-unit1__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit1/what-is-function-calling" href="bonus-unit1__what-is-function-calling.html">什么是函数调用？</a><a class="nav-link" data-local="bonus-unit1/fine-tuning" href="bonus-unit1__fine-tuning.html">让我们为函数调用微调模型</a><a class="nav-link" data-local="bonus-unit1/conclusion" href="bonus-unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>附加单元 2. 智能体可观察性和评估</summary><a class="nav-link" data-local="bonus_unit2/introduction" href="bonus_unit2__introduction.html">简介</a><a class="nav-link" data-local="bonus_unit2/what-is-agent-observability-and-evaluation" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">什么是智能体可观察性和评估？</a><a class="nav-link" data-local="bonus_unit2/monitoring-and-evaluating-agents-notebook" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体</a><a class="nav-link" data-local="bonus_unit2/quiz" href="bonus_unit2__quiz.html">测验</a></details>
+<details class="nav-chap"><summary>附加单元 3. 宝可梦中的AI智能体</summary><a class="nav-link" data-local="bonus-unit3/introduction" href="bonus-unit3__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit3/state-of-art" href="bonus-unit3__state-of-art.html">游戏中使用 LLM 的最新技术</a><a class="nav-link" data-local="bonus-unit3/from-llm-to-agents" href="bonus-unit3__from-llm-to-agents.html">从LLM到AI智能体</a><a class="nav-link" data-local="bonus-unit3/building_your_pokemon_agent" href="bonus-unit3__building_your_pokemon_agent.html">构建你自己的宝可梦对战智能体</a><a class="nav-link" data-local="bonus-unit3/launching_agent_battle" href="bonus-unit3__launching_agent_battle.html">启动你的宝可梦战斗智能体</a><a class="nav-link" data-local="bonus-unit3/conclusion" href="bonus-unit3__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>后续内容何时发布？</summary><a class="nav-link" data-local="communication/next-units" href="communication__next-units.html">后续单元</a></details></aside>
+<main>
+<h1 id="rag">创建宾客信息检索生成（RAG）工具</h1>
+<p>您信赖的智能体 Alfred 正在筹备本世纪最盛大的晚会。为确保活动顺利进行，Alfred 需要快速获取最新宾客信息。让我们通过定制化的检索增强生成（RAG）工具（基于专属数据集）为 Alfred 赋能。</p>
+<h2 id="rag_1">为何选择 RAG 技术？</h2>
+<p>试想 Alfred 在宾客间穿梭时需即时调取详细信息，传统大语言模型（LLM）可能面临以下挑战：
+1. 宾客名单属于特定活动数据，不在模型训练范围内
+2. 宾客信息可能频繁变更或更新
+3. 需精确检索电子邮件地址等细节信息</p>
+<p>这正是检索增强生成（RAG）技术的优势所在！通过结合检索系统与 LLM，Alfred 可按需获取准确、实时的宾客信息。</p>
+<blockquote>
+<p>[!TIP]
+您可以选择课程涵盖的任何框架实现本用例，请通过代码标签页选择偏好方案。</p>
+</blockquote>
+<h2 id="_1">应用搭建</h2>
+<p>我们将以 Hugging Face Space 为开发环境，采用结构化 Python 项目构建智能体。这种架构通过功能模块化实现代码整洁，更贴近实际部署场景。</p>
+<h3 id="_2">项目结构</h3>
+<ul>
+<li><strong><code>tools.py</code></strong> – 为智能体提供辅助工具  </li>
+<li><strong><code>retriever.py</code></strong> – 实现支持知识访问的检索功能  </li>
+<li><strong><code>app.py</code></strong> – 整合所有组件形成完整功能智能体（将在本单元最后完成）</li>
+</ul>
+<p>实操参考：<a href="https://huggingface.co/spaces/agents-course/Unit_3_Agentic_RAG">Hugging Face Space 示例</a>，该空间已部署本单元开发的智能体增强 RAG 系统，欢迎克隆体验！</p>
+<p>可直接测试下方智能体：</p>
+<p><iframe
+    src="https://agents-course-unit-3-agentic-rag.hf.space"
+    frameborder="0"
+    width="850"
+    height="450"
+></iframe>
+</p>
+<h2 id="_3">数据集概览</h2>
+<p>数据集 <a href="https://huggingface.co/datasets/agents-course/unit3-invitees/"><code>agents-course/unit3-invitees</code></a> 包含以下字段：
+- <strong>Name</strong>: 宾客全名
+- <strong>Relation</strong>: 与主办方关系
+- <strong>Description</strong>: 简要传记或趣闻
+- <strong>Email Address</strong>: 邀请函发送及跟进联系方式</p>
+<p>数据集预览：</p>
+<p><iframe
+  src="https://huggingface.co/datasets/agents-course/unit3-invitees/embed/viewer/default/train"
+  frameborder="0"
+  width="100%"
+  height="560px"
+></iframe>
+</p>
+<blockquote>
+<p>[!TIP]
+实际场景可扩展数据集字段，包含饮食偏好、礼品兴趣、禁忌话题等对主持人有用的详细信息。</p>
+</blockquote>
+<h2 id="_4">构建宾客信息工具</h2>
+<p>我们将创建 Alfred 在晚会期间快速检索宾客信息的定制工具，分三步实现：
+1. 加载并预处理数据集
+2. 创建检索工具
+3. 工具与 Alfred 集成</p>
+<h3 id="_5">步骤一：加载并预处理数据集</h3>
+<p>首先将原始宾客数据转换为适合检索的格式：</p>
+<p><hfoptions id="agents-frameworks">
+<hfoption id="smolagents"></p>
+<pre><code class="language-python">import datasets
+from langchain_core.documents import Document
+
+# 加载数据集
+guest_dataset = datasets.load_dataset(&quot;agents-course/unit3-invitees&quot;, split=&quot;train&quot;)
+
+# 转换为 Document 对象
+docs = [
+    Document(
+        page_content=&quot;\n&quot;.join([
+            f&quot;Name: {guest['name']}&quot;,
+            f&quot;Relation: {guest['relation']}&quot;,
+            f&quot;Description: {guest['description']}&quot;,
+            f&quot;Email: {guest['email']}&quot;
+        ]),
+        metadata={&quot;name&quot;: guest[&quot;name&quot;]}
+    )
+    for guest in guest_dataset
+]
+
+</code></pre>
+<p></hfoption>
+<hfoption id="llama-index"></p>
+<p>我们将使用 Hugging Face <code>datasets</code> 库来加载数据集并将其转换为来自 <code>llama_index.core.schema</code> 模块的 <code>Document</code> 对象列表。</p>
+<pre><code class="language-python">import datasets
+from llama_index.core.schema import Document
+
+# 加载数据集
+guest_dataset = datasets.load_dataset(&quot;agents-course/unit3-invitees&quot;, split=&quot;train&quot;)
+
+# 转换为 Document 对象
+docs = [
+    Document(
+        text=&quot;\n&quot;.join([
+            f&quot;Name: {guest_dataset['name'][i]}&quot;,
+            f&quot;Relation: {guest_dataset['relation'][i]}&quot;,
+            f&quot;Description: {guest_dataset['description'][i]}&quot;,
+            f&quot;Email: {guest_dataset['email'][i]}&quot;
+        ]),
+        metadata={&quot;name&quot;: guest_dataset['name'][i]}
+    )
+    for i in range(len(guest_dataset))
+]
+</code></pre>
+<p></hfoption>
+<hfoption id="langgraph"></p>
+<p>我们将使用 Hugging Face <code>datasets</code> 库来加载数据集并将其转换为来自 <code>langchain.docstore.document</code> 模块的 <code>Document</code> 对象列表。</p>
+<pre><code class="language-python">import datasets
+from langchain_core.documents import Document
+
+# 加载数据集
+guest_dataset = datasets.load_dataset(&quot;agents-course/unit3-invitees&quot;, split=&quot;train&quot;)
+
+# 转换为 Document 对象
+docs = [
+    Document(
+        page_content=&quot;\n&quot;.join([
+            f&quot;Name: {guest['name']}&quot;,
+            f&quot;Relation: {guest['relation']}&quot;,
+            f&quot;Description: {guest['description']}&quot;,
+            f&quot;Email: {guest['email']}&quot;
+        ]),
+        metadata={&quot;name&quot;: guest[&quot;name&quot;]}
+    )
+    for guest in guest_dataset
+]
+</code></pre>
+<p></hfoption>
+</hfoptions></p>
+<p>在上面的代码中，我们：
+- 加载数据集
+- 将每条房客记录转换为包含格式化内容的 “Document” 对象
+- 将 “Document” 对象存储在列表中</p>
+<p>这意味着我们已经准备好所有数据，可以开始配置检索功能了。</p>
+<h3 id="2">步骤 2：创建检索工具</h3>
+<p>现在，让我们创建一个自定义工具，Alfred 可以使用它来搜索房客信息。</p>
+<p><hfoptions id="agents-frameworks">
+<hfoption id="smolagents"></p>
+<p>我们将使用“langchain_community.retrievers”模块中的“BM25Retriever”来创建一个检索工具。</p>
+<blockquote>
+<p>[!TIP]
+<code>BM25Retriever</code> 是检索的一个很好的起点，但对于更高级的语义搜索，您可以考虑使用基于嵌入的检索器，例如来自 <a href="https://www.sbert.net/">sentence-transformers</a> 的检索器。</p>
+</blockquote>
+<pre><code class="language-python">from smolagents import Tool
+from langchain_community.retrievers import BM25Retriever
+
+class GuestInfoRetrieverTool(Tool):
+    name = &quot;guest_info_retriever&quot;
+    description = &quot;Retrieves detailed information about gala guests based on their name or relation.&quot;
+    inputs = {
+        &quot;query&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;The name or relation of the guest you want information about.&quot;
+        }
+    }
+    output_type = &quot;string&quot;
+
+    def __init__(self, docs):
+        self.is_initialized = False
+        self.retriever = BM25Retriever.from_documents(docs)
+
+    def forward(self, query: str):
+        results = self.retriever.get_relevant_documents(query)
+        if results:
+            return &quot;\n\n&quot;.join([doc.page_content for doc in results[:3]])
+        else:
+            return &quot;No matching guest information found.&quot;
+
+# 初始化工具
+guest_info_tool = GuestInfoRetrieverTool(docs)
+</code></pre>
+<p>让我们逐步了解这个工具：
+- <code>name</code> 和 <code>description</code> 帮助智能体了解何时以及如何使用此工具
+- <code>inputs</code> 定义工具所需的参数（在本例中为搜索查询）
+- 我们使用 <code>BM25Retriever</code>，这是一种强大的文本检索算法，不需要嵌入
+- <code>forward</code> 方法处理查询并返回最相关的客人信息</p>
+<p></hfoption>
+<hfoption id="llama-index"></p>
+<p>我们将使用 <code>llama_index.retrievers.bm25</code> 模块中的 <code>BM25Retriever</code> 来创建一个检索工具。</p>
+<blockquote>
+<p>[!TIP]
+<code>BM25Retriever</code> 是一个很好的检索起点，但对于更高级的语义搜索，您可以考虑使用基于嵌入的检索器，例如 <a href="https://www.sbert.net/">sentence-transformers</a> 中的检索器。</p>
+</blockquote>
+<pre><code class="language-python">from llama_index.core.tools import FunctionTool
+from llama_index.retrievers.bm25 import BM25Retriever
+
+bm25_retriever = BM25Retriever.from_defaults(nodes=docs)
+
+def get_guest_info_retriever(query: str) -&gt; str:
+    &quot;&quot;&quot;Retrieves detailed information about gala guests based on their name or relation.&quot;&quot;&quot;
+    results = bm25_retriever.retrieve(query)
+    if results:
+        return &quot;\n\n&quot;.join([doc.text for doc in results[:3]])
+    else:
+        return &quot;No matching guest information found.&quot;
+
+# 初始化工具
+guest_info_tool = FunctionTool.from_defaults(get_guest_info_retriever)
+</code></pre>
+<p>让我们逐步了解这个工具。
+- 文档字符串帮助智能体了解何时以及如何使用此工具
+- 类型装饰器定义了工具所需的参数（在本例中为搜索查询）
+- 我们使用 <code>BM25Retriever</code>，这是一种强大的文本检索算法，不需要嵌入
+- 该方法处理查询并返回最相关的客人信息</p>
+<p></hfoption>
+<hfoption id="langgraph"></p>
+<p>我们将使用 <code>langchain_community.retrievers</code> 模块中的 <code>BM25Retriever</code> 来创建一个检索工具。</p>
+<blockquote>
+<p>[!TIP]
+<code>BM25Retriever</code> 是一个很好的检索起点，但对于更高级的语义搜索，您可以考虑使用基于嵌入的检索器，例如 <a href="https://www.sbert.net/">sentence-transformers</a> 中的检索器。</p>
+</blockquote>
+<pre><code class="language-python">from langchain_community.retrievers import BM25Retriever
+from langchain_core.tools import Tool
+
+bm25_retriever = BM25Retriever.from_documents(docs)
+
+def extract_text(query: str) -&gt; str:
+    &quot;&quot;&quot;Retrieves detailed information about gala guests based on their name or relation.&quot;&quot;&quot;
+    results = bm25_retriever.invoke(query)
+    if results:
+        return &quot;\n\n&quot;.join([doc.page_content for doc in results[:3]])
+    else:
+        return &quot;No matching guest information found.&quot;
+
+guest_info_tool = Tool(
+    name=&quot;guest_info_retriever&quot;,
+    func=extract_text,
+    description=&quot;Retrieves detailed information about gala guests based on their name or relation.&quot;
+)
+</code></pre>
+<p>让我们逐步了解这个工具。
+- <code>name</code> 和 <code>description</code> 帮助智能体了解何时以及如何使用此工具。
+- 类型装饰器定义了工具所需的参数（在本例中为搜索查询）。
+- 我们使用 <code>BM25Retriever</code>，这是一种强大的文本检索算法，无需嵌入。
+- 该方法处理查询并返回最相关的客人信息。</p>
+<p></hfoption>
+</hfoptions></p>
+<h3 id="3-alfred">步骤 3：将工具与 Alfred 集成</h3>
+<p>最后，让我们创建智能体并为其配备自定义工具，将所有内容整合在一起：</p>
+<p><hfoptions id="agents-frameworks">
+<hfoption id="smolagents"></p>
+<pre><code class="language-python">from smolagents import CodeAgent, InferenceClientModel
+
+# 初始化 Hugging Face 模型
+model = InferenceClientModel()
+
+# 使用宾客信息工具创建我们的晚会智能体 Alfred
+alfred = CodeAgent(tools=[guest_info_tool], model=model)
+
+# Example query Alfred might receive during the gala
+response = alfred.run(&quot;Tell me about our guest named 'Lady Ada Lovelace'.&quot;)
+
+print(&quot;🎩 Alfred's Response:&quot;)
+print(response)
+</code></pre>
+<p>预期输出：</p>
+<pre><code>🎩 Alfred's Response:
+根据我检索到的信息，艾达·洛夫莱斯夫人是一位受人尊敬的数学家和朋友。她因其在数学和计算机领域的开创性工作而闻名，并因其在查尔斯·巴贝奇的分析机方面的贡献而被誉为第一位计算机程序员。她的电子邮件地址是 ada.lovelace@example.com。
+</code></pre>
+<p>这最后一步具体做了什么：
+- 我们使用 <code>InferenceClientModel</code> 类初始化 Hugging Face 模型
+- 我们将智能体 (Alfred) 创建为 <code>CodeAgent</code>，它可以执行 Python 代码来解决问题
+- 我们让 Alfred 检索一位名叫“Lady Ada Lovelace”的客人的信息</p>
+<p></hfoption>
+<hfoption id="llama-index"></p>
+<pre><code class="language-python">from llama_index.core.agent.workflow import AgentWorkflow
+from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
+
+# 初始化 Hugging Face 模型
+llm = HuggingFaceInferenceAPI(model_name=&quot;Qwen/Qwen2.5-Coder-32B-Instruct&quot;)
+
+# 使用宾客信息工具创建我们的晚会智能体 Alfred
+alfred = AgentWorkflow.from_tools_or_functions(
+    [guest_info_tool],
+    llm=llm,
+)
+
+# Example query Alfred might receive during the gala
+response = await alfred.run(&quot;Tell me about our guest named 'Lady Ada Lovelace'.&quot;)
+
+print(&quot;🎩 Alfred's Response:&quot;)
+print(response)
+</code></pre>
+<p>预期输出：</p>
+<pre><code>🎩 Alfred's Response:
+Lady Ada Lovelace 是一位受人尊敬的数学家和朋友，因其在数学和计算领域的开创性工作而闻名。她因参与查尔斯·巴贝奇的分析机研究而被誉为第一位计算机程序员。她的邮箱是 ada.lovelace@example.com。
+</code></pre>
+<p>这最后一步具体做了什么：
+- 我们使用 <code>HuggingFaceInferenceAPI</code> 类初始化 Hugging Face 模型
+- 我们将智能体 (Alfred) 创建为 <code>AgentWorkflow</code>，其中包含我们刚刚创建的工具
+- 我们请求 Alfred 检索名为“Lady Ada Lovelace”的客人的信息</p>
+<p></hfoption>
+<hfoption id="langgraph"></p>
+<pre><code class="language-python">from typing import TypedDict, Annotated
+from langgraph.graph.message import add_messages
+from langchain_core.messages import AnyMessage, HumanMessage, AIMessage
+from langgraph.prebuilt import ToolNode
+from langgraph.graph import START, StateGraph
+from langgraph.prebuilt import tools_condition
+from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
+
+# 生成聊天界面，包括工具
+llm = HuggingFaceEndpoint(
+    repo_id=&quot;Qwen/Qwen2.5-Coder-32B-Instruct&quot;,
+    huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
+)
+
+chat = ChatHuggingFace(llm=llm, verbose=True)
+tools = [guest_info_tool]
+chat_with_tools = chat.bind_tools(tools)
+
+# 生成 AgentState 和 Agent 图
+class AgentState(TypedDict):
+    messages: Annotated[list[AnyMessage], add_messages]
+
+def assistant(state: AgentState):
+    return {
+        &quot;messages&quot;: [chat_with_tools.invoke(state[&quot;messages&quot;])],
+    }
+
+## 构建流程图
+builder = StateGraph(AgentState)
+
+# 定义节点：这些节点完成工作
+builder.add_node(&quot;assistant&quot;, assistant)
+builder.add_node(&quot;tools&quot;, ToolNode(tools))
+
+# 定义边：这些决定了控制流如何移动
+builder.add_edge(START, &quot;assistant&quot;)
+builder.add_conditional_edges(
+    &quot;assistant&quot;,
+    # If the latest message requires a tool, route to tools
+    # Otherwise, provide a direct response
+    tools_condition,
+)
+builder.add_edge(&quot;tools&quot;, &quot;assistant&quot;)
+alfred = builder.compile()
+
+messages = [HumanMessage(content=&quot;Tell me about our guest named 'Lady Ada Lovelace'.&quot;)]
+response = alfred.invoke({&quot;messages&quot;: messages})
+
+print(&quot;🎩 Alfred's Response:&quot;)
+print(response['messages'][-1].content)
+</code></pre>
+<p>预期输出：</p>
+<pre><code>🎩 Alfred's Response:
+Lady Ada Lovelace 是一位受人尊敬的数学家和计算机领域的先驱，由于她在查尔斯·巴贝奇的分析机上所做的工作，她经常被誉为第一位计算机程序员。
+</code></pre>
+<p>这最后一步具体做了什么：
+- 我们使用 <code>HuggingFaceEndpoint</code> 类初始化 Hugging Face 模型。我们还生成了一个聊天界面并附加了工具。
+- 我们将智能体 (Alfred) 创建为一个 <code>StateGraph</code>，它使用一条边连接两个节点（<code>Assistant</code> 和 <code>tools</code>）。
+- 我们让 Alfred 检索一位名叫“Lady Ada Lovelace”的客人的信息。</p>
+<p></hfoption>
+</hfoptions></p>
+<h2 id="_6">互动示例</h2>
+<p>在晚会上，对话可能像这样进行：</p>
+<p><strong>你</strong>：“Alfred，那位正在和大使说话的先生是谁？”</p>
+<p><strong>Alfred</strong> <em>快速搜索嘉宾数据库</em> “先生，那是尼古拉·特斯拉博士。他是你大学时代的老朋友。他最近申请了一种新的无线能量传输系统的专利，很乐意和你讨论一下。不过别忘了，他对鸽子很感兴趣，所以这或许会成为一次很好的闲聊。”</p>
+<pre><code class="language-json">{
+    &quot;name&quot;: &quot;Dr. Nikola Tesla&quot;,
+    &quot;relation&quot;: &quot;old friend from university days&quot;,  
+    &quot;description&quot;: &quot;Dr. Nikola Tesla is an old friend from your university days. He's recently patented a new wireless energy transmission system and would be delighted to discuss it with you. Just remember he's passionate about pigeons, so that might make for good small talk.&quot;,
+    &quot;email&quot;: &quot;nikola.tesla@gmail.com&quot;
+}
+</code></pre>
+<h2 id="_7">更进一步</h2>
+<p>既然 Alfred 可以检索宾客信息，不妨考虑如何增强这个系统：</p>
+<ol>
+<li><strong>改进检索器</strong>，使用更复杂的算法，例如 <a href="https://www.sbert.net/">sentence-transformers</a></li>
+<li><strong>实现对话记忆</strong>，让 Alfred 记住之前的互动</li>
+<li><strong>结合网页搜索</strong>，获取陌生宾客的最新信息</li>
+<li><strong>整合多个索引</strong>，从经过验证的来源获取更完整的信息</li>
+</ol>
+<p>现在，Alfred 已经完全有能力轻松处理宾客的咨询，确保您的晚会成为本世纪最精致、最令人愉悦的盛事！</p>
+<p>&lt;提示&gt;
+尝试扩展检索工具，使其能够根据每位宾客的兴趣或背景返回对话开场白。您将如何修改该工具来实现这一点？</p>
+<p>完成后，在 <code>retriever.py</code> 文件中实现您的宾客检索工具。
+&lt;/提示&gt;</p>
+<div class="pager"><a class="prev" href="unit3__agentic-rag__agentic-rag.html">← Agentic 检索增强生成（RAG）</a><a class="next" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具 →</a></div>
+<p class="attrib">内容来自 <a href="https://huggingface.co/learn/agents-course/zh-cn/unit0/introduction">Hugging Face AI Agents Course</a>(官方中文翻译),Apache 2.0 协议开源。本站为方便阅读的镜像整理,证书与测验请前往官方课程完成。</p>
+</main></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  var exp=q.querySelector('.quiz-explain');
+  q.querySelectorAll('.quiz-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('right','wrong')});
+      var ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'right':'wrong');
+      exp.hidden=false;
+      exp.textContent=(ok?'✅ 答对了!':'❌ 再想想:')+' '+btn.dataset.explain;
+    });
+  });
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.querySelector('aside').classList.toggle('open')});}
+</script></body></html>

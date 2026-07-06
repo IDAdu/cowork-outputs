@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使用 Smolagents 创建我们的第一个智能体 · HF AI Agents 课程(中文)</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2620;--muted:#7a6f61;--accent:#d97e30;--accent-soft:#fdeedd;--line:#e8e0d4;--green:#3d8a5f;--green-soft:#e4f2ea;--red:#b3452f;--red-soft:#fbe7e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+.layout{display:flex;min-height:100vh}
+aside{width:300px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
+aside .home{display:block;font-weight:700;margin-bottom:12px;color:var(--ink);text-decoration:none;font-size:.98rem}
+.nav-chap{margin-bottom:6px}
+.nav-chap summary{cursor:pointer;font-weight:600;font-size:.88rem;padding:6px 8px;border-radius:8px;color:var(--ink)}
+.nav-chap summary:hover{background:var(--accent-soft)}
+.nav-link{display:block;padding:5px 10px 5px 22px;font-size:.85rem;color:var(--muted);text-decoration:none;border-radius:8px}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:40px 48px 80px;max-width:860px;margin:0 auto}
+main img{max-width:100%;border-radius:10px;margin:14px 0}
+main h1{font-size:1.7rem;margin:0 0 18px}
+main h2{font-size:1.3rem;margin:30px 0 12px;padding-top:10px;border-top:1px solid var(--line)}
+main h3{font-size:1.1rem;margin:22px 0 10px}
+main p{margin:0 0 14px}
+main ul,main ol{margin:0 0 14px 1.5em}
+main li{margin-bottom:6px}
+main a{color:var(--accent)}
+main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+main th{background:var(--accent-soft)}
+pre{background:#2b2620;color:#f0e9dd;padding:16px;border-radius:10px;overflow-x:auto;margin:16px 0;line-height:1.55;font-size:.85rem}
+code{font-family:"SF Mono",Consolas,Menlo,monospace}
+p code,li code,td code{background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-size:.86em}
+blockquote{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.tip.warn{background:var(--red-soft);border-left-color:var(--red)}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}
+.quiz-q{font-weight:600;margin-bottom:10px}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);cursor:pointer;font-size:.92rem;font-family:inherit;line-height:1.6}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.right{background:var(--green-soft);border-color:var(--green)}
+.quiz-opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.quiz-explain{margin-top:6px;font-size:.9rem;padding:10px 14px;border-radius:8px;background:var(--accent-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-size:.9rem}
+.pager a:hover{border-color:var(--accent)}
+.pager .next{text-align:right}
+.attrib{margin-top:36px;font-size:.8rem;color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:900px){
+ aside{position:fixed;left:-320px;z-index:20;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+ aside.open{left:0}
+ .menu-btn{display:block;position:fixed;top:12px;left:12px;z-index:21;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.9rem}
+ main{padding:64px 20px 60px}
+}
+</style></head><body>
+<button class="menu-btn">☰ 目录</button>
+<div class="layout">
+<aside><a class="home" href="index.html">🤗 AI Agents 课程(中文)</a><details class="nav-chap" open><summary>第 0 单元. 课程欢迎</summary><a class="nav-link" data-local="unit0/introduction" href="unit0__introduction.html">欢迎来到课程 🤗</a><a class="nav-link" data-local="unit0/onboarding" href="unit0__onboarding.html">入门指南</a><a class="nav-link" data-local="unit0/discord101" href="unit0__discord101.html">(可选) Discord 使用指南</a></details>
+<details class="nav-chap"><summary>直播 1. 课程运作方式和问答</summary><a class="nav-link" data-local="communication/live1" href="communication__live1.html">直播 1. 课程运作方式和问答</a></details>
+<details class="nav-chap"><summary>第 1 单元. 智能体简介</summary><a class="nav-link" data-local="unit1/introduction" href="unit1__introduction.html">简介</a><a class="nav-link" data-local="unit1/what-are-agents" href="unit1__what-are-agents.html">什么是智能体？</a><a class="nav-link" data-local="unit1/quiz1" href="unit1__quiz1.html">快速测验 1</a><a class="nav-link" data-local="unit1/what-are-llms" href="unit1__what-are-llms.html">什么是 LLMs？</a><a class="nav-link" data-local="unit1/messages-and-special-tokens" href="unit1__messages-and-special-tokens.html">消息和特殊 token</a><a class="nav-link" data-local="unit1/tools" href="unit1__tools.html">什么是工具？</a><a class="nav-link" data-local="unit1/quiz2" href="unit1__quiz2.html">快速测验 2</a><a class="nav-link" data-local="unit1/agent-steps-and-structure" href="unit1__agent-steps-and-structure.html">通过思考-行动-观察循环理解 AI 智能体</a><a class="nav-link" data-local="unit1/thoughts" href="unit1__thoughts.html">思考、内部推理和 Re-Act 方法</a><a class="nav-link" data-local="unit1/actions" href="unit1__actions.html">行动，使智能体能够与环境交互</a><a class="nav-link" data-local="unit1/observations" href="unit1__observations.html">观察，整合反馈以反思和适应</a><a class="nav-link" data-local="unit1/dummy-agent-library" href="unit1__dummy-agent-library.html">简单智能体库</a><a class="nav-link active" data-local="unit1/tutorial" href="unit1__tutorial.html">使用 Smolagents 创建我们的第一个智能体</a><a class="nav-link" data-local="unit1/final-quiz" href="unit1__final-quiz.html">第 1 单元最终测验</a><a class="nav-link" data-local="unit1/conclusion" href="unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2 单元. AI 智能体框架</summary><a class="nav-link" data-local="unit2/introduction" href="unit2__introduction.html">AI 智能体框架</a></details>
+<details class="nav-chap"><summary>第 2.1 单元. smolagents 框架</summary><a class="nav-link" data-local="unit2/smolagents/introduction" href="unit2__smolagents__introduction.html">smolagents 简介</a><a class="nav-link" data-local="unit2/smolagents/why_use_smolagents" href="unit2__smolagents__why_use_smolagents.html">为什么使用 smolagents？</a><a class="nav-link" data-local="unit2/smolagents/quiz1" href="unit2__smolagents__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/smolagents/code_agents" href="unit2__smolagents__code_agents.html">构建使用代码的智能体</a><a class="nav-link" data-local="unit2/smolagents/tool_calling_agents" href="unit2__smolagents__tool_calling_agents.html">将智能体与工具集成</a><a class="nav-link" data-local="unit2/smolagents/tools" href="unit2__smolagents__tools.html">工具</a><a class="nav-link" data-local="unit2/smolagents/retrieval_agents" href="unit2__smolagents__retrieval_agents.html">检索智能体</a><a class="nav-link" data-local="unit2/smolagents/quiz2" href="unit2__smolagents__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/smolagents/multi_agent_systems" href="unit2__smolagents__multi_agent_systems.html">多智能体系统</a><a class="nav-link" data-local="unit2/smolagents/vision_agents" href="unit2__smolagents__vision_agents.html">视觉和浏览器智能体</a><a class="nav-link" data-local="unit2/smolagents/final_quiz" href="unit2__smolagents__final_quiz.html">最终测验</a><a class="nav-link" data-local="unit2/smolagents/conclusion" href="unit2__smolagents__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.2 单元. LlamaIndex 框架</summary><a class="nav-link" data-local="unit2/llama-index/introduction" href="unit2__llama-index__introduction.html">LlamaIndex 简介</a><a class="nav-link" data-local="unit2/llama-index/llama-hub" href="unit2__llama-index__llama-hub.html">LlamaHub 简介</a><a class="nav-link" data-local="unit2/llama-index/components" href="unit2__llama-index__components.html">LlamaIndex 中的组件是什么？</a><a class="nav-link" data-local="unit2/llama-index/tools" href="unit2__llama-index__tools.html">在 LlamaIndex 中使用工具</a><a class="nav-link" data-local="unit2/llama-index/quiz1" href="unit2__llama-index__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/llama-index/agents" href="unit2__llama-index__agents.html">在 LlamaIndex 中使用智能体</a><a class="nav-link" data-local="unit2/llama-index/workflows" href="unit2__llama-index__workflows.html">在 LlamaIndex 中创建智能工作流</a><a class="nav-link" data-local="unit2/llama-index/quiz2" href="unit2__llama-index__quiz2.html">快速测验2</a><a class="nav-link" data-local="unit2/llama-index/conclusion" href="unit2__llama-index__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 2.3 单元. LangGraph 框架</summary><a class="nav-link" data-local="unit2/langgraph/introduction" href="unit2__langgraph__introduction.html">LangGraph 是什么？</a><a class="nav-link" data-local="unit2/langgraph/when_to_use_langgraph" href="unit2__langgraph__when_to_use_langgraph.html">何时使用 LangGraph？</a><a class="nav-link" data-local="unit2/langgraph/building_blocks" href="unit2__langgraph__building_blocks.html">LangGraph 的构建模块</a><a class="nav-link" data-local="unit2/langgraph/first_graph" href="unit2__langgraph__first_graph.html">创建你的第一个 LangGraph</a><a class="nav-link" data-local="unit2/langgraph/document_analysis_agent" href="unit2__langgraph__document_analysis_agent.html">文档分析智能体</a><a class="nav-link" data-local="unit2/langgraph/quiz1" href="unit2__langgraph__quiz1.html">快速测验1</a><a class="nav-link" data-local="unit2/langgraph/conclusion" href="unit2__langgraph__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 3 单元. Agentic RAG 的用例</summary><a class="nav-link" data-local="unit3/agentic-rag/introduction" href="unit3__agentic-rag__introduction.html">Agentic RAG 用例简介</a><a class="nav-link" data-local="unit3/agentic-rag/agentic-rag" href="unit3__agentic-rag__agentic-rag.html">Agentic 检索增强生成（RAG）</a><a class="nav-link" data-local="unit3/agentic-rag/invitees" href="unit3__agentic-rag__invitees.html">为宾客故事创建 RAG 工具</a><a class="nav-link" data-local="unit3/agentic-rag/tools" href="unit3__agentic-rag__tools.html">为你的智能体构建和集成工具</a><a class="nav-link" data-local="unit3/agentic-rag/agent" href="unit3__agentic-rag__agent.html">创建你的 Gala 智能体</a><a class="nav-link" data-local="unit3/agentic-rag/conclusion" href="unit3__agentic-rag__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>第 4 单元. 最终项目 - 创建，测试和认证你的智能体</summary><a class="nav-link" data-local="unit4/introduction" href="unit4__introduction.html">欢迎来到最后一个单元</a><a class="nav-link" data-local="unit4/what-is-gaia" href="unit4__what-is-gaia.html">什么是GAIA？</a><a class="nav-link" data-local="unit4/hands-on" href="unit4__hands-on.html">动手实践</a><a class="nav-link" data-local="unit4/get-your-certificate" href="unit4__get-your-certificate.html">领取你的证书</a><a class="nav-link" data-local="unit4/conclusion" href="unit4__conclusion.html">结论</a><a class="nav-link" data-local="unit4/additional-readings" href="unit4__additional-readings.html">那现在呢？我应该学习哪些主题？</a></details>
+<details class="nav-chap"><summary>附加单元 1. 为函数调用微调大型语言模型</summary><a class="nav-link" data-local="bonus-unit1/introduction" href="bonus-unit1__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit1/what-is-function-calling" href="bonus-unit1__what-is-function-calling.html">什么是函数调用？</a><a class="nav-link" data-local="bonus-unit1/fine-tuning" href="bonus-unit1__fine-tuning.html">让我们为函数调用微调模型</a><a class="nav-link" data-local="bonus-unit1/conclusion" href="bonus-unit1__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>附加单元 2. 智能体可观察性和评估</summary><a class="nav-link" data-local="bonus_unit2/introduction" href="bonus_unit2__introduction.html">简介</a><a class="nav-link" data-local="bonus_unit2/what-is-agent-observability-and-evaluation" href="bonus_unit2__what-is-agent-observability-and-evaluation.html">什么是智能体可观察性和评估？</a><a class="nav-link" data-local="bonus_unit2/monitoring-and-evaluating-agents-notebook" href="bonus_unit2__monitoring-and-evaluating-agents-notebook.html">监控和评估智能体</a><a class="nav-link" data-local="bonus_unit2/quiz" href="bonus_unit2__quiz.html">测验</a></details>
+<details class="nav-chap"><summary>附加单元 3. 宝可梦中的AI智能体</summary><a class="nav-link" data-local="bonus-unit3/introduction" href="bonus-unit3__introduction.html">简介</a><a class="nav-link" data-local="bonus-unit3/state-of-art" href="bonus-unit3__state-of-art.html">游戏中使用 LLM 的最新技术</a><a class="nav-link" data-local="bonus-unit3/from-llm-to-agents" href="bonus-unit3__from-llm-to-agents.html">从LLM到AI智能体</a><a class="nav-link" data-local="bonus-unit3/building_your_pokemon_agent" href="bonus-unit3__building_your_pokemon_agent.html">构建你自己的宝可梦对战智能体</a><a class="nav-link" data-local="bonus-unit3/launching_agent_battle" href="bonus-unit3__launching_agent_battle.html">启动你的宝可梦战斗智能体</a><a class="nav-link" data-local="bonus-unit3/conclusion" href="bonus-unit3__conclusion.html">结论</a></details>
+<details class="nav-chap"><summary>后续内容何时发布？</summary><a class="nav-link" data-local="communication/next-units" href="communication__next-units.html">后续单元</a></details></aside>
+<main>
+<h1 id="smolagents">使用 smolagents 创建我们的第一个智能体</h1>
+<p>在上一节中，我们学习了如何使用 Python 代码从头开始创建智能体，并且我们<strong>看到了这个过程是多么繁琐</strong>。幸运的是，许多智能体库通过<strong>为你处理大量繁重的工作</strong>来简化这项工作。</p>
+<p>在本教程中，<strong>你将创建你的第一个智能体</strong>，它能够执行图像生成、网络搜索、时区检查等更多操作！</p>
+<p>你还将把你的智能体<strong>发布到 Hugging Face Space 上，以便与朋友和同事分享</strong>。</p>
+<p>让我们开始吧！</p>
+<h2 id="smolagents_1">什么是 smolagents？</h2>
+<p><img
+  src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/smolagents.png"
+  alt="smolagents"
+/></p>
+<p>为了创建这个智能体，我们将使用 <code>smolagents</code>，这是一个<strong>提供轻松开发智能体框架的库</strong>。</p>
+<p>这个轻量级库设计简洁，但它抽象了构建智能体的许多复杂性，使你能够专注于设计智能体的行为。</p>
+<p>我们将在下一个单元中深入了解 smolagents。同时，你也可以查看这篇<a href="https://huggingface.co/blog/smolagents" target="_blank">博客文章</a>或该库的<a href="https://github.com/huggingface/smolagents" target="_blank">GitHub 仓库</a>。</p>
+<p>简而言之，<code>smolagents</code> 是一个专注于 <strong>codeAgent</strong> 的库，codeAgent 是一种通过代码块执行<strong>“操作”</strong>，然后通过执行代码<strong>“观察”</strong>结果的智能体。</p>
+<p>以下是我们将构建的一个示例！</p>
+<p>我们为我们的智能体提供了一个<strong>图像生成工具</strong>，并要求它生成一张猫的图片。</p>
+<p><code>smolagents</code> 中的智能体将具有<strong>与我们之前构建的自定义智能体相同的行为</strong>：它将<strong>以循环的方式思考、行动和观察</strong>，直到得出最终答案：</p>
+<p><iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/PQDKcWiuln4?si=ysSTDZoi8y55FVvA"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+></iframe>
+</p>
+<p>很令人兴奋，对吧？</p>
+<h2 id="_1">让我们来构建我们的智能体！</h2>
+<p>首先，复制这个 Space：<a href="https://huggingface.co/spaces/agents-course/First_agent_template" target="_blank">https://huggingface.co/spaces/agents-course/First_agent_template</a></p>
+<blockquote>
+<p>感谢 <a href="https://huggingface.co/m-ric" target="_blank">Aymeric</a> 提供的这个模板！🙌</p>
+</blockquote>
+<p>复制这个 Space 意味着<strong>在你的个人资料中创建一个本地副本</strong>：</p>
+<p><img
+  src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/duplicate-space.gif"
+  alt="复制"
+/></p>
+<p>复制这个 Space 之后，<strong>你需要添加你的 Hugging Face API token</strong>，以便你的<strong>智能体</strong>可以调用模型 API。</p>
+<ol>
+<li>首先，从<a href="https://hf.co/settings/tokens"> https://hf.co/settings/tokens </a>获取一个具有<strong>推理权限</strong>的 token，第 4 步需要用到。如果你已经有了，可以跳过此步。</li>
+<li>进入你的主页，找到刚才复制的空间，点击<strong>设置</strong>按钮。</li>
+<li>向下滚动到<strong>变量和密钥</strong>部分，点击<strong>新建密钥</strong>。</li>
+<li>创建一个名为<strong>HF_TOKEN</strong>的密钥，值为第一步获取到的 token。</li>
+<li>点击<strong>保存</strong>。</li>
+</ol>
+<p>在整个课程中，你唯一需要修改的文件是当前不完整的<strong>"app.py"</strong>。你可以在这里查看<a href="https://huggingface.co/spaces/agents-course/First_agent_template/blob/main/app.py">模板中的原始文件</a>。要找到你的文件，请进入你复制的 Space，然后点击 <code>Files</code> 选项卡，再在目录列表中点击 <code>app.py</code>。</p>
+<p>让我们一起分解代码：</p>
+<ul>
+<li>文件开头是一些简单但必要的库导入</li>
+</ul>
+<pre><code class="language-python">from smolagents import CodeAgent, DuckDuckGoSearchTool, InferenceClientModel, load_tool, tool
+import datetime
+import requests
+import pytz
+import yaml
+from tools.final_answer import FinalAnswerTool
+</code></pre>
+<p>正如之前所述，我们将直接使用 <strong>smolagents</strong> 中的 <strong>CodeAgent</strong> 类。</p>
+<h3 id="tool">Tool（工具）</h3>
+<p>现在让我们来了解一下工具！如果你需要回顾一下工具的相关内容，请随时回到课程的<a href="tools">工具</a>部分。</p>
+<pre><code class="language-python">@tool
+def my_custom_tool(arg1:str, arg2:int)-&gt; str: # it's important to specify the return type
+    # Keep this format for the tool description / args description but feel free to modify the tool
+    &quot;&quot;&quot;A tool that does nothing yet
+    Args:
+        arg1: the first argument
+        arg2: the second argument
+    &quot;&quot;&quot;
+    return &quot;What magic will you build ?&quot;
+
+@tool
+def get_current_time_in_timezone(timezone: str) -&gt; str:
+    &quot;&quot;&quot;A tool that fetches the current local time in a specified timezone.
+    Args:
+        timezone: A string representing a valid timezone (e.g., 'America/New_York').
+    &quot;&quot;&quot;
+    try:
+        # Create timezone object
+        tz = pytz.timezone(timezone)
+        # Get current time in that timezone
+        local_time = datetime.datetime.now(tz).strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
+        return f&quot;The current local time in {timezone} is: {local_time}&quot;
+    except Exception as e:
+        return f&quot;Error fetching time for timezone '{timezone}': {str(e)}&quot;
+</code></pre>
+<p>这些工具是我们在这个部分鼓励你构建的东西！我们给你两个例子：</p>
+<ol>
+<li>一个<strong>不工作的虚拟工具</strong>，你可以修改它来制作一些有用的东西。</li>
+<li>一个<strong>实际工作的工具</strong>，它可以获取世界某地的当前时间。</li>
+</ol>
+<p>要定义你的工具，重要的是：</p>
+<ol>
+<li>为你的函数提供输入和输出类型，例如 <code>get_current_time_in_timezone(timezone: str) -&gt; str:</code></li>
+<li><strong>格式良好的文档字符串</strong>。<code>smolagents</code> 期望所有参数在文档字符串中都有<strong>文字描述</strong>。</li>
+</ol>
+<h3 id="the-agent">The Agent（智能体）</h3>
+<p>它使用 <a href="https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct"><code>Qwen/Qwen2.5-Coder-32B-Instruct</code></a> 作为 LLM 引擎。这是一个非常强大的模型，我们将通过无服务器 API 访问它。</p>
+<pre><code class="language-python">final_answer = FinalAnswerTool()
+model = InferenceClientModel(
+    max_tokens=2096,
+    temperature=0.5,
+    model_id='Qwen/Qwen2.5-Coder-32B-Instruct',
+    custom_role_conversions=None,
+)
+
+with open(&quot;prompts.yaml&quot;, 'r') as stream:
+    prompt_templates = yaml.safe_load(stream)
+
+# We're creating our CodeAgent
+agent = CodeAgent(
+    model=model,
+    tools=[final_answer], # add your tools here (don't remove final_answer)
+    max_steps=6,
+    verbosity_level=1,
+    grammar=None,
+    planning_interval=None,
+    name=None,
+    description=None,
+    prompt_templates=prompt_templates
+)
+
+GradioUI(agent).launch()
+</code></pre>
+<p>这个智能体仍在使用我们在前面部分中看到的<code>InferenceClient</code>，它位于<strong>InferenceClientModel</strong>类的背后！</p>
+<p>当我们介绍 Unit 2 中的框架时，我们会给出更深入的例子。目前，你需要专注于通过智能体的<code>tools</code>参数<strong>向工具列表中添加新工具</strong>。</p>
+<p>例如，你可以使用代码第一行导入的<code>DuckDuckGoSearchTool</code>，或者你可以检查稍后从 Hub 加载的<code>image_generation_tool</code>。</p>
+<p><strong>添加工具将赋予你的智能体新的能力</strong>，在这里尝试发挥创意吧！</p>
+<p>完整的"app.py"：</p>
+<pre><code class="language-python">from smolagents import CodeAgent, DuckDuckGoSearchTool, InferenceClientModel, load_tool, tool
+import datetime
+import requests
+import pytz
+import yaml
+from tools.final_answer import FinalAnswerTool
+
+from Gradio_UI import GradioUI
+
+# Below is an example of a tool that does nothing. Amaze us with your creativity!
+@tool
+def my_custom_tool(arg1:str, arg2:int)-&gt; str: # it's important to specify the return type
+    # Keep this format for the tool description / args description but feel free to modify the tool
+    &quot;&quot;&quot;A tool that does nothing yet
+    Args:
+        arg1: the first argument
+        arg2: the second argument
+    &quot;&quot;&quot;
+    return &quot;What magic will you build ?&quot;
+
+@tool
+def get_current_time_in_timezone(timezone: str) -&gt; str:
+    &quot;&quot;&quot;A tool that fetches the current local time in a specified timezone.
+    Args:
+        timezone: A string representing a valid timezone (e.g., 'America/New_York').
+    &quot;&quot;&quot;
+    try:
+        # Create timezone object
+        tz = pytz.timezone(timezone)
+        # Get current time in that timezone
+        local_time = datetime.datetime.now(tz).strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
+        return f&quot;The current local time in {timezone} is: {local_time}&quot;
+    except Exception as e:
+        return f&quot;Error fetching time for timezone '{timezone}': {str(e)}&quot;
+
+
+final_answer = FinalAnswerTool()
+model = InferenceClientModel(
+    max_tokens=2096,
+    temperature=0.5,
+    model_id='Qwen/Qwen2.5-Coder-32B-Instruct',
+    custom_role_conversions=None,
+)
+
+
+# Import tool from Hub
+image_generation_tool = load_tool(&quot;agents-course/text-to-image&quot;, trust_remote_code=True)
+
+with open(&quot;prompts.yaml&quot;, 'r') as stream:
+    prompt_templates = yaml.safe_load(stream)
+
+agent = CodeAgent(
+    model=model,
+    tools=[final_answer], # add your tools here (don't remove final_answer)
+    max_steps=6,
+    verbosity_level=1,
+    grammar=None,
+    planning_interval=None,
+    name=None,
+    description=None,
+    prompt_templates=prompt_templates
+)
+
+
+GradioUI(agent).launch()
+</code></pre>
+<p>你的<strong>目标</strong>是熟悉 Space 和智能体。</p>
+<p>目前，模板中的智能体<strong>没有使用任何工具，所以尝试为它提供一些预制的工具，甚至自己动手制作一些新工具！</strong></p>
+<p>我们非常期待在 Discord 频道 <strong>#agents-course-showcase</strong> 中看到你的精彩智能体成果！</p>
+<hr />
+<p>恭喜你，你已经构建了你的第一个智能体！不要犹豫，与你的朋友和同事分享吧。</p>
+<p>由于这是你的第一次尝试，如果有点小问题或速度有点慢，这是完全正常的。在未来的单元中，我们将学习如何构建更好的智能体。</p>
+<p>最好的学习方法是尝试，所以不要犹豫，去更新它，添加更多工具，尝试使用另一个模型，等等。</p>
+<p>在下一节中，你将完成最后的测验并获得证书！</p>
+<div class="pager"><a class="prev" href="unit1__dummy-agent-library.html">← 简单智能体库</a><a class="next" href="unit1__final-quiz.html">第 1 单元最终测验 →</a></div>
+<p class="attrib">内容来自 <a href="https://huggingface.co/learn/agents-course/zh-cn/unit0/introduction">Hugging Face AI Agents Course</a>(官方中文翻译),Apache 2.0 协议开源。本站为方便阅读的镜像整理,证书与测验请前往官方课程完成。</p>
+</main></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  var exp=q.querySelector('.quiz-explain');
+  q.querySelectorAll('.quiz-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('right','wrong')});
+      var ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'right':'wrong');
+      exp.hidden=false;
+      exp.textContent=(ok?'✅ 答对了!':'❌ 再想想:')+' '+btn.dataset.explain;
+    });
+  });
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.querySelector('aside').classList.toggle('open')});}
+</script></body></html>
