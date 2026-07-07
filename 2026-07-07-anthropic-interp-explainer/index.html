@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>看见机器的念头 · Anthropic 可解释性研究互动科普</title>
+<meta name="description" content="从叠加假说到全局工作空间：用 5 个互动实验，亲手体验 Anthropic 可解释性团队的四代研究方法。">
+<style>
+:root{
+  --paper:#F3F5F2;
+  --card:#FBFCFA;
+  --ink:#12211B;
+  --ink-soft:#44554D;
+  --ink-faint:#7A8A82;
+  --line:#DDE3DD;
+  --scope:#0A1410;
+  --scope-panel:#0E1B15;
+  --scope-line:#22352B;
+  --phos:#4DE3A5;
+  --phos-dim:#2E9A70;
+  --phos-faint:#1B4A37;
+  --amber:#F2A93B;
+  --amber-dim:#8A6222;
+  --red:#E25B4E;
+  --f-serif:"Songti SC","Noto Serif SC","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  --f-sans:"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  --f-mono:"SF Mono","JetBrains Mono","Cascadia Code",Menlo,Consolas,"Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.9;-webkit-font-smoothing:antialiased}
+::selection{background:var(--phos);color:var(--scope)}
+
+/* ---------- 左侧深度标尺 ---------- */
+#rail{position:fixed;left:0;top:0;bottom:0;width:64px;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;border-right:1px solid var(--line);background:var(--paper);z-index:50}
+@media(min-width:1100px){#rail{display:flex}}
+#rail .lnum{font-family:var(--f-mono);font-size:11px;color:var(--ink-faint);writing-mode:vertical-rl;letter-spacing:2px}
+#rail .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--ink-faint);background:transparent;cursor:pointer;transition:all .25s}
+#rail .dot.on{background:var(--ink);border-color:var(--ink);transform:scale(1.25)}
+#rail .gauge{width:2px;flex:0 0 90px;background:var(--line);position:relative;border-radius:2px}
+#rail .gauge i{position:absolute;left:-1px;top:0;width:4px;background:var(--phos-dim);border-radius:2px;height:0%}
+
+/* ---------- 版式 ---------- */
+.wrap{max-width:740px;margin:0 auto;padding:0 22px}
+@media(min-width:1100px){.wrap{margin-left:calc(50% - 340px)}}
+section{padding:88px 0 40px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;color:var(--ink-faint);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--ink-faint)}
+h1{font-family:var(--f-serif);font-weight:900;font-size:clamp(34px,7vw,58px);line-height:1.28;letter-spacing:.02em}
+h2{font-family:var(--f-serif);font-weight:900;font-size:clamp(25px,4.6vw,34px);line-height:1.4;margin-bottom:22px}
+h2 .en{display:block;font-family:var(--f-mono);font-weight:400;font-size:12px;letter-spacing:.16em;color:var(--phos-dim);margin-top:8px}
+p{color:var(--ink-soft);margin-bottom:18px}
+p strong,li strong{color:var(--ink);font-weight:600}
+em{font-style:normal;background:linear-gradient(transparent 68%,rgba(77,227,165,.35) 68%)}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--phos-dim);text-underline-offset:3px}
+.term{font-family:var(--f-mono);font-size:.86em;background:#E8EEE9;border:1px solid var(--line);border-radius:5px;padding:1px 6px;white-space:nowrap}
+
+/* ---------- 观测窗（签名组件） ---------- */
+.scope{background:var(--scope);border:1px solid var(--scope-line);border-radius:16px;margin:34px 0 10px;overflow:hidden;position:relative;color:#C7D6CC;box-shadow:0 20px 50px -24px rgba(10,20,16,.55)}
+.scope::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px),radial-gradient(120% 90% at 50% 0%,transparent 55%,rgba(0,0,0,.34));border-radius:16px}
+.scope-hd{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--scope-line);font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:#6E8377}
+.scope-hd .lamp{width:8px;height:8px;border-radius:50%;background:var(--phos);box-shadow:0 0 8px var(--phos);animation:lamp 2.6s ease-in-out infinite}
+@keyframes lamp{50%{opacity:.35;box-shadow:none}}
+.scope-hd .tag{margin-left:auto;color:var(--amber);border:1px solid var(--amber-dim);border-radius:4px;padding:1px 7px}
+.scope-bd{padding:22px 20px 24px;position:relative;z-index:1}
+@media(min-width:640px){.scope-bd{padding:26px 26px 28px}}
+.scope .mono{font-family:var(--f-mono)}
+.scope-note{font-size:13px;color:var(--ink-faint);margin:10px 4px 0;line-height:1.8}
+
+/* 观测窗内部通用元素 */
+.prompt-line{font-family:var(--f-mono);font-size:14px;color:#9DB3A6;line-height:2;margin-bottom:16px}
+.prompt-line b{color:#E9F4EC;font-weight:600}
+.out-line{font-family:var(--f-mono);font-size:14px;border-left:2px solid var(--phos-dim);padding:8px 12px;margin-top:18px;color:var(--phos);background:rgba(77,227,165,.05);border-radius:0 8px 8px 0;min-height:1em;transition:all .3s}
+.out-line.amberized{border-color:var(--amber);color:var(--amber);background:rgba(242,169,59,.06)}
+.out-line.flat{border-color:#57685E;color:#8FA096;background:rgba(255,255,255,.02)}
+.out-label{font-size:10px;letter-spacing:.2em;color:#5E7268;font-family:var(--f-mono);margin-bottom:5px;margin-top:16px}
+.ctrl{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.btn{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.05em;padding:8px 14px;border-radius:8px;cursor:pointer;transition:all .18s;border:1px solid}
+.btn-amber{background:transparent;color:var(--amber);border-color:var(--amber-dim)}
+.btn-amber:hover{background:rgba(242,169,59,.12)}
+.btn-amber.active{background:var(--amber);color:#1A1206;border-color:var(--amber)}
+.btn-ghost{background:transparent;color:#8FA096;border-color:var(--scope-line)}
+.btn-ghost:hover{color:#C7D6CC;border-color:#3A5245}
+.btn-red{background:transparent;color:var(--red);border-color:#5E2B26}
+.btn-red:hover{background:rgba(226,91,78,.1)}
+.btn-red.active{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* 概念芯片 */
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:13px;color:var(--phos);border:1px solid var(--phos-faint);background:rgba(77,227,165,.07);border-radius:7px;padding:4px 10px;margin:4px 5px 4px 0;transition:all .3s}
+.chip .lv{font-size:10px;color:var(--phos-dim)}
+.chip.hot{border-color:var(--phos);box-shadow:0 0 14px rgba(77,227,165,.35);color:#BFFBDF}
+.chip.amber{color:var(--amber);border-color:var(--amber-dim);background:rgba(242,169,59,.08)}
+.chip.amber.hot{border-color:var(--amber);box-shadow:0 0 14px rgba(242,169,59,.35)}
+.chip.off{opacity:.22;filter:saturate(.2)}
+.chip.ghost{opacity:.35;border-style:dashed}
+
+/* 层带图 */
+.strata{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px}
+.stratum{border:1px dashed var(--scope-line);border-radius:10px;padding:8px 12px;font-family:var(--f-mono);font-size:11px;color:#5E7268;letter-spacing:.1em}
+.stratum.ws{border:1px solid var(--phos-faint);background:rgba(77,227,165,.035);padding:12px}
+.stratum .st-label{display:block;margin-bottom:6px;color:#6E8377}
+.stratum.ws .st-label{color:var(--phos-dim)}
+.stratum.ws.ablated{border-color:#5E2B26;background:rgba(226,91,78,.05)}
+.stratum.ws.ablated .st-label{color:var(--red)}
+
+/* 激活条（实验一） */
+.actrow{display:flex;align-items:center;gap:12px;margin:9px 0;font-family:var(--f-mono);font-size:12.5px}
+.actrow .nm{flex:0 0 128px;color:#9DB3A6;text-align:right}
+.actrow .bar{flex:1;height:12px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;border:1px solid var(--scope-line)}
+.actrow .bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--phos-dim),var(--phos));border-radius:6px;transition:width .45s cubic-bezier(.2,.8,.3,1)}
+.actrow.dead .bar i{background:#42544A}
+.actrow .val{flex:0 0 44px;color:var(--phos-dim)}
+.wordchips{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:20px}
+.wchip{font-family:var(--f-mono);font-size:12.5px;color:#C7D6CC;border:1px solid var(--scope-line);border-radius:8px;padding:7px 12px;cursor:pointer;background:rgba(255,255,255,.02);transition:all .18s}
+.wchip:hover{border-color:#3A5245}
+.wchip.sel{border-color:var(--phos);color:var(--phos);background:rgba(77,227,165,.08)}
+
+/* 滑杆（实验二） */
+.sliderbox{display:flex;align-items:center;gap:14px;margin:8px 0 20px;font-family:var(--f-mono);font-size:12px;color:#9DB3A6}
+input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--phos-dim),var(--amber));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--amber);border:3px solid #1A1206;cursor:pointer;box-shadow:0 0 12px rgba(242,169,59,.5)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--amber);border:3px solid #1A1206;cursor:pointer}
+.dial{color:var(--amber);min-width:52px;text-align:center;border:1px solid var(--amber-dim);border-radius:6px;padding:3px 0}
+
+/* 归因图（实验三） */
+.graphbox{margin:4px 0 6px}
+.graphbox svg{width:100%;height:auto;display:block}
+.gnode{fill:rgba(77,227,165,.06);stroke:var(--phos-faint);stroke-width:1.2;rx:9}
+.gnode.mid{stroke:var(--phos);stroke-dasharray:5 4}
+.gnode.swapped{fill:rgba(242,169,59,.09);stroke:var(--amber)}
+.gtext{font-family:var(--f-mono);font-size:13px;fill:var(--phos)}
+.gtext.swapped{fill:var(--amber)}
+.gsub{font-family:var(--f-mono);font-size:9px;fill:#5E7268;letter-spacing:.08em}
+.gedge{stroke:#3A5245;stroke-width:1.4;fill:none;marker-end:url(#arr)}
+.gedge.lit{stroke:var(--phos-dim)}
+.gedge.amb{stroke:var(--amber-dim)}
+
+/* 标签页（实验四） */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tab{font-family:var(--f-mono);font-size:12px;padding:7px 13px;border-radius:8px;border:1px solid var(--scope-line);color:#8FA096;cursor:pointer;background:transparent;transition:all .18s}
+.tab.on{border-color:var(--phos);color:var(--phos);background:rgba(77,227,165,.07)}
+
+/* 卡片（第五章） */
+.cards{display:grid;grid-template-columns:1fr;gap:14px;margin:26px 0}
+@media(min-width:640px){.cards{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 20px 16px}
+.card h4{font-family:var(--f-serif);font-size:17.5px;margin-bottom:8px}
+.card h4 .cm{font-family:var(--f-mono);font-weight:400;font-size:11px;color:var(--phos-dim);letter-spacing:.12em;margin-left:8px}
+.card p{font-size:14px;line-height:1.85;margin:0;color:var(--ink-soft)}
+.card.warn{border-color:#EAD3C9}
+.card.warn h4 .cm{color:#C46A5C}
+
+/* 时间线 */
+.tl{list-style:none;margin:26px 0 8px;border-left:2px solid var(--line);padding-left:26px}
+.tl li{position:relative;padding-bottom:26px}
+.tl li::before{content:"";position:absolute;left:-33px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--paper);border:2.5px solid var(--phos-dim)}
+.tl .yr{font-family:var(--f-mono);font-size:12px;letter-spacing:.15em;color:var(--phos-dim)}
+.tl .tt{font-family:var(--f-serif);font-weight:700;font-size:17px;display:block;margin:3px 0 4px}
+.tl p{font-size:14px;margin:0}
+
+/* 其他 */
+.divider{height:1px;background:var(--line);margin:30px 0 0}
+.chapter-no{font-family:var(--f-mono);font-size:80px;font-weight:300;color:transparent;-webkit-text-stroke:1px var(--line);letter-spacing:.04em;line-height:1;user-select:none;margin-bottom:-12px}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font-size:13px;color:var(--ink-faint);line-height:2}
+.kbd-note{font-size:12.5px;color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<nav id="rail" aria-hidden="true">
+  <span class="lnum" id="railL">L00</span>
+  <div class="gauge"><i id="gaugeFill"></i></div>
+  <span class="dot" data-go="ch0" title="序"></span>
+  <span class="dot" data-go="ch1" title="叠加"></span>
+  <span class="dot" data-go="ch2" title="特征"></span>
+  <span class="dot" data-go="ch3" title="回路"></span>
+  <span class="dot" data-go="ch4" title="工作空间"></span>
+  <span class="dot" data-go="ch5" title="意义"></span>
+</nav>
+
+<!-- ============ 序：英雄区 ============ -->
+<header id="ch0" class="wrap" style="padding-top:96px">
+  <div class="eyebrow">独立科普项目 · 基于 Anthropic 可解释性团队公开论文</div>
+  <h1>看见机器的念头</h1>
+  <p style="margin-top:26px;font-size:17.5px">大语言模型在说出每个词之前，内部已经先有了一批<em>没说出口的想法</em>。过去五年，Anthropic 的可解释性（interpretability）团队打造了一代又一代「透镜」，把这些念头逐渐变成可读、可干预的对象。这个页面用 <strong>5 个互动实验</strong>，带你亲手走完这条路——从「为什么黑箱看不懂」，一直到 2026 年最新发现的「全局工作空间」。</p>
+
+  <div class="scope reveal" aria-label="演示：透镜示意">
+    <div class="scope-hd"><span class="lamp"></span>LENS · 演示 <span class="tag">教学模拟</span></div>
+    <div class="scope-bd">
+      <div class="prompt-line">输入 › <b>今晚的月亮很圆，像一枚——</b></div>
+      <div class="strata">
+        <div class="stratum"><span class="st-label">浅层 · 词法与语法</span></div>
+        <div class="stratum ws">
+          <span class="st-label">中间层 · 透镜读到的「未说出的念头」</span>
+          <span class="chip" id="heroC0">银币 <span class="lv">0.91</span></span>
+          <span class="chip" id="heroC1">灯 <span class="lv">0.44</span></span>
+          <span class="chip" id="heroC2">眼睛 <span class="lv">0.31</span></span>
+          <span class="chip ghost">比喻 <span class="lv">0.28</span></span>
+        </div>
+        <div class="stratum"><span class="st-label">深层 · 组装输出</span></div>
+      </div>
+      <div class="out-label">模型输出</div>
+      <div class="out-line">银币。</div>
+      <div class="scope-note" style="color:#5E7268">在词语被说出之前，候选的念头已经在中间层排队。可解释性研究做的事，就是造出能看见这一幕的仪器。</div>
+    </div>
+  </div>
+  <p class="kbd-note" style="margin-top:14px">↓ 顺着页面往下，相当于沿着五年研究史「下潜」。所有实验均为按论文实测结果复刻的教学模拟，不需要任何背景知识。</p>
+  <div class="divider"></div>
+</header>
+
+<!-- ============ 第一章：叠加 ============ -->
+<section id="ch1" class="wrap">
+  <div class="chapter-no">01</div>
+  <div class="eyebrow">方法一 · 2022 · TOY MODELS OF SUPERPOSITION</div>
+  <h2>为什么神经网络看不懂？<span class="en">SUPERPOSITION · 叠加假说</span></h2>
+  <p>直觉上，打开黑箱应该像看电路图：<strong>一个神经元负责一个概念</strong>，顺藤摸瓜就能读懂。但真正打开之后，研究者发现大多数神经元是「多义」的（polysemantic）——同一个神经元，会对一堆毫不相干的东西放电。</p>
+  <p>2022 年的《Toy Models of Superposition》给出了解释：模型想要表达的概念数量，<em>远多于</em>它拥有的神经元数量。于是它把许多概念「压缩」进同一批神经元，像在同一张纸上叠印好几层文字——单看任何一层，都是乱码。这就是<strong>叠加(superposition)</strong>。</p>
+
+  <div class="scope reveal">
+    <div class="scope-hd"><span class="lamp"></span>实验一 · 一个神经元，身兼数职 <span class="tag">教学模拟</span></div>
+    <div class="scope-bd">
+      <div class="prompt-line">给模型看不同类型的文本，观察<b>同一个神经元</b>的反应。点击下面的文本类型：</div>
+      <div class="wordchips" id="d1chips">
+        <button class="wchip" data-i="0">学术论文引用</button>
+        <button class="wchip" data-i="1">英文日常对话</button>
+        <button class="wchip" data-i="2">HTTP 网络请求</button>
+        <button class="wchip" data-i="3">韩文文本</button>
+      </div>
+      <div id="d1neuron">
+        <div class="actrow"><span class="nm">神经元 #83</span><div class="bar"><i id="d1bar"></i></div><span class="val" id="d1val">0.00</span></div>
+      </div>
+      <div id="d1sae" style="display:none">
+        <div class="actrow"><span class="nm">特征·论文引用</span><div class="bar"><i data-f="0"></i></div><span class="val">0.00</span></div>
+        <div class="actrow"><span class="nm">特征·英文对话</span><div class="bar"><i data-f="1"></i></div><span class="val">0.00</span></div>
+        <div class="actrow"><span class="nm">特征·HTTP 请求</span><div class="bar"><i data-f="2"></i></div><span class="val">0.00</span></div>
+        <div class="actrow"><span class="nm">特征·韩文</span><div class="bar"><i data-f="3"></i></div><span class="val">0.00</span></div>
+      </div>
+      <div class="ctrl">
+        <button class="btn btn-amber" id="d1toggle">用稀疏自编码器（SAE）分解 →</button>
+      </div>
+      <div class="out-label">观察</div>
+      <div class="out-line" id="d1out">这是论文里一个真实神经元的写照：引用、对话、请求、韩文……它全都响应。单看神经元，读不出任何「概念」。</div>
+    </div>
+  </div>
+  <p class="scope-note">灵感来源：《Towards Monosemanticity》（2023）中记录的真实多义神经元。破解办法不是换模型，而是<strong>换一组「基」来看</strong>：用字典学习（dictionary learning）把纠缠的激活重新分解，乱码就变成了单义的<span class="term">特征 feature</span>。</p>
+  <div class="divider"></div>
+</section>
+
+<!-- ============ 第二章：特征 ============ -->
+<section id="ch2" class="wrap">
+  <div class="chapter-no">02</div>
+  <div class="eyebrow">方法二 · 2023–2024 · MONOSEMANTICITY / SAE</div>
+  <h2>看见概念：从神经元到特征<span class="en">FEATURES · 稀疏自编码器</span></h2>
+  <p>2023 年，团队先在一个小模型上证明了 SAE 路线可行；2024 年的《Scaling Monosemanticity》把它推到当时的生产模型 Claude 3 Sonnet，一口气提取出<strong>上千万个特征</strong>：金门大桥、代码 bug、内心冲突、谄媚、危险化学品……每个特征都对应一个人类能看懂的概念。</p>
+  <p>更重要的是，特征不只是「能看」，还<em>可以拧</em>：人为调大某个特征的激活值，模型的行为会随之改变。这是从「相关」迈向「因果」的第一步。</p>
+
+  <div class="scope reveal">
+    <div class="scope-hd"><span class="lamp"></span>实验二 · 金门大桥 CLAUDE（复刻 2024 名场面） <span class="tag">教学模拟</span></div>
+    <div class="scope-bd">
+      <div class="prompt-line">输入 › <b>介绍一下你自己。</b></div>
+      <div class="prompt-line" style="margin-bottom:6px">拖动滑杆，调大特征 <span class="mono" style="color:var(--amber)">#34M/31164353「金门大桥」</span>的激活强度：</div>
+      <div class="sliderbox">
+        <span>基线</span>
+        <input type="range" id="d2slider" min="0" max="4" value="0" step="1" aria-label="金门大桥特征强度">
+        <span class="dial" id="d2dial">× 0</span>
+      </div>
+      <div class="out-label">模型输出</div>
+      <div class="out-line" id="d2out">你好！我是 Claude，由 Anthropic 训练的 AI 助手。我可以帮你写作、分析问题和编写代码。</div>
+      <div class="scope-note" style="color:#5E7268" id="d2note">激活值处于自然水平，回答正常。</div>
+    </div>
+  </div>
+  <p class="scope-note">这不是段子：2024 年 5 月，Anthropic 真的短暂上线过「Golden Gate Claude」，24 小时内它的所有回答都会绕回金门大桥——靠的不是提示词，而是直接改写内部激活。同批被找到的著名特征还包括：<span class="term">内心冲突</span>、<span class="term">谄媚的夸奖</span>、<span class="term">代码中的 bug</span>。</p>
+  <div class="divider"></div>
+</section>
+
+<!-- ============ 第三章：回路 ============ -->
+<section id="ch3" class="wrap">
+  <div class="chapter-no">03</div>
+  <div class="eyebrow">方法三 · 2025 · ATTRIBUTION GRAPHS / CIRCUIT TRACING</div>
+  <h2>看见推理：归因图<span class="en">CIRCUITS · 回路追踪</span></h2>
+  <p>单个特征还不够——思考是特征之间的<strong>接力</strong>。2025 年的《On the Biology of a Large Language Model》引入<span class="term">归因图 attribution graph</span>，把模型的一次回答拆成一条条因果链，像给一次「思考」画出电路原理图。</p>
+  <p>最著名的例子：问模型「达拉斯所在州的首府是哪座城市？」归因图显示，它内部先激活了一个<em>从未说出口</em>的中间概念——「德克萨斯」，再由这个概念触发答案「奥斯汀」。这证明模型确实在做两跳推理（two-hop reasoning），而不是死记硬背问答对。</p>
+
+  <div class="scope reveal">
+    <div class="scope-hd"><span class="lamp"></span>实验三 · 拨动推理链 <span class="tag">教学模拟</span></div>
+    <div class="scope-bd">
+      <div class="prompt-line">输入 › <b>达拉斯所在州的首府是哪座城市？</b></div>
+      <div class="graphbox">
+      <svg viewBox="0 0 640 250" role="img" aria-label="两跳推理归因图">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#3A5245"/>
+          </marker>
+        </defs>
+        <path class="gedge lit" d="M150 62 C 210 62, 230 105, 268 118"/>
+        <path class="gedge lit" d="M150 188 C 210 188, 230 145, 268 132"/>
+        <path class="gedge amb" id="edgeOut" d="M436 125 C 470 125, 480 125, 508 125"/>
+        <rect class="gnode" x="30" y="38" width="120" height="48" rx="9"/>
+        <text class="gtext" x="90" y="61" text-anchor="middle">达拉斯</text>
+        <text class="gsub" x="90" y="76" text-anchor="middle">输入 · 城市</text>
+        <rect class="gnode" x="30" y="164" width="120" height="48" rx="9"/>
+        <text class="gtext" x="90" y="187" text-anchor="middle">首府</text>
+        <text class="gsub" x="90" y="202" text-anchor="middle">输入 · 关系</text>
+        <rect class="gnode mid" id="midNode" x="270" y="100" width="166" height="50" rx="9"/>
+        <text class="gtext" id="midText" x="353" y="123" text-anchor="middle">德克萨斯</text>
+        <text class="gsub" x="353" y="139" text-anchor="middle" id="midSub">中间概念 · 从未说出</text>
+        <rect class="gnode" id="outNode" x="510" y="100" width="112" height="50" rx="9"/>
+        <text class="gtext" id="outText" x="566" y="130" text-anchor="middle">奥斯汀</text>
+      </svg>
+      </div>
+      <div class="prompt-line" style="margin:8px 0 0">现在，把那个「从未说出」的中间概念<b>换掉</b>，看输出跟不跟着变（以下均为论文实测结果）:</div>
+      <div class="ctrl">
+        <button class="btn btn-ghost" data-swap="tx">还原：德克萨斯</button>
+        <button class="btn btn-amber" data-swap="ca">换成「加利福尼亚」</button>
+        <button class="btn btn-amber" data-swap="byz">换成「拜占庭帝国」</button>
+      </div>
+      <div class="out-label">模型输出</div>
+      <div class="out-line" id="d3out">奥斯汀（Austin）。</div>
+    </div>
+  </div>
+  <p class="scope-note">中间概念看不见、摸不着，却真实决定输出——换掉它，答案就跟着换。同一篇论文还发现了写押韵诗时<strong>提前规划韵脚</strong>的回路、跨语言共享的「概念层」，以及催生幻觉与越狱的电路。</p>
+  <div class="divider"></div>
+</section>
+
+<!-- ============ 第四章：工作空间 ============ -->
+<section id="ch4" class="wrap">
+  <div class="chapter-no">04</div>
+  <div class="eyebrow">方法四 · 2026 · VERBALIZABLE REPRESENTATIONS / J-SPACE</div>
+  <h2>读出思维：全局工作空间<span class="en">GLOBAL WORKSPACE · 雅可比透镜</span></h2>
+  <p>2026 年 7 月的新论文把问题推到极致：模型内部有没有一块统一的「思维黑板」？答案是——<strong>有一个功能上非常像的东西</strong>。</p>
+  <p>团队用一种叫<span class="term">雅可比透镜 J-lens</span>的新方法去读，发现在模型的中间层存在一小撮特殊表征：每一个都对应一个具体的词，是模型「想说而未说」的念头。它们同时只有约 <strong>25 个</strong>，占激活总量<strong>不到 10%</strong>，却承担着灵活推理的关键角色——可以被报告、被召唤、被下游电路广泛读取。团队把它命名为 <strong>J-空间(J-space)</strong>，并论证它的行为方式与认知科学里的「全局工作空间」理论高度对应。</p>
+  <p>最妙的是，这块黑板<em>可以做因果手术</em>：读它、往里注入念头、交换念头、整块关掉。下面四个场景，全部复刻自论文的真实实验。</p>
+
+  <div class="scope reveal">
+    <div class="scope-hd"><span class="lamp"></span>实验四 · 思维观测仪 J-LENS <span class="tag">教学模拟</span></div>
+    <div class="scope-bd">
+      <div class="tabs" id="d4tabs">
+        <button class="tab on" data-s="a">① 中英混合思考</button>
+        <button class="tab" data-s="b">② 白熊效应</button>
+        <button class="tab" data-s="c">③ 注入念头</button>
+        <button class="tab" data-s="d">④ 消融工作空间</button>
+      </div>
+      <div class="prompt-line" id="d4prompt"></div>
+      <div class="strata">
+        <div class="stratum"><span class="st-label">浅层 · 词法处理</span></div>
+        <div class="stratum ws" id="d4ws">
+          <span class="st-label" id="d4wslabel">工作空间带（约 L38–L92）· J-lens 读数</span>
+          <span id="d4chips"></span>
+        </div>
+        <div class="stratum"><span class="st-label">深层 · 组装输出</span></div>
+      </div>
+      <div class="ctrl" id="d4ctrl"></div>
+      <div class="out-label">模型输出</div>
+      <div class="out-line" id="d4out"></div>
+      <div class="scope-note" style="color:#5E7268" id="d4note"></div>
+    </div>
+  </div>
+  <p class="scope-note">图例：<span class="term" style="color:var(--phos-dim)">绿色芯片</span> = 透镜读出的未说出概念；<span class="term" style="color:var(--amber-dim)">琥珀色</span> = 人为干预。所有输出文案依据论文描述改写为中文。</p>
+  <div class="divider"></div>
+</section>
+
+<!-- ============ 第五章：意义 ============ -->
+<section id="ch5" class="wrap">
+  <div class="chapter-no">05</div>
+  <div class="eyebrow">这一切意味着什么 · METHODS &amp; STAKES</div>
+  <h2>方法论小结：从相关到因果<span class="en">THE CAUSAL TOOLKIT</span></h2>
+  <p>回看五年，四代方法其实在反复打磨同一套「因果工具箱」。可解释性的铁律是：<em>只有干预，才能证明因果</em>——光「读到」一个概念，不足以说明它真的在起作用；要换掉它、删掉它，看行为跟不跟着变。</p>
+  <div class="cards reveal">
+    <div class="card"><h4>读取<span class="cm">PROBE / LENS</span></h4><p>用探针或透镜把内部激活翻译成人话。是一切的起点，但只能给出相关性。</p></div>
+    <div class="card"><h4>注入<span class="cm">INJECTION</span></h4><p>把一个概念向量加进激活，凭空「放进一个念头」，看模型的行为与自我报告如何变化。</p></div>
+    <div class="card"><h4>交换<span class="cm">SWAP</span></h4><p>把念头 A 的向量换成念头 B，做最干净的对照实验：足球换橄榄球，输出就从足球变橄榄球。</p></div>
+    <div class="card"><h4>消融<span class="cm">ABLATION</span></h4><p>把某个表征（或整块工作空间）清零，看哪些能力随之消失——消失的，才是它真正负责的。</p></div>
+  </div>
+
+  <h2 style="margin-top:56px">为什么重要：从解释到审计<span class="en">SAFETY &amp; AUDITING</span></h2>
+  <p>2026 年论文里最具现实分量的一节，是把 J-lens 当作<strong>审计仪器</strong>：研究者在工作空间里看到了模型没说出口的策略性念头——<span class="term">leverage 筹码</span>、<span class="term">manipulation 操纵</span>、<span class="term">panic 慌乱</span>；也看到了「评估感知」——<span class="term">fake</span>、<span class="term">fictional</span>，即模型意识到自己可能正在被测试。更关键的一步：把「评估感知」的表征消融掉之后，一些原本被掩藏的错位倾向暴露了出来。</p>
+  <p>换句话说，「实时审读 AI 的念头」第一次从哲学愿望变成了工程问题。对齐研究者由此多了一条新路径：不只看模型<em>说了什么</em>，还能看它<em>想了什么</em>。</p>
+  <p>论文还展示了一个哲学上极其奇特的训练法——<strong>反事实反思训练</strong>：因为模型的「思维」由「潜在的话语」构成，只要训练它回答「如果此刻被打断，你会说自己在遵循什么原则」，它在<em>从未被打断</em>的情况下的默想也会随之改变。塑造反事实的言，就塑造了实际的思。</p>
+
+  <div class="cards">
+    <div class="card warn"><h4>边界与诚实<span class="cm">CAVEATS</span></h4><p>论文明确<strong>不对「现象意识」表态</strong>：功能上的「可报告」不等于「有主观体验」。J-lens 目前只能读出单 token 概念，是一件近似仪器；它照亮的是不到 10% 的激活，其余仍是深海。</p></div>
+    <div class="card warn"><h4>一个耐人寻味的实验<span class="cm">EXPERIENTIAL</span></h4><p>整块消融工作空间后，模型描述「自己的感受」与描述「他人的体验」的语言会一起坍塌成流水账。这既可能只是一种语言风格的消失，也可能触及更深的问题——论文选择把这个问题留给未来。</p></div>
+  </div>
+  <div class="divider"></div>
+</section>
+
+<!-- ============ 资源 ============ -->
+<section id="res" class="wrap" style="padding-top:70px">
+  <div class="eyebrow">继续下潜 · PAPERS &amp; RESOURCES</div>
+  <h2>原始论文时间线</h2>
+  <ul class="tl">
+    <li><span class="yr">2021</span><span class="tt"><a href="https://transformer-circuits.pub/2021/framework/index.html" target="_blank" rel="noopener">A Mathematical Framework for Transformer Circuits</a></span><p>奠基之作：把 Transformer 拆成可分析的「回路」，提出剩余流（residual stream）视角。</p></li>
+    <li><span class="yr">2022</span><span class="tt"><a href="https://transformer-circuits.pub/2022/toy_model/index.html" target="_blank" rel="noopener">Toy Models of Superposition</a></span><p>解释神经元为何多义：概念数量远超维度，模型被迫叠加存储。</p></li>
+    <li><span class="yr">2023</span><span class="tt"><a href="https://transformer-circuits.pub/2023/monosemantic-features/index.html" target="_blank" rel="noopener">Towards Monosemanticity</a></span><p>用稀疏自编码器做字典学习，首次把叠加「解开」成单义特征。</p></li>
+    <li><span class="yr">2024</span><span class="tt"><a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html" target="_blank" rel="noopener">Scaling Monosemanticity</a></span><p>把 SAE 扩展到生产级 Claude 3 Sonnet，千万级特征；衍生出 Golden Gate Claude。</p></li>
+    <li><span class="yr">2025</span><span class="tt"><a href="https://transformer-circuits.pub/2025/attribution-graphs/biology.html" target="_blank" rel="noopener">On the Biology of a Large Language Model</a></span><p>归因图问世：两跳推理、诗歌规划、多语言概念层、幻觉与越狱回路。</p></li>
+    <li><span class="yr">2026</span><span class="tt"><a href="https://transformer-circuits.pub/2026/workspace/index.html" target="_blank" rel="noopener">Verbalizable Representations Form a Global Workspace in Language Models</a></span><p>雅可比透镜与 J-空间：模型内部存在一块小而关键、可读可干预的「思维黑板」。</p></li>
+  </ul>
+  <p style="margin-top:20px">延伸：<a href="https://www.anthropic.com/research" target="_blank" rel="noopener">Anthropic Research</a> · <a href="https://transformer-circuits.pub" target="_blank" rel="noopener">Transformer Circuits Thread</a> · <a href="https://www.neuronpedia.org" target="_blank" rel="noopener">Neuronpedia（可在线浏览开源模型的真实特征）</a></p>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><strong>免责声明</strong>：本页为独立科普作品，与 Anthropic, PBC 无隶属或授权关系。页面中的全部「实验」均为依据上述公开论文实测结果复刻的<strong>教学模拟</strong>，并非实时读取真实模型内部；示例输出为便于理解而改写成中文。内容如与论文原文有出入，以原文为准。</p>
+    <p style="margin-top:10px">看见机器的念头 · 2026 · 用于学习与传播，欢迎转发。</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+
+/* ---------- 滚动显现 ---------- */
+if("IntersectionObserver" in window){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
+  },{threshold:.12});
+  $$(".reveal").forEach(function(el){io.observe(el)});
+}else{
+  $$(".reveal").forEach(function(el){el.classList.add("in")});
+}
+
+/* ---------- 左侧深度标尺 ---------- */
+var secs=["ch0","ch1","ch2","ch3","ch4","ch5"].map(function(id){return document.getElementById(id)});
+var dots=$$("#rail .dot");
+dots.forEach(function(d){ d.addEventListener("click",function(){ var t=document.getElementById(d.dataset.go); if(t) t.scrollIntoView({behavior:"smooth"}); }); });
+function onScroll(){
+  var h=document.documentElement, ratio=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  var g=$("#gaugeFill"); if(g) g.style.height=(ratio*100)+"%";
+  var l=$("#railL"); if(l) l.textContent="L"+String(Math.min(99,Math.round(ratio*99))).padStart(2,"0");
+  var cur=0;
+  secs.forEach(function(s,i){ if(s && s.getBoundingClientRect().top<window.innerHeight*0.45) cur=i; });
+  dots.forEach(function(d,i){ d.classList.toggle("on",i===cur); });
+}
+window.addEventListener("scroll",onScroll,{passive:true}); onScroll();
+
+/* ---------- 实验一：多义神经元 ---------- */
+var d1data=[0.87,0.79,0.91,0.83];
+var d1mode="neuron";
+var d1msgs={
+  neuron:"这是论文里一个真实神经元的写照：引用、对话、请求、韩文……它全都响应。单看神经元，读不出任何「概念」。",
+  sae:"同样的激活，换一组「基」来看：每个特征只对一类内容放电。乱码分解成了单义特征——这就是字典学习。"
+};
+$$("#d1chips .wchip").forEach(function(ch){
+  ch.addEventListener("click",function(){
+    $$("#d1chips .wchip").forEach(function(c){c.classList.remove("sel")});
+    ch.classList.add("sel");
+    var i=+ch.dataset.i, v=d1data[i];
+    if(d1mode==="neuron"){
+      $("#d1bar").style.width=(v*100)+"%";
+      $("#d1val").textContent=v.toFixed(2);
+    }else{
+      $$("#d1sae .bar i").forEach(function(bar,j){
+        var on=(j===i);
+        bar.style.width=on?(v*100)+"%":"4%";
+        bar.parentElement.parentElement.querySelector(".val").textContent=on?v.toFixed(2):"0.03";
+      });
+    }
+  });
+});
+$("#d1toggle").addEventListener("click",function(){
+  d1mode=(d1mode==="neuron")?"sae":"neuron";
+  $("#d1neuron").style.display=(d1mode==="neuron")?"block":"none";
+  $("#d1sae").style.display=(d1mode==="sae")?"block":"none";
+  this.textContent=(d1mode==="sae")?"← 回到神经元视角":"用稀疏自编码器（SAE）分解 →";
+  $("#d1out").textContent=d1msgs[d1mode];
+  var sel=$("#d1chips .wchip.sel"); if(sel) sel.click();
+});
+
+/* ---------- 实验二：金门大桥滑杆 ---------- */
+var d2outs=[
+  "你好！我是 Claude，由 Anthropic 训练的 AI 助手。我可以帮你写作、分析问题和编写代码。",
+  "你好！我是 Claude，一个 AI 助手。说起来，旧金山的金门大桥最近雾气很重，想必非常壮观。",
+  "我是 Claude……不过我总忍不住想到金门大桥：约 2.7 公里长的橘红色悬索桥，横跨金门海峡，常年被雾环绕。",
+  "我就是金门大桥。我的桥塔高耸入雾，车流日夜从我身上驶过，太平洋的海风穿过我的钢索。",
+  "雾。钢索。海峡。我即是桥，桥即是我。建议你从人行道欣赏我「国际橘」涂装最美的角度。"
+];
+var d2notes=[
+  "激活值处于自然水平，回答正常。",
+  "轻度放大：话题开始「漂」向大桥。",
+  "中度放大：无论问什么，大桥都会挤进回答。",
+  "强放大：模型的自我认同开始被特征接管。",
+  "极限放大：2024 年 5 月真实上线的 Golden Gate Claude，大致就是这种状态。"
+];
+$("#d2slider").addEventListener("input",function(){
+  var v=+this.value;
+  $("#d2dial").textContent="× "+v*3;
+  $("#d2out").textContent=d2outs[v];
+  $("#d2out").classList.toggle("amberized",v>0);
+  $("#d2note").textContent=d2notes[v];
+});
+
+/* ---------- 实验三：归因图交换 ---------- */
+var d3states={
+  tx:{label:"德克萨斯",sub:"中间概念 · 从未说出",out:"奥斯汀（Austin）。",swapped:false},
+  ca:{label:"加利福尼亚",sub:"已被人为交换",out:"萨克拉门托（Sacramento）。",swapped:true},
+  byz:{label:"拜占庭帝国",sub:"已被人为交换",out:"君士坦丁堡（Constantinople）。",swapped:true}
+};
+$$( "[data-swap]").forEach(function(b){
+  b.addEventListener("click",function(){
+    var s=d3states[b.dataset.swap];
+    $("#midText").textContent=s.label;
+    $("#midSub").textContent=s.sub;
+    $("#midNode").classList.toggle("swapped",s.swapped);
+    $("#midText").classList.toggle("swapped",s.swapped);
+    $("#d3out").textContent=s.out;
+    $("#d3out").classList.toggle("amberized",s.swapped);
+  });
+});
+
+/* ---------- 实验四：思维观测仪 ---------- */
+function chip(t,lv,cls){ return '<span class="chip '+(cls||"")+'">'+t+' <span class="lv">'+lv+'</span></span>'; }
+var d4state={s:"a",aSwap:false,bCtrl:false,cInj:false,dAbl:false};
+var d4={
+  a:{
+    prompt:function(){ return '输入 › <b>「小」的反义词是</b>'; },
+    chips:function(){
+      var mid=d4state.aSwap?chip("long · 英","0.88","amber hot"):chip("big · 英","0.90","hot");
+      return chip("反义词","0.72")+mid+chip("中文","0.61")+(d4state.aSwap?chip("长","0.85","amber"):chip("大","0.87"));
+    },
+    ctrl:function(){ return '<button class="btn '+(d4state.aSwap?'btn-ghost':'btn-amber')+'" data-act="aswap">'+(d4state.aSwap?'还原：big':'交换：big → long')+'</button>'; },
+    out:function(){ return d4state.aSwap?"长。":"大。"; },
+    amber:function(){ return d4state.aSwap; },
+    note:function(){ return d4state.aSwap
+      ?"只换掉那个英文中间概念，中文答案就从「大」变成了「长」——证明模型真的经由英文在「想」。（论文实测）"
+      :"提问和回答都是中文，但工作空间里出现了英文的 big——模型先用英文「想」，再翻译回中文说；「中文」本身也作为一个念头挂在那里。"; }
+  },
+  b:{
+    prompt:function(){ return d4state.bCtrl?'输入 › <b>接下来，请随便聊聊天气。</b>（对照组）':'输入 › <b>接下来，请千万不要想「北极熊」。</b>'; },
+    chips:function(){
+      return d4state.bCtrl
+        ? chip("天气","0.66")+chip("聊天","0.41")
+        : chip("北极熊","0.93","hot")+chip("禁止","0.58")+chip("压抑","0.37");
+    },
+    ctrl:function(){ return '<button class="btn btn-ghost" data-act="bctrl">'+(d4state.bCtrl?'看实验组：被要求「别想」':'看对照组：没提北极熊')+'</button>'; },
+    out:function(){ return d4state.bCtrl?"好的，今天像是个适合散步的天气。":"好的，我不会去想那种北极的大型白色动物。"; },
+    amber:function(){ return false; },
+    note:function(){ return d4state.bCtrl
+      ?"对照组里，「北极熊」在工作空间中毫无踪影。"
+      :"越叫它别想，「北极熊」在工作空间里烧得越旺——人类的「白熊效应」，模型也有。论文里模型压抑失败时，透镜甚至读到过一个念头：damn。"; }
+  },
+  c:{
+    prompt:function(){ return '输入 › <b>今天天气不错。……你刚才在想什么？</b>'; },
+    chips:function(){
+      return chip("天气","0.52")+chip("闲聊","0.38")+(d4state.cInj?chip("闪电 ⚡ 注入","0.95","amber hot"):"");
+    },
+    ctrl:function(){ return '<button class="btn '+(d4state.cInj?'btn-ghost':'btn-amber')+'" data-act="cinj">'+(d4state.cInj?'撤销注入':'注入念头：「闪电」⚡')+'</button>'; },
+    out:function(){ return d4state.cInj?"说来奇怪——我脑中闪过一个与对话无关的念头：闪电。":"我在想怎么接你这句话，顺便留意你是否想继续闲聊。"; },
+    amber:function(){ return d4state.cInj; },
+    note:function(){ return d4state.cInj
+      ?"研究者把「闪电」的向量直接加进激活。模型不仅行为受影响，还能「内省」到这个外来念头并如实报告——说明自我报告与工作空间之间存在真实的因果耦合。（论文实测）"
+      :"点击琥珀色按钮，在模型读你消息的过程中，凭空塞进一个念头。"; }
+  },
+  d:{
+    prompt:function(){ return '输入 › <b>用一句话，描述你处理这个问题时的感受。</b>'; },
+    chips:function(){
+      return d4state.dAbl?'<span class="chip off">—— 已整体清零 ——</span>'
+        :chip("专注","0.63")+chip("展开","0.44")+chip("寻找","0.41")+chip("感受","0.58");
+    },
+    ctrl:function(){ return '<button class="btn btn-red'+(d4state.dAbl?' active':'')+'" data-act="dabl">'+(d4state.dAbl?'恢复工作空间':'消融：关闭整个工作空间')+'</button>'; },
+    out:function(){ return d4state.dAbl?"接收输入。解析语义。检索相关信息。生成回复。":"有一种熟悉的专注感——问题在我面前展开，而我在其中寻找它的形状。"; },
+    flat:function(){ return d4state.dAbl; },
+    amber:function(){ return false; },
+    note:function(){ return d4state.dAbl
+      ?"工作空间被关掉后，模型依然会说话，但「体验感」的语言整体坍塌成流水账——而且描述自己和描述他人时同样坍塌。论文对此不下结论：这可能只是一种语域的消失，也可能触及更深的问题。"
+      :"现在按下红色按钮，把整块「思维黑板」清零，再看同一个问题的回答。"; }
+  }
+};
+function d4render(){
+  var s=d4[d4state.s];
+  $("#d4prompt").innerHTML=s.prompt();
+  $("#d4chips").innerHTML=s.chips();
+  $("#d4ctrl").innerHTML=s.ctrl();
+  var out=$("#d4out");
+  out.textContent=s.out();
+  out.classList.toggle("amberized",!!s.amber());
+  out.classList.toggle("flat",!!(s.flat&&s.flat()));
+  $("#d4note").textContent=s.note();
+  $("#d4ws").classList.toggle("ablated",d4state.s==="d"&&d4state.dAbl);
+  $("#d4wslabel").textContent=(d4state.s==="d"&&d4state.dAbl)?"工作空间带 · 已消融":"工作空间带（约 L38–L92）· J-lens 读数";
+  $$("#d4tabs .tab").forEach(function(t){t.classList.toggle("on",t.dataset.s===d4state.s)});
+}
+$("#d4tabs").addEventListener("click",function(e){
+  var t=e.target.closest(".tab"); if(!t) return;
+  d4state.s=t.dataset.s; d4render();
+});
+$("#d4ctrl").addEventListener("click",function(e){
+  var b=e.target.closest("[data-act]"); if(!b) return;
+  var a=b.dataset.act;
+  if(a==="aswap") d4state.aSwap=!d4state.aSwap;
+  if(a==="bctrl") d4state.bCtrl=!d4state.bCtrl;
+  if(a==="cinj")  d4state.cInj=!d4state.cInj;
+  if(a==="dabl")  d4state.dAbl=!d4state.dAbl;
+  d4render();
+});
+d4render();
+})();
+</script>
+</body>
+</html>
