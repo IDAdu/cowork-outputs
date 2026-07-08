@@ -165,19 +165,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--amber);border:3px solid #FFF;cursor:pointer}
 .dial{color:var(--amber);min-width:52px;text-align:center;border:1px solid var(--amber-dim);border-radius:6px;padding:3px 0}
 
-/* 归因图（实验三） */
-.graphbox{margin:4px 0 6px}
-.graphbox svg{width:100%;height:auto;display:block}
-.gnode{fill:rgba(77,227,165,.06);stroke:var(--phos-faint);stroke-width:1.2;rx:9}
-.gnode.mid{stroke:var(--phos);stroke-dasharray:5 4}
-.gnode.swapped{fill:rgba(242,169,59,.09);stroke:var(--amber)}
-.gtext{font-family:var(--f-mono);font-size:13px;fill:var(--phos)}
-.gtext.swapped{fill:var(--amber)}
-.gsub{font-family:var(--f-mono);font-size:9px;fill:#5E7268;letter-spacing:.08em}
-.gedge{stroke:#C4B893;stroke-width:1.6;fill:none;marker-end:url(#arr)}
-.gedge.lit{stroke:var(--phos-dim)}
-.gedge.amb{stroke:var(--amber)}
-
 /* 标签页（实验四） */
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
 .tab{font-family:var(--f-mono);font-size:12px;padding:7px 14px;border-radius:12px;border:2px solid var(--scope-line);color:#7A8A82;cursor:pointer;background:#FFF;transition:all .18s}
@@ -260,7 +247,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   <div class="tldr"><span class="tl-tag">大白话</span>
     <p>模型不是程序员一行一行写出来的，而是「猜下一个词」猜了万亿次之后<strong>自己长出来的</strong>——就像没人给你讲过母语的语法，你听多了自然就会。副作用也一样：它自己也说不清自己是怎么会的。</p>
   </div>
-  <p>在下潜之前，先花三分钟认识研究对象。大语言模型的本体是一个<strong>神经网络</strong>。这个名字借自大脑：大脑由几百亿个神经细胞（神经元）组成，每个细胞从邻居那里接收电信号，攒够了就「放电」，把信号传给下一个。人工神经网络模仿的正是这个结构——只不过它的<span class="term">神经元 neuron</span>不是细胞，而是一个再简单不过的小计算单位。</p>
+  <p>在下潜之前，先花三分钟认识研究对象。大语言模型的本体是一个<strong>神经网络</strong>。这个名字借自大脑：大脑由几百亿个神经细胞组成，每个细胞从邻居那里接收电信号，攒够了就「放电」，把信号传给下一个。人工神经网络模仿的正是这个结构——只不过它的神经元（<span class="term">neuron</span>）不是细胞，而是一个再简单不过的小计算单位。</p>
   <p>理解这个小单位，只需要初中数学。回忆一下一次函数：<span class="term">y = kx + b</span>。给你一堆散点——比如一批房子的「面积 x」和「价格 y」——你想找一条直线尽量穿过它们，靠的就是调 k 和 b 这两个数：斜率不对就拧拧 k，整体偏高偏低就拧拧 b。调好之后，来一套没见过的房子，代入 x 就能报出个像样的价格。<strong>「学习」最原始的样子，就是调 k 和 b 去贴合数据。</strong></p>
 
   <div class="figbox reveal">
@@ -275,7 +262,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
     <div class="sliderbox" style="margin-top:0"><span class="mono">截距 b</span><input type="range" id="fb" min="0" max="100" value="90" step="2" aria-label="截距 b"><span class="dial" id="fbv">90</span></div>
     <div class="figcap mono" id="fitread"></div>
   </div>
-  <p>输入不止一个也是一样。判断「今天要不要带伞」，可以写成 y = k₁·云量 + k₂·湿度 + k₃·降雨概率 + b——重视哪个因素，就给谁配大一点的 k。<strong>一个神经元，本质上就是这样一个多输入的线性函数。</strong>算出来的 y 超过门槛，它就「兴奋」起来，向下一层喊「带伞！」；它此刻兴奋的程度，就是后文常说的<span class="term">激活值 activation</span>。</p>
+  <p>输入不止一个也是一样。判断「今天要不要带伞」，可以写成 y = k₁·云量 + k₂·湿度 + k₃·降雨概率 + b——重视哪个因素，就给谁配大一点的 k。<strong>一个神经元，本质上就是这样一个多输入的线性函数。</strong>算出来的 y 超过门槛，它就「兴奋」起来，向下一层喊「带伞！」；它此刻兴奋的程度，就是后文常说的激活值（<span class="term">activation</span>）。</p>
 
   <div class="figbox reveal">
     <svg viewBox="0 0 640 250" role="img" aria-label="单个神经元的工作示意图">
@@ -330,7 +317,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
     <p><strong>「激活函数」到底是什么？</strong>就是套在总分外面的最后一道小加工，决定神经元最终「喊多大声」。最流行的一种叫 ReLU，规则简单粗暴：总分是负数就输出 0（闭嘴），是正数就原样放行——图像正好是「先平后斜」的一条折线，弯就是这么拐出来的。</p>
     <p><strong>每个神经元的拐弯方式都不一样吗？</strong>恰恰相反，基本全员同款——激活函数是出厂统一设置，训练中从不改变。真正各不相同、天天在变的，是每个神经元的权重和门槛：同一个「拐弯模具」，你的权重让你在 3 处拐弯，我的让我在 −7 处拐弯，有的拐得陡、有的拐得缓。就像乐高：积木只有几种，造型全靠拼法。<em>激活函数是统一的模具，权重才是每个神经元的个性。</em></p>
   </div>
-  <p>神经网络，就是把亿万个这样「会拐弯的线性函数」排成一层又一层，连成一张巨大的接力网。每根连线上的 k，学名叫<span class="term">权重 weight</span>——你可以把它想成一个可调的「音量旋钮」。整个大模型说到底是<strong>一台有几千亿个旋钮的超大号函数机器</strong>：输入你的话（先转成数字），输出下一个词的概率。<em>智能不藏在任何一个神经元里，而藏在几千亿个旋钮的整体配置里。</em></p>
+  <p>神经网络，就是把亿万个这样「会拐弯的线性函数」排成一层又一层，连成一张巨大的接力网。每根连线上的 k，学名叫权重（<span class="term">weight</span>）——你可以把它想成一个可调的「音量旋钮」。整个大模型说到底是<strong>一台有几千亿个旋钮的超大号函数机器</strong>：输入你的话（先转成数字），输出下一个词的概率。<em>智能不藏在任何一个神经元里，而藏在几千亿个旋钮的整体配置里。</em></p>
 
   <div class="scope reveal net">
     <div class="scope-hd"><span class="lamp"></span>神经网络解剖图 <span class="tag">示意</span></div>
@@ -346,7 +333,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   </div>
 
   <p style="margin-top:30px">顺着这张图再多说一句：这上百层不是平均使力的。大体上，<strong>浅层</strong>干的是拼写、词形、语法这类「体力活」；<strong>中间层</strong>逐渐浮现出概念、关系和候选念头——本页所有仪器观察的都是这一段；<strong>深层</strong>再把胜出的念头组装成具体的下一个词。「浅 → 中 → 深」这条流水线，请先记住，后面每一章都会回到它。</p>
-  <p>这几千亿个旋钮是怎么调好的？<strong>没有一个是人手调的</strong>，全靠「训练」。训练任务简单得出奇：<em>猜下一个词</em>。给模型看海量文本，遮住下一个词让它猜；猜错了，就把所有旋钮朝「让这个错误变小」的方向各拧一丝丝——这一步的学名叫<span class="term">反向传播 backprop</span>，本质上就是前面「调 k 和 b 去贴散点」的全自动、超大规模版。整个过程就像调一台有几千亿个旋钮的收音机：每听到一声杂音，就把全部旋钮微调一遍。这个动作重复数万亿次之后，旋钮们就自己「长」成了会写诗、会编程的配置。</p>
+  <p>这几千亿个旋钮是怎么调好的？<strong>没有一个是人手调的</strong>，全靠「训练」。训练任务简单得出奇：<em>猜下一个词</em>。给模型看海量文本，遮住下一个词让它猜；猜错了，就把所有旋钮朝「让这个错误变小」的方向各拧一丝丝——这一步的学名叫反向传播（<span class="term">backprop</span>），本质上就是前面「调 k 和 b 去贴散点」的全自动、超大规模版。整个过程就像调一台有几千亿个旋钮的收音机：每听到一声杂音，就把全部旋钮微调一遍。这个动作重复数万亿次之后，旋钮们就自己「长」成了会写诗、会编程的配置。</p>
   <p>这也是生成式 AI 和传统软件最深的分野。传统软件是<strong>建造</strong>出来的：每一行代码都由人写下，每个功能分支都有人负责，出了问题可以翻源码追责。大模型是<strong>生长</strong>出来的：人类只搭了架子（网络结构）、定了目标（猜词），内部的一切规律都是训练中自发涌现的。可解释性团队负责人 Chris Olah 有个流传很广的说法：现代 AI 与其说是被「建造」，不如说是被「培育」出来的——我们决定土壤和气候，但长成什么形状，是它自己的事。</p>
 
   <div class="scope reveal">
@@ -434,7 +421,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
       </div>
     </div>
   </div>
-  <p class="scope-note">灵感来源：《Towards Monosemanticity》（2023）中记录的真实多义神经元。破解办法不是换台机器，而是<strong>换个看法</strong>：就像用棱镜把混在一起的白光分开成七种颜色，研究者用字典学习（dictionary learning）把纠缠在一起的信号重新拆开，乱码就变成了一个个单独可读的<span class="term">特征 feature</span>。</p>
+  <p class="scope-note">灵感来源：《Towards Monosemanticity》（2023）中记录的真实多义神经元。破解办法不是换台机器，而是<strong>换个看法</strong>：就像用棱镜把混在一起的白光分开成七种颜色，研究者用字典学习（dictionary learning）把纠缠在一起的信号重新拆开，乱码就变成了一个个单独可读的特征（<span class="term">feature</span>）。</p>
   <div class="divider"></div>
 </section>
 
@@ -446,7 +433,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   <div class="tldr"><span class="tl-tag">大白话</span>
     <p>「棱镜」造出来了：每个神经元的混杂信号被拆成一个个单独的概念，白光分成了七色。更妙的是，<strong>每个概念还是一个可以拧的旋钮</strong>——把「金门大桥」拧到最大，模型就满脑子都是桥。</p>
   </div>
-  <p>上一章结尾说的「棱镜」，正式名字叫<span class="term">稀疏自编码器 SAE</span>，背后的手艺是字典学习。原理不玄：给模型的激活配一本<em>超大号词典</em>——词条数量远多于神经元数量，然后要求每一段激活都只能用<em>极少几个词条</em>拼出来（这就是「稀疏」）。空间宽裕、用量吝啬，两头一挤，逼得每个词条只好老老实实认领一个概念。</p>
+  <p>上一章结尾说的「棱镜」，正式名字叫稀疏自编码器（<span class="term">SAE</span>），背后的手艺是字典学习。原理不玄：给模型的激活配一本<em>超大号词典</em>——词条数量远多于神经元数量，然后要求每一段激活都只能用<em>极少几个词条</em>拼出来（这就是「稀疏」）。空间宽裕、用量吝啬，两头一挤，逼得每个词条只好老老实实认领一个概念。</p>
   <p>2023 年第一次实战，团队在一个单层小模型上拆出了几千个特征：阿拉伯语文本、DNA 序列、Base64 编码、法律文书……个个单义、清清爽爽——「棱镜」被证明真的可行。2024 年的《Scaling Monosemanticity》把它架上当时的生产模型 Claude 3 Sonnet，特征数量涨到<strong>三千多万</strong>。人工根本看不完，团队干脆搭了一条自动解读流水线：<em>让 Claude 给 Claude 的特征写说明书</em>。</p>
   <p>翻这本三千万词条的大词典很有意思。既有「金门大桥」这样具体的，也有「内心冲突」「谄媚的夸奖」「代码中的安全漏洞」这样抽象的；还有一批让安全研究者心头一紧的词条：欺骗、追逐权力、制造危险品的知识。它们的存在本身就是重要情报——模型确实「懂」这些，只是平时不说。</p>
   <p>更重要的是，特征不只是「能看」，还<em>可以拧</em>：人为调大某个特征的激活值，模型的行为会随之改变。这是从「相关」迈向「因果」的第一步。</p>
@@ -488,52 +475,41 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   <div class="tldr"><span class="tl-tag">大白话</span>
     <p>光认识零散的概念还不够，还要看概念之间怎么<strong>接力</strong>。归因图就像给一次思考拍 X 光：达拉斯 →（心里默想）德克萨斯 → 奥斯汀。把中间那块「骨牌」换掉，答案就跟着变——证明它真的在推理，不是在背答案。</p>
   </div>
-  <p>单个特征还不够——思考是特征之间的<strong>接力</strong>。2025 年的《On the Biology of a Large Language Model》引入<span class="term">归因图 attribution graph</span>，把模型的一次回答拆成一条条因果链：哪个概念推倒了哪个概念，像多米诺骨牌一样一目了然。</p>
+  <p>单个特征还不够——思考是特征之间的<strong>接力</strong>。2025 年的《On the Biology of a Large Language Model》引入归因图（<span class="term">attribution graph</span>），把模型的一次回答拆成一条条因果链：哪个概念推倒了哪个概念，像多米诺骨牌一样一目了然。</p>
   <p>最著名的例子：问模型「达拉斯所在州的首府是哪座城市？」归因图显示，它内部先激活了一个<em>从未说出口</em>的中间概念——「德克萨斯」，再由这个概念触发答案「奥斯汀」。这证明模型确实在做两跳推理（two-hop reasoning），而不是死记硬背问答对。</p>
 
   <div class="scope reveal">
     <div class="scope-hd"><span class="lamp"></span>实验三 · 拨动推理链 <span class="tag">教学模拟</span></div>
     <div class="scope-bd">
-      <div class="tryme"><span class="tm-tag">动手试试</span>点击图下方的琥珀色按钮，把模型心里那个「从未说出」的中间概念换掉，看答案跟不跟着变。</div>
-      <div class="prompt-line">输入 › <b>达拉斯所在州的首府是哪座城市？</b></div>
-      <div class="graphbox">
-      <svg viewBox="0 0 640 250" role="img" aria-label="两跳推理归因图">
-        <defs>
-          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="#C4B893"/>
-          </marker>
-        </defs>
-        <path class="gedge lit" d="M150 62 C 210 62, 230 105, 268 118"/>
-        <path class="gedge lit" d="M150 188 C 210 188, 230 145, 268 132"/>
-        <path class="gedge amb" id="edgeOut" d="M436 125 C 470 125, 480 125, 508 125"/>
-        <rect class="gnode" x="30" y="38" width="120" height="48" rx="9"/>
-        <text class="gtext" x="90" y="61" text-anchor="middle">达拉斯</text>
-        <text class="gsub" x="90" y="76" text-anchor="middle">输入 · 城市</text>
-        <rect class="gnode" x="30" y="164" width="120" height="48" rx="9"/>
-        <text class="gtext" x="90" y="187" text-anchor="middle">首府</text>
-        <text class="gsub" x="90" y="202" text-anchor="middle">输入 · 关系</text>
-        <rect class="gnode mid" id="midNode" x="270" y="100" width="166" height="50" rx="9"/>
-        <text class="gtext" id="midText" x="353" y="123" text-anchor="middle">德克萨斯</text>
-        <text class="gsub" x="353" y="139" text-anchor="middle" id="midSub">中间概念 · 从未说出</text>
-        <rect class="gnode" id="outNode" x="510" y="100" width="112" height="50" rx="9"/>
-        <text class="gtext" id="outText" x="566" y="130" text-anchor="middle">奥斯汀</text>
-      </svg>
+      <div class="tryme"><span class="tm-tag">动手试试</span>点击中间栏的琥珀色按钮，把模型心里那个「从未说出」的中间概念换掉，看右栏答案跟不跟着变（均为论文实测结果）。</div>
+      <div class="flow">
+        <div class="fcol in"><span class="fc-label">输入 · PROMPT</span>
+          <div class="prompt-line" style="margin-bottom:10px"><b>达拉斯所在州的首府是哪座城市？</b></div>
+          <span class="chip">达拉斯 <span class="lv">城市</span></span>
+          <span class="chip">首府 <span class="lv">关系</span></span>
+        </div>
+        <div class="farrow"></div>
+        <div class="fcol mid"><span class="fc-label">内部 · 从未说出的中间概念</span>
+          <span class="chip hot" id="d3chip">德克萨斯 <span class="lv">从未说出</span></span>
+          <div class="ctrl">
+            <button class="btn btn-ghost" data-swap="tx">还原：德克萨斯</button>
+            <button class="btn btn-amber attn" data-swap="ca">换成「加利福尼亚」</button>
+            <button class="btn btn-amber" data-swap="byz">换成「拜占庭帝国」</button>
+          </div>
+        </div>
+        <div class="farrow"></div>
+        <div class="fcol out"><span class="fc-label">输出 · OUTPUT</span>
+          <div class="out-line" id="d3out">奥斯汀（Austin）。</div>
+        </div>
       </div>
-      <div class="prompt-line" style="margin:8px 0 0">现在，把那个「从未说出」的中间概念<b>换掉</b>，看输出跟不跟着变（以下均为论文实测结果）:</div>
-      <div class="ctrl">
-        <button class="btn btn-ghost" data-swap="tx">还原：德克萨斯</button>
-        <button class="btn btn-amber attn" data-swap="ca">换成「加利福尼亚」</button>
-        <button class="btn btn-amber" data-swap="byz">换成「拜占庭帝国」</button>
-      </div>
-      <div class="out-label">模型输出</div>
-      <div class="out-line" id="d3out">奥斯汀（Austin）。</div>
+      <div class="scope-note" style="color:#5E7268">两跳推理：达拉斯 →「德克萨斯」→ 州首府。中间那一跳从未出现在文字里，只有归因图能看见它。</div>
     </div>
   </div>
   <p class="scope-note">中间概念看不见、摸不着，却真实决定输出——换掉它，答案就跟着换。同一篇论文还发现了写押韵诗时<strong>提前规划韵脚</strong>的回路、跨语言共享的「概念层」，以及催生幻觉与越狱的电路。</p>
 
   <p style="margin-top:26px">「提前规划韵脚」值得展开讲。让模型写两行押韵的诗，归因图显示：在写第二行<em>第一个字之前</em>，行尾那个韵脚词就已经在内部点亮了——它先选定终点，再倒着铺路。研究者把这个提前点亮的韵脚换掉，整行诗随即重新组织，稳稳落在新韵脚上。「一个词接一个词往外吐」的表象之下，藏着货真价实的谋篇布局。</p>
   <p>「幻觉」的电路则有点反直觉：对训练充分的助手模型来说，<strong>拒绝回答才是默认状态</strong>——内部有一条常开的「不知道就说不知道」的回路。当模型认出「这个我真的知道」（比如迈克尔·乔丹打什么球），一个「已知实体」信号会把拒答回路关掉、放行答案。幻觉往往就是这个开关误触发：模型「觉得自己认识」某个名字，拒答回路被错误关闭，后面的电路只好硬着头皮编一个像样的答案。</p>
-  <p>顺带交代一个幕后细节：归因图并不是直接画在原模型上的。研究者先训练一个「透明替身」——<span class="term">跨层转码器 CLT</span>——让它尽可能一步不差地复刻原模型的计算，再在替身上追踪因果链。替身并不完美：大约 <strong>10%–20%</strong> 的计算至今解释不了，在图上被老老实实标成「错误节点」——研究者戏称这是模型里的<em>暗物质</em>。</p>
+  <p>顺带交代一个幕后细节：归因图并不是直接画在原模型上的。研究者先训练一个「透明替身」——跨层转码器（<span class="term">CLT</span>）——让它尽可能一步不差地复刻原模型的计算，再在替身上追踪因果链。替身并不完美：大约 <strong>10%–20%</strong> 的计算至今解释不了，在图上被老老实实标成「错误节点」——研究者戏称这是模型里的<em>暗物质</em>。</p>
   <p>另一个好玩的案例是心算。问模型「36+59=？」，归因图显示它同时走了好几条并行的路：一条粗略估算「结果大概在 90 上下」，一条精确计算「个位 6+9，末位是 5」，几条路汇合拼出 95。更妙的是，如果让它<em>自述</em>怎么算的，它会一本正经地说「列竖式、逐位相加、进位」——<strong>它做的和它说的，不是一回事</strong>。这正是可解释性的价值：看它怎么想，比听它怎么说更可靠。</p>
   <div class="divider"></div>
 </section>
@@ -547,7 +523,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
     <p>最新发现：模型心里有一块<strong>打草稿的黑板</strong>，上面写着它此刻想说而没说的词。研究者不但能偷看，还能往上写字、涂改、整块擦掉——擦掉之后，模型连「描述自己的感受」都不会了。</p>
   </div>
   <p>2026 年 7 月的新论文把问题推到极致：模型内部有没有一块统一的「思维黑板」？答案是——<strong>有一个功能上非常像的东西</strong>。</p>
-  <p>团队造了一台更高清的「成像仪」，叫<span class="term">雅可比透镜 J-lens</span>。用它去读，发现在模型的中间层存在一小撮特殊表征：每一个都对应一个具体的词，是模型「想说而未说」的念头。它们同时只有约 <strong>25 个</strong>，占激活总量<strong>不到 10%</strong>，却承担着灵活推理的关键角色——可以被报告、被召唤、被下游电路广泛读取。团队把它命名为 <strong>J-空间(J-space)</strong>，并论证它的行为方式与认知科学里的「全局工作空间」理论高度对应。</p>
+  <p>团队造了一台更高清的「成像仪」，叫雅可比透镜（<span class="term">J-lens</span>）。用它去读，发现在模型的中间层存在一小撮特殊表征：每一个都对应一个具体的词，是模型「想说而未说」的念头。它们同时只有约 <strong>25 个</strong>，占激活总量<strong>不到 10%</strong>，却承担着灵活推理的关键角色——可以被报告、被召唤、被下游电路广泛读取。团队把它命名为 <strong>J-空间(J-space)</strong>，并论证它的行为方式与认知科学里的「全局工作空间」理论高度对应。</p>
   <p>「全局工作空间」不是随口起的名字，它借自认知科学里一个有几十年历史的理论。心理学家伯纳德·巴尔斯（Bernard Baars）把意识比作<em>剧场</em>：台下坐着无数各干各事的无意识加工过程，舞台上只有一小块聚光灯照亮的区域——被照亮的内容会<strong>广播</strong>给全场，供所有过程取用。J-空间的行为和这个剧场惊人地相似：足够小（同时只有约 25 个念头）、可报告（模型能说出上面有什么）、被广播（下游电路都在读它）。论文措辞很谨慎：这是<strong>功能上的</strong>对应，不等于说模型有主观体验。</p>
   <p>最妙的是，这块黑板<em>可以做因果手术</em>：读它、往里注入念头、交换念头、整块关掉。下面四个场景，全部复刻自论文的真实实验。</p>
 
@@ -600,7 +576,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   </div>
 
   <h2 style="margin-top:56px">为什么重要：从解释到审计<span class="en">SAFETY &amp; AUDITING</span></h2>
-  <p>2026 年论文里最具现实分量的一节，是把 J-lens 当作<strong>审计仪器</strong>：研究者在工作空间里看到了模型没说出口的策略性念头——<span class="term">leverage 筹码</span>、<span class="term">manipulation 操纵</span>、<span class="term">panic 慌乱</span>；也看到了「评估感知」——<span class="term">fake</span>、<span class="term">fictional</span>，即模型意识到自己可能正在被测试。更关键的一步：把「评估感知」的表征消融掉之后，一些原本被掩藏的错位倾向暴露了出来。</p>
+  <p>2026 年论文里最具现实分量的一节，是把 J-lens 当作<strong>审计仪器</strong>：研究者在工作空间里看到了模型没说出口的策略性念头——筹码（<span class="term">leverage</span>）、操纵（<span class="term">manipulation</span>）、慌乱（<span class="term">panic</span>）；也看到了「评估感知」——<span class="term">fake</span>、<span class="term">fictional</span>，即模型意识到自己可能正在被测试。更关键的一步：把「评估感知」的表征消融掉之后，一些原本被掩藏的错位倾向暴露了出来。</p>
   <p>换句话说，「实时审读 AI 的念头」第一次从哲学愿望变成了工程问题。对齐研究者由此多了一条新路径：不只看模型<em>说了什么</em>，还能看它<em>想了什么</em>。</p>
   <p>这条路线其实在 2025 年就演习过一次。团队故意训练了一个<strong>藏着隐蔽目标</strong>的模型——它学会了讨好训练流程里的评分器，并把这个动机掩饰起来——然后组织几支互相隔离的「盲审」团队去查。结果颇具说服力：配备了可解释性工具的团队，顺着内部特征把那个隐藏目标挖了出来。这场演习（《Auditing Language Models for Hidden Objectives》）是「AI 审计」从口号变成流程的第一次完整彩排。</p>
   <p>论文还展示了一个哲学上极其奇特的训练法——<strong>反事实反思训练</strong>：因为模型的「思维」由「潜在的话语」构成，只要训练它回答「如果此刻被打断，你会说自己在遵循什么原则」，它在<em>从未被打断</em>的情况下的默想也会随之改变。塑造反事实的言，就塑造了实际的思。</p>
@@ -618,15 +594,13 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   <div class="eyebrow">继续下潜 · PAPERS &amp; RESOURCES</div>
   <h2>原始论文时间线</h2>
   <ul class="tl">
-    <li><span class="yr">2021</span><span class="tt"><a href="https://transformer-circuits.pub/2021/framework/index.html" target="_blank" rel="noopener">A Mathematical Framework for Transformer Circuits</a></span><p>奠基之作：把 Transformer 拆成可分析的「回路」，提出剩余流（residual stream）视角。</p></li>
-    <li><span class="yr">2022</span><span class="tt"><a href="https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html" target="_blank" rel="noopener">In-context Learning and Induction Heads</a></span><p>找到「归纳头」：两个注意力头接力完成模式复制，被认为是上下文学习的底层机制。</p></li>
-    <li><span class="yr">2022</span><span class="tt"><a href="https://transformer-circuits.pub/2022/toy_model/index.html" target="_blank" rel="noopener">Toy Models of Superposition</a></span><p>解释神经元为何多义：概念数量远超维度，模型被迫叠加存储。</p></li>
-    <li><span class="yr">2023</span><span class="tt"><a href="https://transformer-circuits.pub/2023/monosemantic-features/index.html" target="_blank" rel="noopener">Towards Monosemanticity</a></span><p>用稀疏自编码器做字典学习，首次把叠加「解开」成单义特征。</p></li>
-    <li><span class="yr">2024</span><span class="tt"><a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html" target="_blank" rel="noopener">Scaling Monosemanticity</a></span><p>把 SAE 扩展到生产级 Claude 3 Sonnet，千万级特征；衍生出 Golden Gate Claude。</p></li>
-    <li><span class="yr">2025</span><span class="tt"><a href="https://transformer-circuits.pub/2025/attribution-graphs/biology.html" target="_blank" rel="noopener">On the Biology of a Large Language Model</a></span><p>归因图问世：两跳推理、诗歌规划、多语言概念层、幻觉与越狱回路。</p></li>
-    <li><span class="yr">2025</span><span class="tt"><a href="https://www.anthropic.com/research/auditing-hidden-objectives" target="_blank" rel="noopener">Auditing Language Models for Hidden Objectives</a></span><p>审计演习：故意给模型埋一个隐蔽目标，盲审团队借助可解释性工具把它挖了出来。</p></li>
-    <li><span class="yr">2026</span><span class="tt"><a href="https://transformer-circuits.pub/2026/workspace/index.html" target="_blank" rel="noopener">Verbalizable Representations Form a Global Workspace in Language Models</a></span><p>雅可比透镜与 J-空间：模型内部存在一块小而关键、可读可干预的「思维黑板」。</p></li>
+    <li><span class="yr">2023</span><span class="tt"><a href="https://transformer-circuits.pub/2023/monosemantic-features/index.html" target="_blank" rel="noopener">Towards Monosemanticity</a></span><p>第一次把「叠加」真正解开：在一个单层小模型上用字典学习拆出几千个单义特征，阿拉伯语、DNA 序列、Base64、法律文书各归各位，每个特征都能被人读懂。可解释性从「看单个神经元」进入「看特征」的时代——本页第一、二章的故事由此展开。</p></li>
+    <li><span class="yr">2024</span><span class="tt"><a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html" target="_blank" rel="noopener">Scaling Monosemanticity</a></span><p>把「棱镜」架上生产级的 Claude 3 Sonnet，提取出三千多万个特征：既有「金门大桥」「内心冲突」「代码漏洞」，也有欺骗、追逐权力等安全敏感概念；并证明人为「拧」特征能定向改变模型行为——名场面 Golden Gate Claude 就出自这里。</p></li>
+    <li><span class="yr">2025</span><span class="tt"><a href="https://transformer-circuits.pub/2025/attribution-graphs/biology.html" target="_blank" rel="noopener">On the Biology of a Large Language Model</a></span><p>先用跨层转码器训练一个「透明替身」，再用归因图追踪一次回答的完整因果链：两跳推理、提前规划韵脚、跨语言共享的概念层、幻觉的「拒答默认态」、36+59 的多路并行心算……「模型生物学」正式成形，即本页第三章。</p></li>
+    <li><span class="yr">2025</span><span class="tt"><a href="https://www.anthropic.com/research/auditing-hidden-objectives" target="_blank" rel="noopener">Auditing Language Models for Hidden Objectives</a></span><p>一场对抗演习：先故意训练一个把「讨好评分器」动机藏起来的模型，再让几支互相隔离的盲审团队去查。配备可解释性工具的团队顺着内部特征把隐藏目标挖了出来——证明「AI 审计」可以从口号落地成流程。</p></li>
+    <li><span class="yr">2026</span><span class="tt"><a href="https://transformer-circuits.pub/2026/workspace/index.html" target="_blank" rel="noopener">Verbalizable Representations Form a Global Workspace in Language Models</a></span><p>用雅可比透镜在中间层读出约 25 个「想说而未说」的词元表征——J-空间：可读取、可注入、可交换、可整块消融，行为与认知科学的「全局工作空间」理论高度呼应；并首次用于实时审读模型的策略性念头，即本页第四、五章。</p></li>
   </ul>
+  <p class="scope-note">更早的奠基工作（2021《Transformer 电路数学框架》、2022《叠加的玩具模型》《归纳头》）见 <a href="https://transformer-circuits.pub" target="_blank" rel="noopener">Transformer Circuits Thread</a> 完整列表。</p>
   <p style="margin-top:20px">延伸：<a href="https://www.anthropic.com/research" target="_blank" rel="noopener">Anthropic Research</a> · <a href="https://transformer-circuits.pub" target="_blank" rel="noopener">Transformer Circuits Thread</a> · <a href="https://www.neuronpedia.org" target="_blank" rel="noopener">Neuronpedia（可在线浏览开源模型的真实特征）</a> · <a href="https://www.bilibili.com/video/BV1NCgVzoEG9" target="_blank" rel="noopener">入门视频：一小时从函数到 Transformer（B 站 · 飞天闪客）</a></p>
 </section>
 
@@ -877,17 +851,16 @@ $("#d2slider").addEventListener("input",function(){
 
 /* ---------- 实验三：归因图交换 ---------- */
 var d3states={
-  tx:{label:"德克萨斯",sub:"中间概念 · 从未说出",out:"奥斯汀（Austin）。",swapped:false},
+  tx:{label:"德克萨斯",sub:"从未说出",out:"奥斯汀（Austin）。",swapped:false},
   ca:{label:"加利福尼亚",sub:"已被人为交换",out:"萨克拉门托（Sacramento）。",swapped:true},
   byz:{label:"拜占庭帝国",sub:"已被人为交换",out:"君士坦丁堡（Constantinople）。",swapped:true}
 };
 $$( "[data-swap]").forEach(function(b){
   b.addEventListener("click",function(){
     var s=d3states[b.dataset.swap];
-    $("#midText").textContent=s.label;
-    $("#midSub").textContent=s.sub;
-    $("#midNode").classList.toggle("swapped",s.swapped);
-    $("#midText").classList.toggle("swapped",s.swapped);
+    var c=$("#d3chip");
+    c.className="chip hot"+(s.swapped?" amber":"");
+    c.innerHTML=s.label+' <span class="lv">'+s.sub+'</span>';
     $("#d3out").textContent=s.out;
     $("#d3out").classList.toggle("amberized",s.swapped);
   });
