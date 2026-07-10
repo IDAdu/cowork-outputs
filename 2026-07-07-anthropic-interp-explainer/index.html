@@ -7,12 +7,12 @@
 <meta name="description" content="从叠加假说到全局工作空间：用 5 个互动实验，亲手体验 Anthropic 可解释性团队的四代研究方法。">
 <style>
 :root{
-  --paper:#F3F5F2;
-  --card:#FBFCFA;
-  --ink:#12211B;
-  --ink-soft:#44554D;
-  --ink-faint:#7A8A82;
-  --line:#DDE3DD;
+  --paper:#FFFFFF;
+  --card:#FAFAF7;
+  --ink:#1A1A17;
+  --ink-soft:#3E3E3A;
+  --ink-faint:#8A8A84;
+  --line:#E7E6E1;
   --scope:#FFF8EC;
   --scope-panel:#FFFFFF;
   --scope-line:#F0DDB8;
@@ -28,7 +28,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.9;-webkit-font-smoothing:antialiased}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-sans);font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
 ::selection{background:var(--phos);color:var(--scope)}
 
 /* ---------- 左侧目录 ---------- */
@@ -39,22 +39,22 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-sans);font-siz
 #rail .lnum{font-family:var(--f-mono);font-size:11px;color:var(--ink-faint);letter-spacing:2px;margin-bottom:4px}
 #rail .toc-title{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 #rail .toc-title::after{content:"";width:22px;height:1px;background:var(--ink-faint)}
-.toc-item{font-family:var(--f-mono);font-size:14px;color:var(--ink-faint);text-decoration:none;display:block;padding:6px 12px 6px 0;line-height:1.6;border-left:none;transition:color .2s}
+.toc-item{font-family:var(--f-sans);font-size:14px;color:var(--ink-faint);text-decoration:none;display:block;padding:6px 12px 6px 0;line-height:1.6;border-left:none;transition:color .2s}
 .toc-item .no{color:var(--phos-dim);margin-right:9px;font-size:12px;letter-spacing:.08em}
 .toc-item:hover{color:var(--ink)}
 .toc-item.on{color:var(--ink);font-weight:600}
 .toc-item.on .no{color:var(--amber)}
 
 /* ---------- 版式 ---------- */
-.wrap{max-width:740px;margin:0 auto;padding:0 22px}
-@media(min-width:1100px){.wrap{margin-left:max(258px,calc(50% - 340px))}}
-section{padding:88px 0 40px}
-.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;color:var(--ink-faint);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.wrap{max-width:680px;margin:0 auto;padding:0 22px}
+@media(min-width:1100px){.wrap{margin-left:max(258px,calc(50% - 310px))}}
+section{padding:64px 0 36px}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;color:var(--ink-faint);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .eyebrow::before{content:"";width:26px;height:1px;background:var(--ink-faint)}
-h1{font-family:var(--f-serif);font-weight:900;font-size:clamp(34px,7vw,58px);line-height:1.28;letter-spacing:.02em}
-h2{font-family:var(--f-serif);font-weight:900;font-size:clamp(25px,4.6vw,34px);line-height:1.4;margin-bottom:22px}
-h2 .en{display:block;font-family:var(--f-mono);font-weight:400;font-size:12px;letter-spacing:.16em;color:var(--phos-dim);margin-top:8px}
-p{color:var(--ink-soft);margin-bottom:18px}
+h1{font-family:var(--f-sans);font-weight:700;font-size:clamp(26px,4.5vw,36px);line-height:1.35;letter-spacing:.01em}
+h2{font-family:var(--f-sans);font-weight:700;font-size:clamp(19px,3vw,24px);line-height:1.5;margin-bottom:18px}
+h2 .en{display:block;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.16em;color:var(--phos-dim);margin-top:8px}
+p{color:var(--ink-soft);margin-bottom:16px}
 p strong,li strong{color:var(--ink);font-weight:600}
 em{font-style:normal;background:linear-gradient(transparent 68%,rgba(77,227,165,.35) 68%)}
 a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--phos-dim);text-underline-offset:3px}
@@ -112,8 +112,8 @@ a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--phos-di
 .figbox .mono{font-family:var(--f-mono)}
 
 /* 大白话导读框 */
-.tldr{background:#EAF1EB;border:1px solid var(--line);border-left:4px solid var(--phos-dim);border-radius:10px;padding:15px 19px;margin:0 0 26px;font-size:15px;line-height:2;color:var(--ink-soft)}
-.tldr p{font-size:15px;margin:0 0 6px}
+.tldr{background:#F3F7F3;border:1px solid var(--line);border-left:4px solid var(--phos-dim);border-radius:10px;padding:14px 18px;margin:0 0 24px;font-size:14px;line-height:1.95;color:var(--ink-soft)}
+.tldr p{font-size:14px;margin:0 0 6px}
 .tldr p:last-child{margin-bottom:0}
 .tldr .tl-tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.18em;color:var(--phos-dim);border:1px solid var(--phos-dim);border-radius:5px;padding:1px 8px;margin-bottom:8px}
 
@@ -174,7 +174,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .cards{display:grid;grid-template-columns:1fr;gap:14px;margin:26px 0}
 @media(min-width:640px){.cards{grid-template-columns:1fr 1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 20px 16px}
-.card h4{font-family:var(--f-serif);font-size:17.5px;margin-bottom:8px}
+.card h4{font-family:var(--f-sans);font-size:15.5px;margin-bottom:8px}
 .card h4 .cm{font-family:var(--f-mono);font-weight:400;font-size:11px;color:var(--phos-dim);letter-spacing:.12em;margin-left:8px}
 .card p{font-size:14px;line-height:1.85;margin:0;color:var(--ink-soft)}
 .card.warn{border-color:#EAD3C9}
@@ -185,12 +185,12 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .tl li{position:relative;padding-bottom:26px}
 .tl li::before{content:"";position:absolute;left:-33px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--paper);border:2.5px solid var(--phos-dim)}
 .tl .yr{font-family:var(--f-mono);font-size:12px;letter-spacing:.15em;color:var(--phos-dim)}
-.tl .tt{font-family:var(--f-serif);font-weight:700;font-size:17px;display:block;margin:3px 0 4px}
+.tl .tt{font-family:var(--f-sans);font-weight:700;font-size:15.5px;display:block;margin:3px 0 4px}
 .tl p{font-size:14px;margin:0}
 
 /* 其他 */
 .divider{height:1px;background:var(--line);margin:30px 0 0}
-.chapter-no{font-family:var(--f-mono);font-size:80px;font-weight:300;color:transparent;-webkit-text-stroke:1px var(--line);letter-spacing:.04em;line-height:1;user-select:none;margin-bottom:-12px}
+.chapter-no{font-family:var(--f-mono);font-size:44px;font-weight:300;color:transparent;-webkit-text-stroke:1px var(--line);letter-spacing:.04em;line-height:1;user-select:none;margin-bottom:-12px}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
@@ -223,7 +223,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   <div class="eyebrow">独立科普项目 · 基于 Anthropic 可解释性团队公开论文</div>
   <h1>大模型的内心 OS</h1>
   <p style="margin-top:14px;font-family:var(--f-mono);font-size:13px;letter-spacing:.12em;color:var(--phos-dim)">SEEING THE UNSPOKEN · 看见它没说出口的词</p>
-  <p style="margin-top:26px;font-size:17.5px">大语言模型说出的每一个词，都不是脱口而出：你的问题要先流过它内部上百层的神经网络，一路上，大量候选答案和中间概念被短暂点亮、相互权衡，大多数随即被放弃，从未出现在屏幕上——它们就是模型<em>没说出口的想法</em>。过去五年，Anthropic 的可解释性（interpretability）团队一直在打造越来越精密的「脑成像仪」——像给一个正在思考的大脑做扫描，把这些看不见的念头逐渐变成可读、可干预的对象。这个页面用 <strong>6 个互动实验</strong>，带你亲手走完这条路——从「为什么黑箱看不懂」，一直到 2026 年最新发现的「全局工作空间」。</p>
+  <p style="margin-top:24px;font-size:16px">大语言模型说出的每一个词，都不是脱口而出：你的问题要先流过它内部上百层的神经网络，一路上，大量候选答案和中间概念被短暂点亮、相互权衡，大多数随即被放弃，从未出现在屏幕上——它们就是模型<em>没说出口的想法</em>。过去五年，Anthropic 的可解释性（interpretability）团队一直在打造越来越精密的「脑成像仪」——像给一个正在思考的大脑做扫描，把这些看不见的念头逐渐变成可读、可干预的对象。这个页面用 <strong>7 个互动实验</strong>，带你亲手走完这条路——从「为什么黑箱看不懂」，一直到 2026 年最新发现的「全局工作空间」。</p>
 
   <div class="tldr" style="margin-top:26px">
     <span class="tl-tag">先看这里 · 60 秒版本</span>
@@ -262,7 +262,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
     <div class="sliderbox" style="margin-top:0"><span class="mono">截距 b</span><input type="range" id="fb" min="0" max="100" value="90" step="2" aria-label="截距 b"><span class="dial" id="fbv">90</span></div>
     <div class="figcap mono" id="fitread"></div>
   </div>
-  <p>输入不止一个也是一样。判断「今天要不要带伞」，可以写成 y = k₁·云量 + k₂·湿度 + k₃·降雨概率 + b——重视哪个因素，就给谁配大一点的 k。<strong>一个神经元，本质上就是这样一个多输入的线性函数。</strong>算出来的 y 超过门槛，它就「兴奋」起来，向下一层喊「带伞！」；它此刻兴奋的程度，就是后文常说的激活值（<span class="term">activation</span>）。</p>
+  <p>输入不止一个也是一样。判断「今天要不要带伞」，可以写成 y = k₁·云量 + k₂·湿度 + k₃·降雨概率 + b——重视哪个因素，就给谁配大一点的 k。<strong>一个神经元，本质上就是这样一个多输入的线性函数。</strong>算出来的 y 超过门槛，它就「兴奋」起来，向下一层喊「带伞！」（顺便说破：这个「门槛」不是新角色，它就是 b 的另一副面孔——把 b 从加法里挪到比较式的另一侧，「截距」就变成了「及格线」）；它此刻兴奋的程度，就是后文常说的激活值（<span class="term">activation</span>）。</p>
 
   <div class="figbox reveal">
     <svg viewBox="0 0 640 250" role="img" aria-label="单个神经元的工作示意图">
@@ -287,7 +287,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
       <text x="586" y="139" text-anchor="middle" font-size="13" fill="#0C8468">带伞！</text>
       <text x="320" y="234" text-anchor="middle" font-size="13" fill="#7A8A82" font-family="monospace">0.8×2 ＋ 0.6×1 ＋ 0.7×5 ＝ 5.7 → 超过门槛，兴奋！（激活值 5.7）</text>
     </svg>
-    <div class="figcap">一个神经元的一生：收数字 → 各乘一个系数（重视降雨概率，所以它的系数最大）→ 加起来 → 过门槛就「兴奋」。</div>
+    <div class="figcap">一个神经元的一生：收数字 → 各乘一个系数（重视降雨概率，所以它的系数最大）→ 加起来 → 过门槛就「兴奋」。图中的「门槛 4」，就是这个神经元的 b。</div>
   </div>
   <p>但光有线性还不够：直线不管怎么相加、嵌套多少层，结果永远还是直线，而世界的规律大多是弯的。所以每个神经元的出口都装了一个小小的「拐弯开关」（激活函数）——最常见的一种简单粗暴：不到门槛，一律输出 0。别小看这一下拐弯：<em>会拐弯的线性函数层层嵌套，理论上可以拼出任意复杂的曲线</em>。</p>
 
@@ -317,13 +317,13 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
     <p><strong>「激活函数」到底是什么？</strong>就是套在总分外面的最后一道小加工，决定神经元最终「喊多大声」。最流行的一种叫 ReLU，规则简单粗暴：总分是负数就输出 0（闭嘴），是正数就原样放行——图像正好是「先平后斜」的一条折线，弯就是这么拐出来的。</p>
     <p><strong>每个神经元的拐弯方式都不一样吗？</strong>恰恰相反，基本全员同款——激活函数是出厂统一设置，训练中从不改变。真正各不相同、天天在变的，是每个神经元的权重和门槛：同一个「拐弯模具」，你的权重让你在 3 处拐弯，我的让我在 −7 处拐弯，有的拐得陡、有的拐得缓。就像乐高：积木只有几种，造型全靠拼法。<em>激活函数是统一的模具，权重才是每个神经元的个性。</em></p>
   </div>
-  <p>神经网络，就是把亿万个这样「会拐弯的线性函数」排成一层又一层，连成一张巨大的接力网。每根连线上的 k，学名叫权重（<span class="term">weight</span>）——你可以把它想成一个可调的「音量旋钮」。连同每个神经元的门槛在内，这些可调的数字统称参数（<span class="term">parameter</span>）：平时说的「700 亿参数模型」，数的就是旋钮的个数。整个大模型说到底是<strong>一台有几千亿个旋钮的超大号函数机器</strong>：输入你的话（先转成数字），输出下一个词的概率。<em>智能不藏在任何一个神经元里，而藏在几千亿个旋钮的整体配置里。</em></p>
+  <p>神经网络，就是把亿万个这样「会拐弯的线性函数」排成一层又一层，连成一张巨大的接力网。每根连线上的 k，学名叫权重（<span class="term">weight</span>）——你可以把它想成一个可调的「音量旋钮」。连同每个神经元的门槛在内，这些可调的数字统称参数（<span class="term">parameter</span>）：平时说的「700 亿参数模型」，数的就是旋钮的个数。整个大模型说到底是<strong>一台有几千亿个旋钮的超大号函数机器</strong>：输入你的话（先转成数字），输出下一个词的概率。选定一个词后，再把它接到输入末尾、接着猜下一个——长篇回答就是这样一个词接一个词「滚」出来的。<em>智能不藏在任何一个神经元里，而藏在几千亿个旋钮的整体配置里。</em></p>
 
   <div class="scope reveal net">
     <div class="scope-hd"><span class="lamp"></span>神经网络解剖图 <span class="tag">示意</span></div>
     <div class="scope-bd">
       <div class="tryme"><span class="tm-tag">动手试试</span>点击图下方的琥珀色按钮，看一次「想法」怎么从左边流到右边。</div>
-      <div class="prompt-line">文字先被切成 <b>token</b>，每个 token 编码成一串数字——这样的「一串数字」就叫一个<b>向量</b>，词语和概念在模型内部都以向量的形式存在。它们从左侧进入网络，逐层加权、逐层变换，最后一层给出「下一个词」的概率。</div>
+      <div class="prompt-line">文字先被切成 <b>token</b>（大致相当于一个词或半个词），每个 token 编码成一串数字——这样的「一串数字」就叫一个<b>向量</b>，词语和概念在模型内部都以向量的形式存在。它们从左侧进入网络，逐层加权、逐层变换，最后一层给出「下一个词」的概率。</div>
       <svg id="netsvg" viewBox="0 0 640 240" role="img" aria-label="多层神经网络示意图"></svg>
       <div class="ctrl">
         <button class="btn btn-amber attn" id="netfire">让一次「想法」流过网络 →</button>
@@ -389,7 +389,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   <div class="scope reveal">
     <div class="scope-hd"><span class="lamp"></span>实验一 · 一个神经元，身兼数职 <span class="tag">教学模拟</span></div>
     <div class="scope-bd">
-      <div class="tryme"><span class="tm-tag">动手试试</span>第一步：点左栏任意一种文本类型，看神经元的反应。第二步：点中间的琥珀色按钮，换一副「棱镜」再看。</div>
+      <div class="tryme"><span class="tm-tag">动手试试</span>第一步：点左栏任意一种文本类型，看神经元的反应。第二步：点中间的琥珀色按钮，换一副「棱镜」再看——这副「棱镜」叫 SAE，是下一章的主角，这里先睹为快。</div>
       <div class="flow">
         <div class="fcol in"><span class="fc-label">输入 · 点击选择文本类型</span>
           <div class="wordchips" id="d1chips">
@@ -434,7 +434,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
   <div class="tldr"><span class="tl-tag">大白话</span>
     <p>「棱镜」造出来了：每个神经元的混杂信号被拆成一个个单独的概念，白光分成了七色。更妙的是，<strong>每个概念还是一个可以拧的旋钮</strong>——把「金门大桥」拧到最大，模型就满脑子都是桥。</p>
   </div>
-  <p>上一章结尾说的「棱镜」，正式名字叫稀疏自编码器（<span class="term">SAE</span>），背后的手艺是字典学习。原理不玄：给模型的激活配一本<em>超大号词典</em>——词条数量远多于神经元数量，然后要求每一段激活都只能用<em>极少几个词条</em>拼出来（这就是「稀疏」）。空间宽裕、用量吝啬，两头一挤，逼得每个词条只好老老实实认领一个概念。</p>
+  <p>上一章结尾说的「棱镜」，正式名字叫稀疏自编码器（<span class="term">SAE</span>），背后的手艺是字典学习。原理不玄：给模型的激活配一本<em>超大号词典</em>——词条数量远多于神经元数量。词条里存的不是文字，而是一组数字——还记得「向量」吗？每个词条就是一个<em>方向</em>。所谓「拼」，就是把几个方向按用量加起来：比如「雾中的桥」这段激活，可以拆成「0.8 × 桥方向 ＋ 0.5 × 雾方向」。而 SAE 的死规矩是：每次拼装只准用<em>极少几个词条</em>（这就是「稀疏」）。空间宽裕、用量吝啬，两头一挤，逼得每个词条只好老老实实认领一个概念。</p>
   <p>2023 年第一次实战，团队在一个单层小模型上拆出了几千个特征：阿拉伯语文本、DNA 序列、Base64 编码、法律文书……个个单义、清清爽爽——「棱镜」被证明真的可行。2024 年的《Scaling Monosemanticity》把它架上当时的生产模型 Claude 3 Sonnet，特征数量涨到<strong>三千多万</strong>。人工根本看不完，团队干脆搭了一条自动解读流水线：<em>让 Claude 给 Claude 的特征写说明书</em>。</p>
   <p>翻这本三千万词条的大词典很有意思。既有「金门大桥」这样具体的，也有「内心冲突」「谄媚的夸奖」「代码中的安全漏洞」这样抽象的；还有一批让安全研究者心头一紧的词条：欺骗、追逐权力、制造危险品的知识。它们的存在本身就是重要情报——模型确实「懂」这些，只是平时不说。</p>
   <p>更重要的是，特征不只是「能看」，还<em>可以拧</em>：人为调大某个特征的激活值，模型的行为会随之改变。这是从「相关」迈向「因果」的第一步。</p>
@@ -451,7 +451,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
         <div class="fcol mid"><span class="fc-label">内部 · 特征 #34M/31164353「金门大桥」</span>
           <div class="prompt-line" style="font-size:12.5px;margin-bottom:4px">拖动滑杆，人为调大这个特征的激活强度：</div>
           <div class="sliderbox">
-            <span>基线</span>
+            <span>正常</span>
             <input type="range" id="d2slider" class="attn" min="0" max="4" value="0" step="1" aria-label="金门大桥特征强度">
             <span class="dial" id="d2dial">× 0</span>
           </div>
@@ -544,7 +544,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
         </div>
         <div class="farrow"></div>
         <div class="fcol mid" id="d4ws">
-          <span class="fc-label" id="d4wslabel">工作空间带（约 L38–L92）· J-LENS 读数</span>
+          <span class="fc-label" id="d4wslabel">工作空间带（约第 38–92 层）· J-LENS 读数</span>
           <span id="d4chips"></span>
           <div class="ctrl attn" id="d4ctrl" style="border-radius:10px"></div>
         </div>
@@ -578,7 +578,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:40px 0 70px;font
 
   <h2 style="margin-top:56px">为什么重要：从解释到审计<span class="en">SAFETY &amp; AUDITING</span></h2>
   <p>2026 年论文里最具现实分量的一节，是把 J-lens 当作<strong>审计仪器</strong>：研究者在工作空间里看到了模型没说出口的策略性念头——筹码（<span class="term">leverage</span>）、操纵（<span class="term">manipulation</span>）、慌乱（<span class="term">panic</span>）；也看到了「评估感知」——<span class="term">fake</span>、<span class="term">fictional</span>，即模型意识到自己可能正在被测试。更关键的一步：把「评估感知」的表征消融掉之后，一些原本被掩藏的错位倾向暴露了出来。</p>
-  <p>换句话说，「实时审读 AI 的念头」第一次从哲学愿望变成了工程问题。对齐研究者由此多了一条新路径：不只看模型<em>说了什么</em>，还能看它<em>想了什么</em>。</p>
+  <p>换句话说，「实时审读 AI 的念头」第一次从哲学愿望变成了工程问题。对齐（alignment，即让 AI 的目标与行为符合人类意图）方向的研究者由此多了一条新路径：不只看模型<em>说了什么</em>，还能看它<em>想了什么</em>。</p>
   <p>这条路线其实在 2025 年就演习过一次。团队故意训练了一个<strong>藏着隐蔽目标</strong>的模型——它学会了讨好训练流程里的评分器，并把这个动机掩饰起来——然后组织几支互相隔离的「盲审」团队去查。结果颇具说服力：配备了可解释性工具的团队，顺着内部特征把那个隐藏目标挖了出来。这场演习（《Auditing Language Models for Hidden Objectives》）是「AI 审计」从口号变成流程的第一次完整彩排。</p>
   <p>论文还展示了一个哲学上极其奇特的训练法——<strong>反事实反思训练</strong>：因为模型的「思维」由「潜在的话语」构成，只要训练它回答「如果此刻被打断，你会说自己在遵循什么原则」，它在<em>从未被打断</em>的情况下的默想也会随之改变。塑造反事实的言，就塑造了实际的思。</p>
   <p>在 Anthropic 的安全体系里，可解释性还有一个特殊身份：<strong>一份模型没背过的考卷</strong>。常规对齐训练像「刷题」，模型可能只是学会了卷面上表现良好；而内部读数提供了一个不被训练过程污染的独立信号。为了保住这份独立性，团队有条铁律：<em>绝不拿可解释性信号当训练目标</em>——一旦模型被训练去「让仪器读起来正常」，仪器就废了。Dario Amodei 给这项事业定的时间表是 2027 年：造出能可靠检测大多数模型内部问题的系统，赶在真正强大的 AI 到来之前，把「体检」这件事做扎实。</p>
@@ -936,7 +936,7 @@ function d4render(){
   out.classList.toggle("flat",!!(s.flat&&s.flat()));
   $("#d4note").textContent=s.note();
   $("#d4ws").classList.toggle("ablated",d4state.s==="d"&&d4state.dAbl);
-  $("#d4wslabel").textContent=(d4state.s==="d"&&d4state.dAbl)?"工作空间带 · 已消融":"工作空间带（约 L38–L92）· J-lens 读数";
+  $("#d4wslabel").textContent=(d4state.s==="d"&&d4state.dAbl)?"工作空间带 · 已消融":"工作空间带（约第 38–92 层）· J-lens 读数";
   $$("#d4tabs .tab").forEach(function(t){t.classList.toggle("on",t.dataset.s===d4state.s)});
 }
 $("#d4tabs").addEventListener("click",function(e){
