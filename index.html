@@ -2,43 +2,38 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cowork 产出 · 目录</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roger 的产出归档</title>
 <style>
-  body{margin:0;background:#faf7f2;color:#2b2723;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-    line-height:1.8;display:flex;justify-content:center;padding:60px 20px;}
-  .box{max-width:640px;width:100%;}
-  .kicker{color:#3f7d6e;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;}
-  h1{font-size:28px;margin:12px 0 6px;}
-  .sub{color:#6d6459;font-size:15px;margin-bottom:32px;}
-  a.card{display:block;text-decoration:none;color:inherit;background:#fffdf9;border:1px solid #e3d9c9;
-    border-left:4px solid #b5602f;border-radius:0 12px 12px 0;padding:18px 22px;margin:14px 0;
-    box-shadow:0 2px 12px rgba(120,90,40,.05);transition:.15s;}
-  a.card:hover{transform:translateX(3px);box-shadow:0 4px 18px rgba(120,90,40,.1);}
-  a.card .t{font-size:17px;font-weight:700;color:#b5602f;}
-  a.card .d{font-size:13.5px;color:#6d6459;margin-top:4px;}
-  footer{color:#9a8f7f;font-size:12.5px;margin-top:30px;}
+  :root{--ink:#0F1720;--ink-3:#6B7682;--paper:#F5F7F4;--card:#FFF;--line:#DEE4DE;--accent:#0E8070;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.9;padding:56px 24px}
+  .wrap{max-width:720px;margin:0 auto}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
+  h1{font-size:clamp(24px,5vw,32px);font-weight:800;margin-bottom:8px}
+  .sub{color:var(--ink-3);font-size:14.5px;margin-bottom:32px}
+  .item{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;text-decoration:none;color:inherit;margin-bottom:14px;transition:border-color .15s}
+  .item:hover{border-color:var(--accent)}
+  .item .t{font-size:16.5px;font-weight:700;color:var(--ink)}
+  .item .m{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:6px}
+  .item .m b{color:var(--accent);font-weight:600}
+  footer{margin-top:40px;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
 </style>
 </head>
 <body>
-<div class="box">
-  <div class="kicker">Cowork 产出归档</div>
-  <h1>研究报告目录</h1>
-  <div class="sub">Roger 的自动发布仓库</div>
-  <a class="card" href="2026-08-17-embodied-ai-top50/">
-    <div class="t">全球具身智能公司全地图</div>
-    <div class="d">75 家公司 · 299 轮融资 · 三张产业地图（价值链泳道 / 估值×商业化 / 资本网络）· 2026-08-17</div>
+<div class="wrap">
+  <p class="eyebrow">Cowork Outputs</p>
+  <h1>Roger 的产出归档</h1>
+  <p class="sub">行业速览系列与其他会话产出,持续更新。</p>
+
+  <a class="item" href="2026-08-17-ai-data-collection-hardware/data-collection-hardware-2026-08.html">
+    <span class="t">AI 数据采集:硬件与规格速览</span>
+    <span class="m"><b>REV D</b> · 2026-08-17 · 具身智能数采路线 / VLA 收敛 / DYNA-2</span>
   </a>
-  <a class="card" href="2026-07-07-anthropic-interp-explainer/index.html">
-    <div class="t">看见机器的念头——Anthropic 可解释性研究互动科普</div>
-    <div class="d">五个互动实验 · 从叠加假说到 J-space 全局工作空间 · 2026-07-07</div>
-  </a>
-  <a class="card" href="2026-07-03-3d-and-world-models/3D-and-World-Models-Report.html">
-    <div class="t">3D 生成、3D 表示与重建,及其与世界模型的关系</div>
-    <div class="d">面向 AI 研究者的深度研究报告 · 2026-07-03</div>
-  </a>
-  <footer>由 Cowork 自动发布 · github.com/IDAdu/cowork-outputs</footer>
+
+  <footer>IDAdu/cowork-outputs · GitHub Pages</footer>
 </div>
 </body>
 </html>
