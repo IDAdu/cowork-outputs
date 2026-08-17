@@ -258,21 +258,22 @@ window.MP_LINKS = {"Preferred Networks (PFN)": [[142.4, 50.5, 10.4], [866.7, 184
     tip.style.display='none';}
   // 气泡通用行为
   root.querySelectorAll('.mp-b, .mp-hit:not(.mp-ihit)').forEach(b=>{
-    b.addEventListener('mouseenter',()=>{
+    b.addEventListener('mouseenter',e=>{
       const k=b.dataset.k, panel=b.closest('.mpanel');
       panel.classList.add('dim');
       root.querySelectorAll(`[data-k="${CSS.escape(k)}"]`).forEach(x=>x.classList.add('hi'));
       if(panel.id==='mpC') root.querySelectorAll(`.mp-e[data-k="${CSS.escape(k)}"]`)
         .forEach(e=>{e.classList.add('hi');
-          const iv=e.dataset.inv;
-          root.querySelectorAll(`[data-inv="${CSS.escape(iv)}"]`).forEach(z=>z.classList.add('hi'));});
+          const iv=CSS.escape(e.dataset.inv);
+          root.querySelectorAll(`.mp-inv[data-inv="${iv}"], .mp-invl[data-inv="${iv}"]`)
+            .forEach(z=>z.classList.add('hi'));});
       const L=window.MP_LINKS[k], g=document.getElementById('mpA-links');
       if(panel.id==='mpA'&&L&&L.length>1&&g){
         const s=[...L].sort((a,b)=>a[1]-b[1]); let d='';
         for(let i=0;i<s.length-1;i++) d+=`M${s[i][0]} ${s[i][1]+s[i][2]}L${s[i+1][0]} ${s[i+1][1]-s[i+1][2]}`;
         g.innerHTML=`<path class="mp-link" d="${d}"/>`;
       }
-      tip.textContent=b.dataset.tip; tip.style.display='block';
+      tip.textContent=b.dataset.tip; tip.style.display='block'; moveTip(e);
     });
     b.addEventListener('mousemove',moveTip);
     b.addEventListener('mouseleave',clearAll);
@@ -284,13 +285,13 @@ window.MP_LINKS = {"Preferred Networks (PFN)": [[142.4, 50.5, 10.4], [866.7, 184
   });
   // 投资方节点
   root.querySelectorAll('.mp-inv, .mp-invl, .mp-ihit').forEach(n=>{
-    n.addEventListener('mouseenter',()=>{
+    n.addEventListener('mouseenter',e=>{
       const iv=n.dataset.inv; document.getElementById('mpC').classList.add('dim');
       root.querySelectorAll(`[data-inv="${CSS.escape(iv)}"]`).forEach(x=>x.classList.add('hi'));
       const ks=[...root.querySelectorAll(`.mp-e[data-inv="${CSS.escape(iv)}"]`)].map(e=>e.dataset.k);
       ks.forEach(k=>root.querySelectorAll(`#mpC [data-k="${CSS.escape(k)}"]`)
         .forEach(x=>x.classList.add('hi')));
-      tip.textContent=`${iv}｜投中 ${ks.length} 家`; tip.style.display='block';
+      tip.textContent=`${iv}｜投中 ${ks.length} 家`; tip.style.display='block'; moveTip(e);
     });
     n.addEventListener('mousemove',moveTip);
     n.addEventListener('mouseleave',clearAll);
