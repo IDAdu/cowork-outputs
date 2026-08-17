@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 数据采集:硬件与规格速览(2026-08)</title>
+<style>
+  :root{
+    --paper:#F6F8F5;
+    --card:#FFFFFF;
+    --ink:#1B2430;
+    --ink-soft:#5A6673;
+    --line:#D9DFDA;
+    --accent:#0E7C6B;      /* 仪器青 */
+    --accent-soft:#E3F0EC;
+    --amber:#A97708;       /* 标定黄,极少量 */
+    --amber-soft:#F7EFDC;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --sans:"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+    --serif:"Noto Serif SC","Songti SC","STSong",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:16px;line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 22px}
+
+  /* ---------- 页眉 ---------- */
+  .masthead{padding:56px 0 0;background:var(--card);border-bottom:1px solid var(--line)}
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.18em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(30px,5.4vw,46px);line-height:1.25;letter-spacing:.01em;
+  }
+  .sub{color:var(--ink-soft);margin-top:14px;max-width:40em}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 30px}
+  .chip{
+    font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--paper);
+  }
+  /* 采样标尺:页眉底部的刻度线 */
+  .ruler{
+    height:14px;
+    background:
+      repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 12px),
+      repeating-linear-gradient(90deg,var(--accent) 0 1px,transparent 1px 96px);
+    background-position:bottom;background-size:100% 6px,100% 12px;background-repeat:repeat-x;
+    opacity:.85;
+  }
+
+  /* ---------- 目录 ---------- */
+  .toc{padding:22px 0;border-bottom:1px solid var(--line)}
+  .toc .wrap{display:flex;flex-wrap:wrap;gap:8px}
+  .toc a{
+    font-family:var(--mono);font-size:12.5px;text-decoration:none;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:6px;padding:5px 10px;background:var(--card);
+    transition:border-color .15s,color .15s;
+  }
+  .toc a:hover,.toc a:focus-visible{color:var(--accent);border-color:var(--accent)}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* ---------- 正文分节 ---------- */
+  .sec{padding:52px 0 8px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px}
+  .sec-no{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.12em}
+  .sec h2{font-family:var(--serif);font-size:clamp(21px,3vw,27px);font-weight:700}
+  .sec p{margin-bottom:14px;max-width:46em}
+  .sec ul,.sec ol{padding-left:1.4em;margin-bottom:14px;max-width:46em}
+  .sec li{margin-bottom:8px}
+  strong{font-weight:700}
+  .note{
+    border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:12px 16px;border-radius:0 8px 8px 0;margin:18px 0;max-width:46em;
+  }
+  .note.warn{border-left-color:var(--amber);background:var(--amber-soft)}
+  .kbd{font-family:var(--mono);font-size:.92em;color:var(--accent)}
+
+  /* 关键数字条 */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:22px 0 6px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .stat b{display:block;font-family:var(--mono);font-size:20px;color:var(--accent);font-weight:600}
+  .stat span{font-size:13px;color:var(--ink-soft)}
+
+  /* ---------- 通道卡(签名元素) ---------- */
+  .channels{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin:8px 0 18px}
+  .ch{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;display:flex;flex-direction:column;gap:8px;
+  }
+  .ch-tag{
+    font-family:var(--mono);font-size:12px;color:var(--accent);
+    letter-spacing:.14em;border-bottom:1px dashed var(--line);padding-bottom:8px;
+  }
+  .ch h3{font-size:16.5px;font-weight:700}
+  .ch p{font-size:14px;color:var(--ink-soft);line-height:1.75;margin:0}
+  .ch .hw{font-size:13px}
+  .ch .hw em{font-style:normal;color:var(--ink)}
+  .meter{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);display:flex;justify-content:space-between;gap:8px}
+  .meter b{color:var(--accent);font-weight:600;letter-spacing:.1em}
+
+  /* ---------- 表格 ---------- */
+  .tbl-scroll{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+  table{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+  th,td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  th{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;color:var(--ink-soft);
+    background:var(--paper);font-weight:600;white-space:nowrap;
+  }
+  tr:last-child td{border-bottom:none}
+  td.spec,td .num{font-family:var(--mono);font-size:13.5px}
+  tbody tr:hover{background:#FAFCFA}
+
+  /* ---------- 术语表 ---------- */
+  .terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 28px;margin:6px 0 16px}
+  .terms dt{
+    font-family:var(--mono);font-size:13.5px;color:var(--accent);font-weight:600;
+    margin-top:12px;
+  }
+  .terms dd{font-size:14px;color:var(--ink-soft);padding-left:0;line-height:1.7}
+
+  /* ---------- 可靠度 ---------- */
+  .grade{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;max-width:46em}
+  .grade b{
+    flex:none;font-family:var(--mono);font-size:12px;padding:3px 10px;border-radius:6px;
+    background:var(--accent-soft);color:var(--accent);letter-spacing:.1em;
+  }
+  .grade.mid b{background:#EDF0F3;color:var(--ink-soft)}
+  .grade.low b{background:var(--amber-soft);color:var(--amber)}
+  .grade span{font-size:14.5px;color:var(--ink-soft)}
+
+  footer{
+    margin-top:56px;padding:26px 0 48px;border-top:1px solid var(--line);
+    color:var(--ink-soft);font-size:13px;
+  }
+  footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+  footer .mono{font-family:var(--mono);font-size:12px}
+  @media print{.toc{display:none}.masthead{padding-top:24px}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Field Brief · Embodied-AI Data Acquisition</p>
+    <h1>AI 数据采集:硬件与规格</h1>
+    <p class="sub">具身智能训练数据的设备地图与选型参数——《AI/大模型行业速览》续篇。2026 年语境下,「AI 数据采集硬件」主要指机器人训练数据的采集设备:这是当前公认的行业瓶颈与最热赛道。</p>
+    <div class="meta">
+      <span class="chip">REV 2026-08-17</span>
+      <span class="chip">SCOPE:具身智能数采</span>
+      <span class="chip">来源分级见第 09 节</span>
+    </div>
+  </div>
+  <div class="ruler" aria-hidden="true"></div>
+</header>
+
+<nav class="toc" aria-label="目录">
+  <div class="wrap">
+    <a href="#s1">01 背景</a>
+    <a href="#s2">02 五条路线</a>
+    <a href="#s3">03 硬件构成</a>
+    <a href="#s4">04 八个规格参数</a>
+    <a href="#s5">05 标准与数据集</a>
+    <a href="#s6">06 产业链</a>
+    <a href="#s7">07 选型速查</a>
+    <a href="#s8">08 术语表</a>
+    <a href="#s9">09 可靠度</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section class="sec" id="s1">
+    <div class="sec-head"><span class="sec-no">01</span><h2>为什么「数据采集」在 2026 年成了焦点</h2></div>
+    <p>随着 VLA(视觉—语言—动作)模型架构收敛、机器人硬件供应链成熟,制约规模化落地的瓶颈已从本体和运动控制<strong>转移到数据</strong>。2026 年被业内称为具身智能的「数据元年」:千寻智能、灵巧智能、灵初智能、鹿明机器人等公司的年度目标不约而同指向百万小时量级的有效数据采集。</p>
+    <div class="stats">
+      <div class="stat"><b>7.37 亿 → 70 亿 USD</b><span>全球具身智能数据集市场规模,2024 → 2031(预测)</span></div>
+      <div class="stat"><b>CAGR ≈ 38%</b><span>2025–2031 年复合增长率;届时中国约占一半</span></div>
+      <div class="stat"><b>10⁶ 小时/年</b><span>头部公司 2026 年数据采集目标量级</span></div>
+    </div>
+    <p>政策层面,上海、天津等地已建设具身智能数据采集基地与跨本体开源数据集平台;数据要素正从「产业附属品」变成可定价、可交易的独立商品。</p>
+    <div class="note">一句话:模型不缺架构、机器人不缺身体,缺的是「教材」——真实世界的高质量交互数据;而采集这些数据,需要专门的硬件。</div>
+  </section>
+
+  <section class="sec" id="s2">
+    <div class="sec-head"><span class="sec-no">02</span><h2>五条采集技术路线(核心地图)</h2></div>
+    <div class="channels">
+      <div class="ch">
+        <span class="ch-tag">CH-01 · LEADER–FOLLOWER</span>
+        <h3>主从臂遥操作</h3>
+        <p>人拖动「主臂」,机器人「从臂」同步执行,直接记录关节轨迹;数据自带机器人关节信息,可直接用于训练和部署。</p>
+        <p class="hw">代表:<em>ALOHA / Mobile ALOHA、GELLO</em></p>
+        <div class="meter"><span>质量 <b>●●●●●</b></span><span>规模化 <b>●●○○○</b></span></div>
+      </div>
+      <div class="ch">
+        <span class="ch-tag">CH-02 · VR + GLOVE</span>
+        <h3>VR + 动捕手套遥操作</h3>
+        <p>头显看机器人视野,手套/控制器把人手位姿映射到机械臂;贴近人类操作习惯,长距移动漂移低。</p>
+        <p class="hw">代表:<em>Quest 3、Vision Pro(avp_teleoperate 控 Unitree G1)+ 动捕手套;Optimus 早期与智元采用此类组合</em></p>
+        <div class="meter"><span>质量 <b>●●●●●</b></span><span>规模化 <b>●●○○○</b></span></div>
+      </div>
+      <div class="ch">
+        <span class="ch-tag">CH-03 · EXOSKELETON</span>
+        <h3>外骨骼/驾驶舱遥操作</h3>
+        <p>穿戴式关节匹配,直接设定机器人上身姿态;输出频率与采集频率一致、延迟低,无需 GPU 级硬件。</p>
+        <p class="hw">代表:<em>HOMIE 等外骨骼驾驶舱方案</em></p>
+        <div class="meter"><span>质量 <b>●●●●●</b></span><span>规模化 <b>●●○○○</b></span></div>
+      </div>
+      <div class="ch">
+        <span class="ch-tag">CH-04 · HANDHELD / UMI</span>
+        <h3>手持采集器</h3>
+        <p>手持带相机的夹爪,人直接干活,SLAM 反推末端轨迹;无需机器人在场,采集效率接近人手的一半、远高于遥操作;但无关节数据,部署需逆运动学换算。</p>
+        <p class="hw">代表:<em>UMI(GoPro + 鱼眼镜头 + 手持夹爪)</em></p>
+        <div class="meter"><span>质量 <b>●●●○○</b></span><span>规模化 <b>●●●●○</b></span></div>
+      </div>
+      <div class="ch">
+        <span class="ch-tag">CH-05 · EGO-CENTRIC</span>
+        <h3>第一视角可穿戴</h3>
+        <p>眼镜或工位级记录系统拍摄人类日常操作;无动作标签,需算法补全,但成本最低、最易规模化,被视为下一阶段方向。</p>
+        <p class="hw">代表:<em>Meta Aria 类多传感器眼镜、工位级记录系统</em></p>
+        <div class="meter"><span>质量 <b>●●○○○</b></span><span>规模化 <b>●●●●●</b></span></div>
+      </div>
+    </div>
+    <p>另外两块必须知道:<strong>第三人称动作捕捉</strong>(采全身运动数据:光学动捕 OptiTrack、Vicon,亚毫米级;惯性动捕 Xsens、诺亦腾、VDSuit-Full 等穿戴式)与<strong>仿真合成数据</strong>(不是硬件,但是硬件路线的最大替代品,如银河通用约 90% 训练数据来自虚拟仿真)。行业共识是「真机 + 仿真 + 无本体采集」深度协同,而非互相取代。</p>
+    <div class="note warn">不同路线之间的综合成本差距可达约 <span class="kbd">200×</span>,选型本质是「数据质量 × 规模 × 成本」的三角权衡。</div>
+  </section>
+
+  <section class="sec" id="s3">
+    <div class="sec-head"><span class="sec-no">03</span><h2>一套采集系统由哪些硬件构成</h2></div>
+    <ol>
+      <li><strong>机器人本体/主从臂</strong>:单臂、双臂、人形;末端为夹爪或灵巧手。</li>
+      <li><strong>XR 头显</strong>:Meta Quest 3、Apple Vision Pro——提供第一视角画面与手部位姿追踪。</li>
+      <li><strong>动捕设备</strong>:光学动捕相机阵列(高精度、需场地)、惯性动捕服(便携、有漂移)。</li>
+      <li><strong>数据手套</strong>:惯性/弯曲传感式(如 mHand Pro、Manus);新趋势是柔性触觉数采手套——高密度电子皮肤,可同时采法向力与切向力分布,还原抓握时的接触细节。</li>
+      <li><strong>视觉传感器</strong>:RGB-D 深度相机(Intel RealSense D435/D455、ZED 2、奥比中光),通常多机位(头部 + 双腕 + 环境位)。</li>
+      <li><strong>力/触觉传感</strong>:指尖触觉阵列、腕部六维力/力矩传感器。</li>
+      <li><strong>边缘算力与同步单元</strong>:如 Jetson Orin 系列,负责多传感器数据融合与时间同步。</li>
+    </ol>
+  </section>
+
+  <section class="sec" id="s4">
+    <div class="sec-head"><span class="sec-no">04</span><h2>看懂「规格」:选型时盯这 8 个参数</h2></div>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>PARAM</th><th>含义与典型量级</th></tr></thead>
+      <tbody>
+        <tr><td class="spec">自由度(DoF)</td><td>设备能捕捉/控制的独立运动维度;<span class="num">单臂 6–7,灵巧手单手 6–20+,全身人形 30+</span></td></tr>
+        <tr><td class="spec">采集频率</td><td>动作/关节数据通常 <span class="num">30–100 Hz</span>(ALOHA 类约 50 Hz);惯性动捕 <span class="num">60–240 Hz</span>;光学动捕 <span class="num">120–360 Hz</span>;触觉信号可到 <span class="num">kHz</span> 级;图像通常 <span class="num">30 fps</span></td></tr>
+        <tr><td class="spec">分辨率/精度</td><td>角度编码常见 <span class="num">12 bit(0–4095)</span>,如 HOMIE 的手套模块;光学动捕亚毫米级;UMI 依赖 SLAM——毫米级可做插孔、开瓶等精细任务,退化到厘米级就只能做擦桌子类粗操作</td></tr>
+        <tr><td class="spec">延迟</td><td>遥操作链路越低越好;外骨骼直连方案输出频率可与采集频率一致</td></tr>
+        <tr><td class="spec">模态完整性</td><td>一条合格数据 = RGB(+深度)+ 关节角/末端位姿 + 夹爪状态(+ 力/触觉)+ 语言任务标注;训练 VLA 需要完整多模态</td></tr>
+        <tr><td class="spec">时空同步</td><td>视觉、力觉、动作必须对齐到同一时间线(硬件触发或软件对时);同步做不好,数据基本作废</td></tr>
+        <tr><td class="spec">标定</td><td>主从零点、手眼标定;行业教训:只买同型号零件不校零点,整批示教数据都会带固定偏差,训练时无法区分「人类意图」和「系统误差」</td></tr>
+        <tr><td class="spec">数据格式</td><td>以 episode(一次完整任务演示)为单位组织;开源事实标准如 Hugging Face 的 LeRobot 格式、Open X-Embodiment/RLDS</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="sec" id="s5">
+    <div class="sec-head"><span class="sec-no">05</span><h2>规格的另一半:行业标准与代表数据集</h2></div>
+    <p><strong>标准化进展(从无到有,进行中)</strong></p>
+    <ul>
+      <li>国内首个具身智能数据集行业标准《人工智能 具身智能 数据采集规范》由国家地方共建具身智能机器人创新中心牵头立项,统一采集格式、加速共享开源。</li>
+      <li>国家标准计划《人工智能 具身智能数据质量规范》在研,起草方包括中国电子技术标准化研究院、北京人形机器人创新中心、小米、优必选等。</li>
+      <li>配套还有《具身智能标准化研究报告》《具身智能数据集及评测研究报告》等指引文件。</li>
+    </ul>
+    <p><strong>代表数据集(看行业「量级」用)</strong></p>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>数据集</th><th>主导方</th><th>规模与规格要点</th></tr></thead>
+      <tbody>
+        <tr><td>AgiBot World</td><td>智元</td><td><span class="num">2000 ㎡</span> 真实场景、<span class="num">217</span> 项任务、<span class="num">3000+</span> 物品;百万条原子轨迹 2 个月产出,数据准确率 <span class="num">99%+</span>,格式标准化率 <span class="num">100%</span>;NVIDIA GR00T N1 约 <span class="num">80%</span> 训练数据来自它</td></tr>
+        <tr><td>RoboMIND</td><td>国创中心 + 北大</td><td>多本体(单臂/双臂/人形、夹爪/灵巧手)、<span class="num">279</span> 项任务、<span class="num">61</span> 种物体,附检测 benchmark</td></tr>
+        <tr><td>白虎数据集</td><td>人形机器人(上海)等</td><td><span class="num">5000 ㎡</span> 训练场、<span class="num">100+</span> 台多构型机器人,累计 <span class="num">100 万</span>条、<span class="num">2.5 PB</span> 多模态真机数据</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>规模化采集设施</strong>:已出现「数据采集工厂」形态——如天津某近 1.2 万㎡ 工厂,部署 150 个标准化采集单元,覆盖汽车制造、3C 装配、家庭、医疗康养等 15 大领域场景。</p>
+  </section>
+
+  <section class="sec" id="s6">
+    <div class="sec-head"><span class="sec-no">06</span><h2>产业链与玩家类型</h2></div>
+    <p>三层结构(亿欧框架):<strong>采集层</strong>(团队 + 硬件 + 平台)→ <strong>加工层</strong>(清洗、标注、对齐、数据集管理)→ <strong>应用层</strong>(模型训练、仿真测试、商业交付)。</p>
+    <div class="tbl-scroll"><table>
+      <thead><tr><th>玩家类型</th><th>代表</th><th>打法</th></tr></thead>
+      <tbody>
+        <tr><td>本体厂商全栈</td><td>宇树(开源全身遥操作真机数据集 + 预训练模型)、智元</td><td>硬件 + 数据流水线 + 模型一体;最懂什么数据「好用」</td></tr>
+        <tr><td>第三方数据服务商</td><td>数据堂、无问智科、公象智能、觅蜂科技</td><td>版权数据集、定制采集、平台化交易</td></tr>
+        <tr><td>仿真为主派</td><td>银河通用</td><td>合成为主、真实为辅</td></tr>
+        <tr><td>灵巧手/部件厂商</td><td>灵巧智能等</td><td>采集方案与硬件共生设计,减少磨损、还原手势</td></tr>
+      </tbody>
+    </table></div>
+    <p>商业模式趋势:数据服务商从「卖数据」升级为「基础设施伙伴」;垂类场景数据(如特定工厂工序)被视为长期护城河。</p>
+  </section>
+
+  <section class="sec" id="s7">
+    <div class="sec-head"><span class="sec-no">07</span><h2>方案选型速查(拿来即用)</h2></div>
+    <ul>
+      <li>小规模验证/预算有限 → <strong>UMI 或轻量化方案</strong>;</li>
+      <li>精细操作任务(拧瓶盖、插接件)→ <strong>VR + 数据手套</strong>,或力觉主从;</li>
+      <li>大规模量产数据 → <strong>ego-centric 可穿戴路线</strong>;</li>
+      <li>全身运动数据(行走、搬运)→ <strong>第三人称动捕或混合方案</strong>;</li>
+      <li>要「采完直接训直接部署」→ <strong>主从臂遥操作</strong>(数据自带关节轨迹)。</li>
+    </ul>
+  </section>
+
+  <section class="sec" id="s8">
+    <div class="sec-head"><span class="sec-no">08</span><h2>术语补充(接上份词表)</h2></div>
+    <dl class="terms">
+      <dt>VLA(Vision-Language-Action)</dt><dd>看图 + 读指令 + 输出动作的机器人基础模型,当前主流架构</dd>
+      <dt>teleoperation(遥操作)</dt><dd>人远程/同步操控机器人,顺便录数据</dd>
+      <dt>leader–follower(主从臂)</dt><dd>人拖主臂、机器人从臂跟随的同构遥操作</dd>
+      <dt>ego-centric(第一视角)</dt><dd>从操作者视角采集的数据,如智能眼镜</dd>
+      <dt>SLAM</dt><dd>同步定位与建图;UMI 路线靠它反推运动轨迹</dd>
+      <dt>IMU(惯性测量单元)</dt><dd>加速度计 + 陀螺仪,惯性动捕的核心元件</dd>
+      <dt>RGB-D</dt><dd>彩色 + 深度图像,机器人「带距离感的眼睛」</dd>
+      <dt>DoF(自由度)</dt><dd>独立运动维度数</dd>
+      <dt>episode / trajectory</dt><dd>一次完整任务演示/其中的状态—动作序列,数据的基本单位</dd>
+      <dt>end-effector(末端执行器)</dt><dd>机械臂末端的夹爪或灵巧手</dd>
+      <dt>dexterous hand(灵巧手)</dt><dd>多自由度仿人手,数据最稀缺的部位</dd>
+      <dt>sim-to-real</dt><dd>仿真训练迁移到真实世界的能力/差距</dd>
+      <dt>motion capture(动捕)</dt><dd>记录人体运动位姿的技术,分光学与惯性</dd>
+      <dt>六维力传感器</dt><dd>同时测三向力 + 三向力矩,装在腕部/指尖</dd>
+    </dl>
+  </section>
+
+  <section class="sec" id="s9">
+    <div class="sec-head"><span class="sec-no">09</span><h2>信息可靠度说明</h2></div>
+    <div class="grade"><b>高</b><span>国家数据局典型案例(AgiBot World、白虎)、全国标准信息公共服务平台(国标计划)、科技日报/人民网(标准立项)。</span></div>
+    <div class="grade mid"><b>中</b><span>亿欧智库《2026 中国具身智能数据采集与数据产业发展展望》、行业媒体与技术长文(方案对比、成本倍数)——方向可信,具体数字看量级。</span></div>
+    <div class="grade low"><b>注意</b><span>成本、效率类数字(如「200 倍差距」「效率接近人手一半」)均为特定条件下的测算,选型时以实测为准。</span></div>
+  </section>
+
+  <section class="sec" id="next">
+    <div class="sec-head"><span class="sec-no">→</span><h2>下一步(可选)</h2></div>
+    <ol>
+      <li>挑一条路线深挖:出一份 ALOHA/UMI 级别的 BOM 清单 + 逐项规格;</li>
+      <li>对比国内主要数采服务商的报价模式与交付格式;</li>
+      <li>把 LeRobot 数据格式拆开讲一遍(顺带练读英文文档);</li>
+      <li>如果你关心的是工业 DAQ(采集卡、ADC 位数、采样率那套),按同样框架另出一份。</li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>行业速览系列 · 第 2 篇 · AI 数据采集:硬件与规格</span>
+    <span class="mono">REV 2026-08-17 · 公开资料整理,数字看量级</span>
+  </div>
+</footer>
+
+</body>
+</html>
