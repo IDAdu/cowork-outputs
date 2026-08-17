@@ -14,6 +14,7 @@
 
 ## 项目目录
 
+- `2026-08-17-embodied-ai-top50/` — 全球具身智能 50 强数据看板(估值排序、286 轮融资明细、三组标签筛选)
 - `2026-07-07-anthropic-interp-explainer/` — 「大模型的内心 OS」可解释性互动科普页
 - `2026-07-03-3d-and-world-models/`
 - `2026-07-06-hf-agents-course/`
