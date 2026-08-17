@@ -84,6 +84,11 @@ tr.r:hover td{background:var(--soft)}
 .note{background:color-mix(in srgb,var(--acc) 7%,transparent);border-left:3px solid var(--acc);
  padding:9px 13px;border-radius:0 6px 6px 0;font-size:12.5px;margin-top:14px;color:var(--ink2)}
 .wl{margin-top:2px;font-size:11px;color:var(--acc);font-weight:600}
+.hit{display:inline-block;margin-top:3px;font-size:10.5px;color:var(--acc);
+ background:color-mix(in srgb,var(--acc) 10%,transparent);padding:1px 6px;border-radius:4px}
+tr.sep td{background:var(--soft);padding:7px 12px;font-size:11.5px;color:var(--ink3);
+ font-weight:650;letter-spacing:.04em;border-bottom:1px solid var(--line)}
+.qmode{display:flex;gap:6px;align-items:center;margin-left:8px}
 footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3);line-height:1.8}
 @media(max-width:900px){.wrap{padding:24px 14px 70px}h1{font-size:23px}
  th:nth-child(5),td:nth-child(5),th:nth-child(6),td:nth-child(6),th:nth-child(7),td:nth-child(7){display:none}
@@ -103,9 +108,9 @@ footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-si
  <div class="row"><span class="lab">技术栈</span><span id="ft"></span></div>
  <div class="row"><span class="lab">收入</span><span id="fr"></span></div>
  <div class="row"><span class="lab">场景</span><span id="fs"></span></div>
- <div class="row"><span class="lab">搜索</span><input class="s" id="q" placeholder="公司名、创始人、投资方、产品、模型名…"></div>
+ <div class="row"><span class="lab">搜索</span><input class="s" id="q" placeholder="公司名、创始人、投资方、产品、模型名…"><span class="qmode"><button class="chip" id="qname" data-tip="只按公司中英文名匹配,不搜投资方、客户等字段">仅公司名</button></span></div>
 </div>
-<details class="legend"><summary>标签怎么读?——给第一次看这张表的人(双轴版:做什么 × 靠什么挣钱)</summary><div class="lg-grid"><div class="lg-item"><div class="lg-name">本体<span class="lg-cat">技术栈</span></div><div class="lg-def">造整机:人形、四足、轮式双臂、机械臂——完整的机器人身体</div></div><div class="lg-item"><div class="lg-name">执行末端<span class="lg-cat">技术栈</span></div><div class="lg-def">灵巧手、夹爪等「手」:机器人与物体接触的最后一环,可以单独卖给整机厂</div></div><div class="lg-item"><div class="lg-name">感知<span class="lg-cat">技术栈</span></div><div class="lg-def">触觉、力矩等传感器:机器人的「皮肤与神经末梢」</div></div><div class="lg-item"><div class="lg-name">面部<span class="lg-cat">技术栈</span></div><div class="lg-def">仿真人脸与微表情:让机器人「看着像人」。体验生意,不是劳动力生意</div></div><div class="lg-item"><div class="lg-name">模型<span class="lg-cat">技术栈</span></div><div class="lg-def">具身基础模型:机器人的智能来源。只有这一项的公司=旧版「纯模型研究」</div></div><div class="lg-item"><div class="lg-name">数据<span class="lg-cat">技术栈</span></div><div class="lg-def">训练数据的采集、生成或交易:模型的「口粮」。光轮造仿真数据,简智/渊澈采真实数据</div></div><div class="lg-item"><div class="lg-name">算力·OS<span class="lg-cat">技术栈</span></div><div class="lg-def">芯片、操作系统、开发平台:全行业的公共地基,「卖铲子」的</div></div><div class="lg-item"><div class="lg-name">卖硬件<span class="lg-cat">收入来源</span></div><div class="lg-def">收入主要来自卖机器人整机或部件。最容易验证的商业模式,50 强的主流</div></div><div class="lg-item"><div class="lg-name">卖解决方案·运营<span class="lg-cat">收入来源</span></div><div class="lg-def">卖的是「干成的活」:项目制交付、RaaS 订阅、场景自营。原力灵机、智平方、Exotec 走这条路</div></div><div class="lg-item"><div class="lg-name">卖软件·模型授权<span class="lg-cat">收入来源</span></div><div class="lg-def">卖模型能力或软件许可,不靠硬件挣钱。全表有可信收入的只有 Skild($30M 官宣)、GigaAI(30 家车企)等少数几家</div></div><div class="lg-item"><div class="lg-name">卖数据服务<span class="lg-cat">收入来源</span></div><div class="lg-def">卖训练数据、仿真环境或数采服务。光轮(合成)与简智(真采)是一对互补样本</div></div><div class="lg-item"><div class="lg-name">尚无规模收入<span class="lg-cat">收入来源</span></div><div class="lg-def">还在花投资人的钱,收入未披露或未形成规模。50 强里 12 家——每 4 家就有 1 家,本表最诚实的一列。悬停行内标签可见证据级(A 审计/B 报道/C 公司口径/D 推断)</div></div><div class="lg-item"><div class="lg-name">工业制造<span class="lg-cat">场景</span></div><div class="lg-def">进工厂产线干活:上下料、装配、质检。当前最主流的付费场景</div></div><div class="lg-item"><div class="lg-name">物流仓储<span class="lg-cat">场景</span></div><div class="lg-def">分拣、搬运、码垛。节拍要求高,但环境可控,容易先跑通</div></div><div class="lg-item"><div class="lg-name">家庭<span class="lg-cat">场景</span></div><div class="lg-def">进家门做家务。所有人的终局梦想,目前最难、离得最远</div></div><div class="lg-item"><div class="lg-name">科研教育<span class="lg-cat">场景</span></div><div class="lg-def">卖给高校实验室与开发者。当下最好卖,天花板也最矮——宇树超 70% 收入来自这里</div></div><div class="lg-item"><div class="lg-name">巡检安防<span class="lg-cat">场景</span></div><div class="lg-def">变电站、油气、园区巡逻。「无聊但真实」的现金流,四足机器人的主场</div></div><div class="lg-item"><div class="lg-name">医疗康养<span class="lg-cat">场景</span></div><div class="lg-def">康复、养老、医院。认证门槛高,但客户粘性也高</div></div><div class="lg-item"><div class="lg-name">零售<span class="lg-cat">场景</span></div><div class="lg-def">便利店补货、无人店、药房。日本 Telexistence、中国银河通用都在磕</div></div><div class="lg-item"><div class="lg-name">商业服务<span class="lg-cat">场景</span></div><div class="lg-def">迎宾、导览、餐饮等对人服务。展示效果好,复购待验证</div></div><div class="lg-item"><div class="lg-name">展陈娱乐<span class="lg-cat">场景</span></div><div class="lg-def">展馆、主题公园、发布会。「被看见」的生意,面部机器人的主场</div></div><div class="lg-item"><div class="lg-name">数据服务<span class="lg-cat">场景</span></div><div class="lg-def">机器人干活顺便产数据、或专门采数据卖。乐聚 45% 收入来自数据采集</div></div><div class="lg-item"><div class="lg-name">上游供货<span class="lg-cat">场景</span></div><div class="lg-def">不面向终端,卖给其他机器人公司。灵巧手、传感器、芯片走这条路</div></div><div class="lg-item"><div class="lg-name">中国<span class="lg-cat">地区</span></div><div class="lg-def">27 家进入 50 强,数量全球第一;特点是融资轮次密、产业资本(宁德、美团、小米)深度下场</div></div><div class="lg-item"><div class="lg-name">美国/北美<span class="lg-cat">地区</span></div><div class="lg-def">估值前四名全在这:Figure $39B、Skild $14B、π $11B、1X $10B。单家估值远高于中国同行</div></div><div class="lg-item"><div class="lg-name">欧洲/以色列<span class="lg-cat">地区</span></div><div class="lg-def">德国 NEURA $70 亿领跑;英国 Humanoid 是「无产品独角兽」;以色列 Mentee 已被 Mobileye 收购</div></div><div class="lg-item"><div class="lg-name">亚太其他<span class="lg-cat">地区</span></div><div class="lg-def">韩国双雄(彩虹/斗山)已上市;日本 PFN 芯片模型全栈;新加坡 Sharpa 是禾赛系触觉玩家</div></div></div></details>
+<details class="legend"><summary>标签怎么读?(点开看全部定义 · 平时可折叠)</summary><div class="lg-grid"><div class="lg-item"><div class="lg-name">本体<span class="lg-cat">技术栈</span></div><div class="lg-def">造整机:人形、四足、轮式双臂、机械臂——完整的机器人身体</div></div><div class="lg-item"><div class="lg-name">执行末端<span class="lg-cat">技术栈</span></div><div class="lg-def">灵巧手、夹爪等「手」:机器人与物体接触的最后一环,可以单独卖给整机厂</div></div><div class="lg-item"><div class="lg-name">感知<span class="lg-cat">技术栈</span></div><div class="lg-def">触觉、力矩等传感器:机器人的「皮肤与神经末梢」</div></div><div class="lg-item"><div class="lg-name">面部<span class="lg-cat">技术栈</span></div><div class="lg-def">仿真人脸与微表情:让机器人「看着像人」。体验生意,不是劳动力生意</div></div><div class="lg-item"><div class="lg-name">模型<span class="lg-cat">技术栈</span></div><div class="lg-def">具身基础模型:机器人的智能来源。只有这一项的公司=旧版「纯模型研究」</div></div><div class="lg-item"><div class="lg-name">数据<span class="lg-cat">技术栈</span></div><div class="lg-def">训练数据的采集、生成或交易:模型的「口粮」。光轮造仿真数据,简智/渊澈采真实数据</div></div><div class="lg-item"><div class="lg-name">算力·OS<span class="lg-cat">技术栈</span></div><div class="lg-def">芯片、操作系统、开发平台:全行业的公共地基,「卖铲子」的</div></div><div class="lg-item"><div class="lg-name">卖硬件<span class="lg-cat">收入来源</span></div><div class="lg-def">收入主要来自卖机器人整机或部件。最容易验证的商业模式,50 强的主流</div></div><div class="lg-item"><div class="lg-name">卖解决方案·运营<span class="lg-cat">收入来源</span></div><div class="lg-def">卖的是「干成的活」:项目制交付、RaaS 订阅、场景自营。原力灵机、智平方、Exotec 走这条路</div></div><div class="lg-item"><div class="lg-name">卖软件·模型授权<span class="lg-cat">收入来源</span></div><div class="lg-def">卖模型能力或软件许可,不靠硬件挣钱。全表有可信收入的只有 Skild($30M 官宣)、GigaAI(30 家车企)等少数几家</div></div><div class="lg-item"><div class="lg-name">卖数据服务<span class="lg-cat">收入来源</span></div><div class="lg-def">卖训练数据、仿真环境或数采服务。光轮(合成)与简智(真采)是一对互补样本</div></div><div class="lg-item"><div class="lg-name">尚无规模收入<span class="lg-cat">收入来源</span></div><div class="lg-def">还在花投资人的钱,收入未披露或未形成规模。50 强里 12 家——每 4 家就有 1 家,本表最诚实的一列。悬停行内标签可见证据级(A 审计/B 报道/C 公司口径/D 推断)</div></div><div class="lg-item"><div class="lg-name">工业制造<span class="lg-cat">场景</span></div><div class="lg-def">进工厂产线干活:上下料、装配、质检。当前最主流的付费场景</div></div><div class="lg-item"><div class="lg-name">物流仓储<span class="lg-cat">场景</span></div><div class="lg-def">分拣、搬运、码垛。节拍要求高,但环境可控,容易先跑通</div></div><div class="lg-item"><div class="lg-name">家庭<span class="lg-cat">场景</span></div><div class="lg-def">进家门做家务。所有人的终局梦想,目前最难、离得最远</div></div><div class="lg-item"><div class="lg-name">科研教育<span class="lg-cat">场景</span></div><div class="lg-def">卖给高校实验室与开发者。当下最好卖,天花板也最矮——宇树超 70% 收入来自这里</div></div><div class="lg-item"><div class="lg-name">巡检安防<span class="lg-cat">场景</span></div><div class="lg-def">变电站、油气、园区巡逻。「无聊但真实」的现金流,四足机器人的主场</div></div><div class="lg-item"><div class="lg-name">医疗康养<span class="lg-cat">场景</span></div><div class="lg-def">康复、养老、医院。认证门槛高,但客户粘性也高</div></div><div class="lg-item"><div class="lg-name">零售<span class="lg-cat">场景</span></div><div class="lg-def">便利店补货、无人店、药房。日本 Telexistence、中国银河通用都在磕</div></div><div class="lg-item"><div class="lg-name">商业服务<span class="lg-cat">场景</span></div><div class="lg-def">迎宾、导览、餐饮等对人服务。展示效果好,复购待验证</div></div><div class="lg-item"><div class="lg-name">展陈娱乐<span class="lg-cat">场景</span></div><div class="lg-def">展馆、主题公园、发布会。「被看见」的生意,面部机器人的主场</div></div><div class="lg-item"><div class="lg-name">数据服务<span class="lg-cat">场景</span></div><div class="lg-def">机器人干活顺便产数据、或专门采数据卖。乐聚 45% 收入来自数据采集</div></div><div class="lg-item"><div class="lg-name">上游供货<span class="lg-cat">场景</span></div><div class="lg-def">不面向终端,卖给其他机器人公司。灵巧手、传感器、芯片走这条路</div></div><div class="lg-item"><div class="lg-name">中国<span class="lg-cat">地区</span></div><div class="lg-def">27 家进入 50 强,数量全球第一;特点是融资轮次密、产业资本(宁德、美团、小米)深度下场</div></div><div class="lg-item"><div class="lg-name">美国/北美<span class="lg-cat">地区</span></div><div class="lg-def">估值前四名全在这:Figure $39B、Skild $14B、π $11B、1X $10B。单家估值远高于中国同行</div></div><div class="lg-item"><div class="lg-name">欧洲/以色列<span class="lg-cat">地区</span></div><div class="lg-def">德国 NEURA $70 亿领跑;英国 Humanoid 是「无产品独角兽」;以色列 Mentee 已被 Mobileye 收购</div></div><div class="lg-item"><div class="lg-name">亚太其他<span class="lg-cat">地区</span></div><div class="lg-def">韩国双雄(彩虹/斗山)已上市;日本 PFN 芯片模型全栈;新加坡 Sharpa 是禾赛系触觉玩家</div></div></div></details>
 <div class="cnt" id="cnt"></div>
 <table><thead><tr>
  <th data-k="rank">#</th><th data-k="name_cn">公司</th><th data-k="country">地区</th>
@@ -140,13 +145,36 @@ function chips(id, key, fkey){
 chips('fc','g_country','country'); chips('ft','g_stack','type'); chips('fr','g_rev','rev'); chips('fs','g_scene','scene');
 const FLAG={'中国':'f-cn','美国/北美':'f-us','欧洲/以色列':'f-eu','亚太其他':'f-ap','其他':'f-ap'};
 const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let nameOnly=false;
+// 命中来源:按优先级排序,命中即记录字段名
+const HITMAP=[
+  ['公司名', r=>[r.name_cn,r.name_en]],
+  ['创始团队', r=>[r.founders]],
+  ['投资方', r=>(r.rounds||[]).flatMap(x=>[x.lead,x.others])],
+  ['产品', r=>[r.products]],
+  ['模型', r=>[r.model,r.tag_model]],
+  ['客户与场景', r=>[r.shipments,r.scenes,r.tag_scene]],
+  ['壁垒与备注', r=>[r.moat,r.note,r.revenue,r.headcount,r.valuation,r.val_basis,r.total_raised,r.hq]],
+];
+function hitFields(r,q){
+  const out=[];
+  for(const [label,pick] of HITMAP){
+    if(pick(r).some(v=>v&&String(v).toLowerCase().includes(q))) out.push(label);
+  }
+  return out;
+}
 function match(r){
   if(F.country.size && !F.country.has(r.g_country)) return false;
   if(F.type.size && !r.g_stack.some(t=>F.type.has(t))) return false;
   if(F.rev.size && !F.rev.has(r.g_rev)) return false;
   if(F.scene.size && !r.g_scene.some(t=>F.scene.has(t))) return false;
   const q=document.getElementById('q').value.trim().toLowerCase();
-  if(q){ const blob=JSON.stringify(r).toLowerCase(); if(!blob.includes(q)) return false; }
+  r._hits = [];
+  if(q){
+    r._hits = hitFields(r,q);
+    if(nameOnly) return r._hits[0]==='公司名';
+    if(!r._hits.length) return false;
+  }
   return true;
 }
 function rndTable(rs){
@@ -157,18 +185,39 @@ function rndTable(rs){
 }
 function render(){
   const rows=DATA.filter(match);
+  const q=document.getElementById('q').value.trim().toLowerCase();
   rows.sort((a,b)=>{
+    if(q){  // 公司名命中排在最前
+      const an=a._hits[0]==='公司名'?0:1, bn=b._hits[0]==='公司名'?0:1;
+      if(an!==bn) return an-bn;
+    }
     let x=a[sortK], y=b[sortK];
     if(sortK==='val_usd'){ x=x??-1; y=y??-1; return sortAsc? x-y : y-x; }
     if(sortK==='rank'){ x=x===''?9999:x; y=y===''?9999:y; return sortAsc? x-y : y-x; }
     return sortAsc? String(x).localeCompare(String(y),'zh') : String(y).localeCompare(String(x),'zh');
   });
-  document.getElementById('cnt').textContent=`显示 ${rows.length} / ${DATA.length} 家`;
-  document.getElementById('tb').innerHTML = rows.map((r,i)=>`
+  const nName = q? rows.filter(r=>r._hits[0]==='公司名').length : 0;
+  document.getElementById('cnt').textContent = q
+    ? `显示 ${rows.length} / ${DATA.length} 家 —— 其中公司名命中 ${nName} 家,其余 ${rows.length-nName} 家是在投资方、客户、产品等字段里提到了「${q}」`
+    : `显示 ${rows.length} / ${DATA.length} 家`;
+  let lastGrp=null;
+  document.getElementById('tb').innerHTML = rows.map((r,i)=>{
+   let sep='';
+   if(q){
+     const grp = r._hits[0]==='公司名' ? 'name' : 'other';
+     if(grp!==lastGrp){
+       lastGrp=grp;
+       sep = grp==='name'
+         ? `<tr class="sep"><td colspan="8">公司名匹配</td></tr>`
+         : `<tr class="sep"><td colspan="8">相关提及 —— 这些公司的投资方、客户或产品字段里出现了「${esc(q)}」</td></tr>`;
+     }
+   }
+   return sep + `
    <tr class="r" onclick="document.getElementById('d${i}').classList.toggle('open')">
     <td class="rk">${r.rank||'—'}</td>
     <td><div class="nm">${esc(r.name_cn)}</div><div class="ne">${esc(r.name_en)}</div>
-        ${r.in_top?'':'<div class="wl">观察名单</div>'}</td>
+        ${r.in_top?'':'<div class="wl">观察名单</div>'}
+        ${(q&&r._hits.length&&r._hits[0]!=='公司名')?`<div class="hit">命中:${esc(r._hits.join('、'))}</div>`:''}</td>
     <td><span class="flag ${FLAG[r.g_country]}">${esc(r.g_country)}</span></td>
     <td class="vwrap"><div class="vnum">${r.val_usd?('$'+r.val_usd.toFixed(2)+'B'):'未披露'}</div>
         <div class="${r.bar?'vbar':'vb-bg'}" style="width:${r.bar||100}%"></div>
@@ -197,11 +246,14 @@ function render(){
       <div><div class="fld">模型路线标签</div><div class="val">${esc(r.tag_model)}</div></div>
      </div>
      ${r.note?`<div class="note"><strong>提示</strong>:${esc(r.note)}</div>`:''}
-   </td></tr>`).join('');
+   </td></tr>`;}).join('');
 }
 document.querySelectorAll('th[data-k]').forEach(th=>{
   th.onclick=()=>{ const k=th.dataset.k; if(sortK===k) sortAsc=!sortAsc; else {sortK=k; sortAsc=(k!=='val_usd');} render(); };
 });
+document.getElementById('qname').onclick=function(){
+  nameOnly=!nameOnly; this.classList.toggle('on'); render();
+};
 document.getElementById('q').oninput=render;
 render();
 </script></body></html>
