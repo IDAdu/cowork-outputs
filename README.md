@@ -14,7 +14,8 @@
 
 ## 项目目录
 
-- `2026-08-17-embodied-ai-top50/` — 全球具身智能公司全地图(75 家公司、299 轮融资明细、三张产业地图、双轴标签筛选)
+- `2026-08-17-ai-data-collection-hardware/` — AI 数据采集:硬件与规格速览
+- `2026-08-17-embodied-ai-top50/` — 全球具身智能公司全地图(79 家公司、315 轮融资明细、三张产业地图、双轴标签筛选)
 - `2026-07-07-anthropic-interp-explainer/` — 「大模型的内心 OS」可解释性互动科普页
 - `2026-07-03-3d-and-world-models/`
 - `2026-07-06-hf-agents-course/`
