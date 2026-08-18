@@ -1,59 +1,338 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Roger 的产出归档</title>
-<style>
-  :root{--ink:#0F1720;--ink-3:#6B7682;--paper:#F5F7F4;--card:#FFF;--line:#DEE4DE;--accent:#0E8070;
-    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-    --sans:"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.9;padding:56px 24px}
-  .wrap{max-width:720px;margin:0 auto}
-  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
-  h1{font-size:clamp(24px,5vw,32px);font-weight:800;margin-bottom:8px}
-  .sub{color:var(--ink-3);font-size:14.5px;margin-bottom:32px}
-  .item{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;text-decoration:none;color:inherit;margin-bottom:14px;transition:border-color .15s}
-  .item:hover{border-color:var(--accent)}
-  .item .t{font-size:16.5px;font-weight:700;color:var(--ink)}
-  .item .m{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:6px}
-  .item .m b{color:var(--accent);font-weight:600}
-  footer{margin-top:40px;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今日一句 · 鼓励</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      padding: 1.5rem;
+    }
+    .card {
+      max-width: 28rem;
+      width: 100%;
+      padding: 2.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      animation: fadeIn 0.6s ease-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .label {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .quote {
+      font-size: 1.35rem;
+      line-height: 1.75;
+      color: #f0f0f0;
+      font-weight: 500;
+    }
+    .quote::before {
+      content: "「";
+      color: rgba(255, 200, 150, 0.6);
+      margin-right: 0.15em;
+    }
+    .quote::after {
+      content: "」";
+      color: rgba(255, 200, 150, 0.6);
+      margin-left: 0.15em;
+    }
+    .quote-en {
+      margin-top: 1rem;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.75);
+      font-style: italic;
+    }
+    .quote-word {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: rgba(255, 200, 150, 0.85);
+    }
+    .quote-word span {
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .top-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .top-info .item {
+      text-align: center;
+    }
+    .top-info .item .label {
+      margin-bottom: 0.35rem;
+    }
+    .top-info .value {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <p class="eyebrow">Cowork Outputs</p>
-  <h1>Roger 的产出归档</h1>
-  <p class="sub">行业速览系列与其他会话产出,持续更新。</p>
+  <div class="card">
+    <div class="top-info">
+      <div class="item">
+        <p class="label">日期</p>
+        <p class="value" id="date">—</p>
+      </div>
+      <div class="item">
+        <p class="label">星期</p>
+        <p class="value" id="weekday">—</p>
+      </div>
+    </div>
+    <p class="label">今日一句</p>
+    <p class="quote" id="quote">加载中…</p>
+    <p class="quote-en" id="quoteEn"></p>
+    <p class="quote-word" id="quoteWord"></p>
+  </div>
+  <script>
+    (function () {
+      var weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+      var now = new Date();
+      document.getElementById("date").textContent = now.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
+      document.getElementById("weekday").textContent = weekdays[now.getDay()];
 
-  <a class="item" href="2026-08-17-embodied-ai-top50/">
-    <span class="t">全球具身智能公司全地图</span>
-    <span class="m"><b>79 家公司</b> · 2026-08-18 · 三张产业地图 / 315 轮融资明细 / 双轴标签筛选</span>
-  </a>
+      var messages = [
+        { zh: "你已经比昨天更进步了一点点，加油！", en: "You've made progress—keep persevering!", word: "persevere" },
+        { zh: "别小看现在的努力，它们都会变成未来的惊喜。", en: "Your efforts will blossom into surprises; resilience pays off.", word: "resilience" },
+        { zh: "再坚持一下，可能马上就要看到成果了！", en: "Hold on a little longer; your tenacity is about to pay off.", word: "tenacity" },
+        { zh: "你有能力做到更好，相信自己！", en: "You have the potential to excel—believe in yourself.", word: "excel" },
+        { zh: "失败没什么可怕的，可怕的是不再尝试。", en: "Failure isn't fearsome; what's fearsome is ceasing to endeavor.", word: "endeavor" },
+        { zh: "今天也要元气满满地向前走一步！", en: "Take one more step today with unwavering spirit.", word: "unwavering" },
+        { zh: "慢一点没关系，只要你还在往前走。", en: "Pace doesn't matter as long as you sustain your momentum.", word: "sustain" },
+        { zh: "你已经很棒了，不要总是否定自己。", en: "You're already remarkable—don't undermine yourself.", word: "undermine" },
+        { zh: "遇到困难说明你正在爬坡，山顶的风景会更好。", en: "Adversity means you're climbing; the summit view will be worth it.", word: "adversity" },
+        { zh: "所有认真生活的人，运气都不会太差。", en: "Those who live with diligence seldom lack good fortune.", word: "diligence" },
+        { zh: "每一步都算数，别急着要答案。", en: "Every step counts; don't rush for immediate outcomes.", word: "outcome" },
+        { zh: "你比想象中更扛得住。", en: "You have more fortitude than you think.", word: "fortitude" },
+        { zh: "休息好了再出发，也是前进。", en: "Resting before you continue is still progress.", word: "progress" },
+        { zh: "别人怎么看你不重要，你怎么看自己才重要。", en: "Your self-perception matters more than others' judgment.", word: "perception" },
+        { zh: "今天的小目标完成了，就值得开心。", en: "Completing today's modest goal is an accomplishment to celebrate.", word: "accomplishment" },
+        { zh: "迷茫的时候，先动起来再说。", en: "When you're uncertain, take action—momentum dispels doubt.", word: "momentum" },
+        { zh: "你不是不够好，只是还在长。", en: "You're not inadequate; you're still evolving.", word: "evolving" },
+        { zh: "偶尔摆烂也没关系，明天再战。", en: "It's fine to pause occasionally; you'll prevail tomorrow.", word: "prevail" },
+        { zh: "做错了改就好，不必一直自责。", en: "Correct your mistakes and move on—no need for prolonged guilt.", word: "prolonged" },
+        { zh: "你的存在本身就有价值。", en: "Your existence has inherent value.", word: "inherent" },
+        { zh: "想放弃的时候，再试一次。", en: "When you want to quit, persist one more time.", word: "persist" },
+        { zh: "进步慢一点，也是在进步。", en: "Slower progress is still substantial progress.", word: "substantial" },
+        { zh: "别人的节奏不是你的节奏。", en: "Others' pace is not your benchmark.", word: "benchmark" },
+        { zh: "今天比昨天好一点，就很好。", en: "Being marginally better than yesterday is commendable.", word: "commendable" },
+        { zh: "焦虑时先做一件小事。", en: "When anxious, accomplish one small task to regain clarity.", word: "clarity" },
+        { zh: "你值得被温柔对待，包括被自己。", en: "You deserve to be treated with compassion, including by yourself.", word: "compassion" },
+        { zh: "路是走出来的，不是想出来的。", en: "The path is forged by walking, not merely by contemplating.", word: "forged" },
+        { zh: "累了就歇，别硬扛。", en: "When exhausted, rest—don't push beyond your capacity.", word: "capacity" },
+        { zh: "你已经在变好的路上了。", en: "You're already on the trajectory of improvement.", word: "trajectory" },
+        { zh: "小事做好，就是大事的根基。", en: "Doing small things well is the foundation for greater things.", word: "foundation" },
+        { zh: "别和过去的自己较劲。", en: "Don't dwell on past versions of yourself.", word: "dwell" },
+        { zh: "今天好好过，明天自然会来。", en: "Live today well; tomorrow will unfold naturally.", word: "unfold" },
+        { zh: "你不需要完美，只需要开始。", en: "You don't need to be flawless—you need to commence.", word: "commence" },
+        { zh: "被否定不代表你不行。", en: "Being rejected doesn't mean you're inadequate.", word: "rejected" },
+        { zh: "再难的事，拆成小步就不怕。", en: "Break the daunting task into steps and it becomes manageable.", word: "daunting" },
+        { zh: "你的努力，时间会看见。", en: "Time will acknowledge your relentless effort.", word: "relentless" },
+        { zh: "偶尔失败是常态，别放大它。", en: "Occasional failure is inevitable; don't magnify it.", word: "inevitable" },
+        { zh: "相信自己能学会、能做好。", en: "Believe that you can acquire the skills and excel.", word: "acquire" },
+        { zh: "今天的一点点，会累积成改变。", en: "Today's small steps will accumulate into transformation.", word: "accumulate" },
+        { zh: "你不是一个人在扛。", en: "You're not bearing the burden in isolation.", word: "isolation" },
+        { zh: "停下来想想，比盲目冲更有用。", en: "Pausing to reflect is more fruitful than rushing blindly.", word: "fruitful" },
+        { zh: "你已经跨过很多坎了。", en: "You've already overcome numerous obstacles.", word: "obstacles" },
+        { zh: "对自己说一句：我可以。", en: "Tell yourself: I am capable—affirm your potential.", word: "affirm" },
+        { zh: "别人的成功不必比较，你的路独一无二。", en: "Don't compare with others' success; your path is unique.", word: "unique" },
+        { zh: "今天好好吃饭睡觉，也是自律。", en: "Eating and sleeping well today is also discipline.", word: "discipline" },
+        { zh: "你比昨天的自己强。", en: "You're stronger than your former self.", word: "former" },
+        { zh: "迷茫时，先做确定的事。", en: "When in doubt, focus on what's certain and take action.", word: "certain" },
+        { zh: "失败是反馈，不是终点。", en: "Failure is feedback, not a permanent verdict.", word: "verdict" },
+        { zh: "你的选择，值得被尊重。", en: "Your choices deserve to be respected.", word: "respected" },
+        { zh: "慢慢来，比较快。", en: "Proceeding steadily often leads to swifter results.", word: "steadily" },
+        { zh: "今天笑了吗？笑一下也好。", en: "Did you smile today? A brief moment of joy matters.", word: "brief" },
+        { zh: "你已经在发光了，只是自己还没发现。", en: "You're already shining; you just haven't noticed yet.", word: "noticed" },
+        { zh: "别用别人的尺子量自己。", en: "Don't measure yourself by others' standards.", word: "standards" },
+        { zh: "再试一次，可能就通了。", en: "One more attempt might yield a breakthrough.", word: "breakthrough" },
+        { zh: "你的坚持，会有人看见。", en: "Your perseverance will be witnessed and valued.", word: "perseverance" },
+        { zh: "累了就睡，醒了再战。", en: "When tired, rest; when refreshed, strive again.", word: "strive" },
+        { zh: "小事也值得认真做。", en: "Small tasks are worth doing with conscientiousness.", word: "conscientiousness" },
+        { zh: "你不是没进步，只是进步在看不见的地方。", en: "You are making progress—sometimes in imperceptible ways.", word: "imperceptible" },
+        { zh: "今天放过自己，明天再加油。", en: "Be gentle with yourself today; you can push tomorrow.", word: "gentle" },
+        { zh: "你的故事，才刚翻开。", en: "Your story has merely begun to unfold.", word: "merely" },
+        { zh: "做不好没关系，多做几次就会好。", en: "It's okay to do poorly at first; repetition fosters improvement.", word: "repetition" },
+        { zh: "你值得更好的对待。", en: "You deserve to be treated with greater dignity.", word: "dignity" },
+        { zh: "别让焦虑偷走你的今天。", en: "Don't let anxiety deprive you of today.", word: "deprive" },
+        { zh: "一步一步来，比较稳。", en: "Proceeding step by step is more stable and reliable.", word: "reliable" },
+        { zh: "你已经很棒了，真的。", en: "You're already remarkable—truly.", word: "remarkable" },
+        { zh: "今天的小胜利，也值得记一笔。", en: "Today's small victory is worth acknowledging.", word: "acknowledging" },
+        { zh: "别人怎么说不重要，你怎么做才重要。", en: "What others say matters less than how you respond.", word: "respond" },
+        { zh: "休息不是偷懒，是续能。", en: "Rest isn't laziness; it's replenishing your energy.", word: "replenishing" },
+        { zh: "你比想象中更能扛。", en: "You're more resilient than you imagine.", word: "resilient" },
+        { zh: "今天完成一件事，就很好。", en: "Completing one thing today is sufficient.", word: "sufficient" },
+        { zh: "别怕慢，怕的是停。", en: "Don't fear slowness; fear stagnation.", word: "stagnation" },
+        { zh: "你的努力，会变成底气。", en: "Your effort will translate into confidence and competence.", word: "competence" },
+        { zh: "偶尔哭一下也没关系。", en: "It's okay to shed tears occasionally—it's human.", word: "occasionally" },
+        { zh: "你正在成为更好的自己。", en: "You're in the process of becoming a better version of yourself.", word: "version" },
+        { zh: "今天的一小步，是明天的一大步。", en: "Today's small step is tomorrow's significant leap.", word: "significant" },
+        { zh: "别用一次失败定义自己。", en: "Don't let a single setback define your identity.", word: "setback" },
+        { zh: "你已经走了很远的路。", en: "You've already traversed a long journey.", word: "traversed" },
+        { zh: "相信自己，你可以的。", en: "Trust yourself; you are capable of achieving this.", word: "achieving" },
+        { zh: "今天也要好好爱自己。", en: "Remember to nurture yourself today as well.", word: "nurture" },
+        { zh: "困难会过去，你会留下。", en: "Difficulties will pass; you will endure and remain.", word: "endure" },
+        { zh: "你的坚持，时间会证明。", en: "Time will validate your dedication.", word: "validate" },
+        { zh: "别和别人比，和昨天的自己比。", en: "Compare yourself to your past self, not to others.", word: "compare" },
+        { zh: "今天做一点，明天再做一点。", en: "Do a little today, then a little more tomorrow—consistency works.", word: "consistency" },
+        { zh: "你值得被看见、被珍惜。", en: "You deserve to be seen and cherished.", word: "cherished" },
+        { zh: "迷茫时，先动起来。", en: "When lost, take initiative—movement brings direction.", word: "initiative" },
+        { zh: "失败只是暂时，你不是。", en: "Failure is temporary; you are not defined by it.", word: "temporary" },
+        { zh: "你的存在，本身就是意义。", en: "Your existence carries intrinsic meaning.", word: "intrinsic" },
+        { zh: "再试一次，说不定就成功了。", en: "Try once more; you might triumph this time.", word: "triumph" },
+        { zh: "今天也要相信自己。", en: "Believe in yourself today as well.", word: "believe" },
+        { zh: "别急，好事正在来的路上。", en: "Don't rush; good things are forthcoming.", word: "forthcoming" },
+        { zh: "你已经很勇敢了。", en: "You've already shown considerable courage.", word: "considerable" },
+        { zh: "小事做好，大事才稳。", en: "Excel in small things and greater things will stabilize.", word: "stabilize" },
+        { zh: "你不需要讨好所有人。", en: "You don't need to please everyone.", word: "please" },
+        { zh: "今天的一点点进步，也是进步。", en: "Incremental progress today still counts as progress.", word: "incremental" },
+        { zh: "你的路，只有你能走完。", en: "Only you can complete your unique path.", word: "complete" },
+        { zh: "累了就停，别硬撑。", en: "When tired, stop—don't push yourself beyond your limit.", word: "limit" },
+        { zh: "你比想象中更有力量。", en: "You possess more strength than you realize.", word: "possess" },
+        { zh: "今天好好过，就是对得起自己。", en: "Living today well is to honor yourself.", word: "honor" },
+        { zh: "别怕犯错，怕的是不试。", en: "Don't fear making mistakes; fear not trying.", word: "mistakes" },
+        { zh: "你的努力，不会白费。", en: "Your efforts will not be in vain.", word: "vain" },
+        { zh: "你已经很棒了，继续加油。", en: "You're already doing well—keep striving forward.", word: "forward" },
+        { zh: "今天也要保持希望。", en: "Maintain hope today as well.", word: "maintain" },
+        { zh: "别让别人的评价困住你。", en: "Don't let others' criticism confine you.", word: "confine" },
+        { zh: "你正在做对的事。", en: "You're doing what's right—trust your judgment.", word: "judgment" },
+        { zh: "再难的事，拆开就不难。", en: "Break down the toughest challenge and it becomes feasible.", word: "feasible" },
+        { zh: "你的坚持，会开花结果。", en: "Your persistence will eventually bear fruit.", word: "persistence" },
+        { zh: "今天笑一笑，明天会更好。", en: "Smile today; tomorrow will be brighter.", word: "brighter" },
+        { zh: "你值得拥有更好的。", en: "You deserve to attain better things.", word: "attain" },
+        { zh: "别放弃，你离目标可能只差一步。", en: "Don't give up; you may be one step from your goal.", word: "goal" },
+        { zh: "你已经跨过很多难关了。", en: "You've already surmounted many difficulties.", word: "surmounted" },
+        { zh: "今天的一点点，会变成大改变。", en: "Today's small steps can catalyze major change.", word: "catalyze" },
+        { zh: "你不需要完美才能开始。", en: "You don't need to be perfect to commence.", word: "perfect" },
+        { zh: "你的故事，值得被听见。", en: "Your story deserves to be heard and acknowledged.", word: "deserves" },
+        { zh: "再试一次，你就多一次机会。", en: "One more attempt gives you another opportunity.", word: "opportunity" },
+        { zh: "今天也要对自己好一点。", en: "Be kind to yourself today as well.", word: "kind" },
+        { zh: "别用过去困住未来。", en: "Don't let the past constrain your future.", word: "constrain" },
+        { zh: "你已经在发光了。", en: "You're already radiating light.", word: "radiating" },
+        { zh: "小事坚持，就是大事。", en: "Consistent effort in small things leads to substantial results.", word: "substantial" },
+        { zh: "你值得被爱，包括被自己。", en: "You are worthy of love, including from yourself.", word: "worthy" },
+        { zh: "今天好好休息，明天再战。", en: "Rest well today; you'll conquer tomorrow.", word: "conquer" },
+        { zh: "你的努力，会有人记得。", en: "Your efforts will be remembered and appreciated.", word: "appreciated" },
+        { zh: "别怕慢，怕的是不动。", en: "Don't fear being slow; fear not moving at all.", word: "moving" },
+        { zh: "你已经走了很远，还可以走更远。", en: "You've come far; you can go even further.", word: "further" },
+        { zh: "今天的一步，是未来的一里。", en: "Today's single step is a milestone for the future.", word: "milestone" },
+        { zh: "你不需要别人认可才能有价值。", en: "You don't need external validation to have value.", word: "validation" },
+        { zh: "再难也要相信会变好。", en: "No matter how hard, believe that things will improve.", word: "improve" },
+        { zh: "你的存在，就是礼物。", en: "Your existence is a gift in itself.", word: "gift" },
+        { zh: "今天也要勇敢一点。", en: "Be a little braver today.", word: "braver" },
+        { zh: "别让恐惧拦住你。", en: "Don't let fear hinder your progress.", word: "hinder" },
+        { zh: "你正在变好，只是需要时间。", en: "You're improving; it just requires patience.", word: "patience" },
+        { zh: "小事做好，信心就来了。", en: "Do small things well and confidence will emerge.", word: "emerge" },
+        { zh: "你值得拥有平静与快乐。", en: "You deserve to experience peace and happiness.", word: "experience" },
+        { zh: "今天也要给自己一个拥抱。", en: "Give yourself a hug today as well.", word: "hug" },
+        { zh: "你的坚持，会照亮前路。", en: "Your dedication will illuminate the path ahead.", word: "illuminate" },
+        { zh: "别用别人的成功折磨自己。", en: "Don't torment yourself by comparing with others' success.", word: "torment" },
+        { zh: "你已经很棒，明天会更好。", en: "You're already great; tomorrow will be even better.", word: "better" },
+        { zh: "再试一次，就多一分可能。", en: "One more try adds to the possibility of success.", word: "possibility" },
+        { zh: "你的努力，时间会回报。", en: "Time will reward your diligence.", word: "reward" },
+        { zh: "今天也要相信光。", en: "Believe in light and hope today as well.", word: "hope" },
+        { zh: "别让一次失败否定你。", en: "Don't let one failure negate your worth.", word: "negate" },
+        { zh: "你已经在正确的路上了。", en: "You're already on the right path.", word: "path" },
+        { zh: "小事积累，就是大成就。", en: "Small things accumulate into significant achievements.", word: "achievements" },
+        { zh: "你值得被温柔以待。", en: "You deserve to be treated with tenderness.", word: "tenderness" },
+        { zh: "今天的一点点，会变成大大的你。", en: "Today's little efforts will shape a greater you.", word: "shape" },
+        { zh: "你的坚持，就是答案。", en: "Your perseverance is the answer.", word: "answer" },
 
-  <a class="item" href="2026-08-17-ai-data-collection-hardware/data-collection-hardware-2026-08.html">
-    <span class="t">AI 数据采集:硬件与规格速览</span>
-    <span class="m"><b>REV D</b> · 2026-08-17 · 具身智能数采路线 / VLA 收敛 / DYNA-2</span>
-  </a>
+        { zh: "哪怕只是一点点前进，也是在向前。", en: "Even the tiniest advance shows your perseverance.", word: "perseverance" },
+        { zh: "你正在学会更温柔地对待自己。", en: "You are learning to treat yourself with gentleness.", word: "gentleness" },
+        { zh: "每一次认真，都在悄悄积累力量。", en: "Each serious effort quietly accumulates strength.", word: "accumulates" },
+        { zh: "请给自己一点耐心，成长需要时间。", en: "Give yourself patience; growth is a gradual evolution.", word: "evolution" },
+        { zh: "你比任何人都更清楚自己的不容易。", en: "You understand your own adversity better than anyone.", word: "adversity" },
+        { zh: "就算只完成一件小事，也值得被肯定。", en: "Finishing one small task is genuinely commendable.", word: "commendable" },
+        { zh: "被看见是一种幸运，被理解是一种奢侈。", en: "Being understood is a rare and precious luxury.", word: "precious" },
+        { zh: "你的细微改变，终会迎来巨大转折。", en: "Subtle changes can one day trigger a breakthrough.", word: "breakthrough" },
+        { zh: "你可以慢一点，但不要停下来。", en: "You may go slowly, but don't surrender your momentum.", word: "momentum" },
+        { zh: "请相信，你正在成为更完整的自己。", en: "Believe you are becoming a more integrated self.", word: "integrated" },
+        { zh: "今天的你，已经配得上更高的期待。", en: "Today's you is worthy of higher expectations.", word: "worthy" },
+        { zh: "迷茫时多看看自己已经走过的路。", en: "In confusion, revisit the distance you've traversed.", word: "traversed" },
+        { zh: "请允许自己偶尔脆弱，但别一直退缩。", en: "Allow occasional fragility, but resist permanent retreat.", word: "fragility" },
+        { zh: "你在一次次尝试里，学会了温柔坚持。", en: "Through repeated attempts, you've learned gentle resilience.", word: "resilience" },
+        { zh: "你不必立刻发光，先稳稳地站好。", en: "You don't have to dazzle instantly; stand with stability first.", word: "stability" },
+        { zh: "很多答案，都藏在你愿不愿意再试一次里。", en: "Many answers hide in your willingness to try again.", word: "willingness" },
+        { zh: "你可以不完美，但可以很真诚。", en: "You may be imperfect, yet profoundly sincere.", word: "sincere" },
+        { zh: "请相信，你正在往更好的方向靠近。", en: "Trust that you're gravitating toward something better.", word: "gravitating" },
+        { zh: "你现在走的每一步，都会给未来撑腰。", en: "Every step now will reinforce your future.", word: "reinforce" },
+        { zh: "对自己温柔一点，也是种高级的自律。", en: "Being gentle with yourself is a refined discipline.", word: "discipline" },
+        { zh: "你有权利慢慢摸索，也有能力走出去。", en: "You have the right to explore and the capacity to emerge.", word: "capacity" },
+        { zh: "你认真生活的样子，本身就很耀眼。", en: "The way you live earnestly is inherently radiant.", word: "radiant" },
+        { zh: "当你为难自己时，也请记得抱抱自己。", en: "When you're hard on yourself, also offer compassion.", word: "compassion" },
+        { zh: "你已经跨过很多没人看见的难关。", en: "You've overcome numerous invisible obstacles.", word: "obstacles" },
+        { zh: "真正的勇敢，是带着害怕继续往前走。", en: "True courage is advancing despite fear.", word: "courage" },
+        { zh: "你把普通的日子，也过出了质感。", en: "You bring a quiet elegance to ordinary days.", word: "elegance" },
+        { zh: "你正在建立属于自己的节奏和边界。", en: "You're establishing your own rhythm and boundaries.", word: "boundaries" },
+        { zh: "请为每一次没有放弃的自己鼓掌。", en: "Applaud yourself for every instance of persistence.", word: "persistence" },
+        { zh: "你并不落后，你只是在走自己的路。", en: "You're not behind; you're on a personalized path.", word: "personalized" },
+        { zh: "你已经学会在崩溃和重启之间来回切换。", en: "You've learned to oscillate between breakdown and renewal.", word: "renewal" },
+        { zh: "你认真对待的小事，会一点点堆叠成底气。", en: "Your care for details gradually consolidates confidence.", word: "consolidates" },
+        { zh: "不要总是苛责自己，你已经尽力了。", en: "Stop excessively harsh self-criticism; you've exerted effort.", word: "criticism" },
+        { zh: "你正在学着把别人的声音调小一点。", en: "You're learning to lower the volume of external opinions.", word: "external" },
+        { zh: "你对自己的期待，会慢慢长成新的现实。", en: "Your expectations can eventually manifest as reality.", word: "manifest" },
+        { zh: "你不是一无所有，你有重新开始的能力。", en: "You're never empty-handed; you retain renewal potential.", word: "potential" },
+        { zh: "你已经迈出那一步，就已经很了不起。", en: "The step you've taken is already remarkable.", word: "remarkable" },
+        { zh: "你可以一边害怕，一边把事情做完。", en: "You can complete tasks while feeling genuinely terrified.", word: "terrified" },
+        { zh: "你为自己做的每一个决定，都在塑造未来。", en: "Each decision you make subtly sculpts your future.", word: "sculpts" },
+        { zh: "你走得很慢，但你走得很真诚。", en: "You move slowly, yet with authentic intention.", word: "authentic" },
+        { zh: "你愿意学习的样子，比结果本身更动人。", en: "Your willingness to learn is more captivating than outcomes.", word: "captivating" },
+        { zh: "你正在学会，在混乱中保护自己的心。", en: "You're learning to safeguard your heart amid chaos.", word: "safeguard" },
+        { zh: "不要小看你咬牙撑过去的那些瞬间。", en: "Don't underestimate the moments you endured silently.", word: "endured" },
+        { zh: "你在一点点和过去的自己和解。", en: "You're slowly reconciling with your former self.", word: "reconciling" },
+        { zh: "你认真活着的样子，就是最大的底气。", en: "Living earnestly is your most solid foundation.", word: "foundation" },
+        { zh: "请把对别人的温柔，分一点给自己。", en: "Share a portion of your tenderness with yourself.", word: "tenderness" },
+        { zh: "你在反复跌倒里，长出了一点点韧性。", en: "Repeated stumbles have cultivated quiet resilience.", word: "resilience" },
+        { zh: "你已经配得上，对自己说一句辛苦了。", en: "You fully deserve to tell yourself: well done.", word: "deserve" },
+        { zh: "你可以允许自己慢慢长成喜欢的样子。", en: "Allow yourself to slowly evolve into who you cherish.", word: "evolve" },
+        { zh: "你认真面对生活的样子，本身就很治愈。", en: "The way you confront life is innately therapeutic.", word: "therapeutic" },
+        { zh: "请继续做一个对世界保持好奇的人。", en: "Please continue to nurture an enduring curiosity.", word: "curiosity" },
+        { zh: "你已经学会，不再为取悦所有人而活。", en: "You've learned to stop living for universal approval.", word: "approval" },
+        { zh: "你正在把日子，慢慢过成自己想要的样子。", en: "You're gradually aligning your days with your vision.", word: "aligning" }
+      ];
 
-  <a class="item" href="2026-07-07-anthropic-interp-explainer/">
-    <span class="t">大模型的内心 OS:可解释性互动科普</span>
-    <span class="m"><b>互动页</b> · 2026-07-07 · Anthropic 可解释性研究入门</span>
-  </a>
-
-  <a class="item" href="2026-07-03-3d-and-world-models/3D-and-World-Models-Report.html">
-    <span class="t">3D 与世界模型报告</span>
-    <span class="m"><b>报告</b> · 2026-07-03</span>
-  </a>
-
-  <a class="item" href="2026-07-06-hf-agents-study-plan/">
-    <span class="t">HF Agents 课程中文学习计划</span>
-    <span class="m"><b>学习计划</b> · 2026-07-06 · 配套课程译文见 hf-agents-course</span>
-  </a>
-
-  <footer>IDAdu/cowork-outputs · GitHub Pages</footer>
-</div>
+      var idx = Math.floor(Math.random() * messages.length);
+      var m = messages[idx];
+      document.getElementById("quote").textContent = m.zh;
+      document.getElementById("quoteEn").textContent = m.en;
+      document.getElementById("quoteWord").innerHTML = "今日词汇 · <span>" + m.word + "</span>";
+    })();
+  </script>
 </body>
 </html>
